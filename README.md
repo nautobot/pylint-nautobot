@@ -16,6 +16,73 @@ Receiving objects: 100% (2221/2221), 4.72 MiB | 19.19 MiB/s, done.
 Resolving deltas: 100% (1356/1356), done.
 ```
 
+Install `pylint-nautobot` in editable mode from your cloned repo:
+
+```
+vagrant@ants:~/nautobot-plugin-golden-config (develop *=)
+> poetry add --editable /vagrant/
+
+Updating dependencies
+Resolving dependencies... (0.8s)
+
+Writing lock file
+```
+
+Enable the `pylint-nautobot` plugin in `pyproject.toml`:
+
+```
+[tool.pylint.master]
+load-plugins="pylint_django, pylint_nautobot"
+```
+
+Test the new rules are enabled:
+
+```
+vagrant@ants:~/nautobot-plugin-golden-config (develop *=)
+> poetry run pylint --list-msgs-enabled | grep E42
+  nb-replaced-device-role (E4211)
+  nb-replaced-rack-role (E4212)
+  nb-replaced-ipam-role (E4213)
+  nb-replaced-region (E4214)
+  nb-replaced-site (E4215)
+  nb-replaced-aggregate (E4216)
+  nb-code-location-utilities (E4251)
+```
+
+Run `pylint`:
+
+```
+vagrant@ants:~/nautobot-plugin-golden-config (develop *=)
+> poetry run pylint nautobot_golden_config/forms.py
+************* Module nautobot_golden_config.forms
+nautobot_golden_config/forms.py:1:0: E5110: Django was not configured. For more information run pylint --load-plugins=pylint_django --help-msg=django-not-configured (django-not-configured)
+nautobot_golden_config/forms.py:7:0: E4214: Imports a model that has been replaced (dcim.Region -> dcim.Location). (nb-replaced-region)
+nautobot_golden_config/forms.py:7:0: E4215: Imports a model that has been replaced (dcim.Site -> dcim.Location). (nb-replaced-site)
+nautobot_golden_config/forms.py:7:0: E4211: Imports a model that has been replaced (dcim.DeviceRole -> extras.Role). (nb-replaced-device-role)
+nautobot_golden_config/forms.py:10:0: E4251: Import location has changed (nautobot.utilities.forms -> nautobot.core.forms). (nb-code-location-utilities)
+
+-----------------------------------
+Your code has been rated at 7.73/10
+```
+
+TODO - run it properly through invoke instead to avoid other detections.
+
+## Testing and developing - with `pylint 2.17` and `python 3.7.2`
+
+Clone a repo:
+
+```
+vagrant@ants:~
+> git clone https://github.com/nautobot/nautobot-plugin-golden-config
+Cloning into 'nautobot-plugin-golden-config'...
+remote: Enumerating objects: 2221, done.
+remote: Counting objects: 100% (250/250), done.
+remote: Compressing objects: 100% (152/152), done.
+remote: Total 2221 (delta 134), reused 183 (delta 91), pack-reused 1971
+Receiving objects: 100% (2221/2221), 4.72 MiB | 19.19 MiB/s, done.
+Resolving deltas: 100% (1356/1356), done.
+```
+
 Update the minimum python version to `3.7.2` to allow the usage of the latest stable `pylint 2.17`:
 
 ```
@@ -43,7 +110,7 @@ Install `pylint-nautobot` in editable mode from your cloned repo:
 
 ```
 vagrant@ants:~/nautobot-plugin-golden-config (develop *=)
-> poetry add --editable /path/to/pylint-vagrant/
+> poetry add --editable /path/to/pylint-nautobot/
 
 Updating dependencies
 Resolving dependencies... (3.2s)
