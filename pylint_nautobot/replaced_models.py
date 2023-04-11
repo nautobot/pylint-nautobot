@@ -1,8 +1,11 @@
+"""Check for usage of models that were replaced in 2.0."""
 from pylint.checkers import BaseChecker
-from pylint.interfaces import IAstroidChecker, ITokenChecker
+from pylint.interfaces import IAstroidChecker
 
 
 class NautobotReplacedModelsImportChecker(BaseChecker):
+    """Visit 'import from' statements to find usage of models that have been replaced in 2.0."""
+
     __implements__ = IAstroidChecker
 
     name = "nautobot-replaced-models"

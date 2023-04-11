@@ -1,0 +1,1 @@
+E4211: Imports a model that has been replaced (dcim.DeviceRole -> extras.Role). (nb-replaced-device-role)
