@@ -22,7 +22,7 @@ jobs:
       INVOKE_LOCAL: "True"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Linting: black"
@@ -33,7 +33,7 @@ jobs:
       INVOKE_LOCAL: "True"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Linting: bandit"
@@ -46,7 +46,7 @@ jobs:
       INVOKE_LOCAL: "True"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Linting: pydocstyle"
@@ -59,7 +59,7 @@ jobs:
       INVOKE_LOCAL: "True"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Linting: flake8"
@@ -72,7 +72,7 @@ jobs:
       INVOKE_LOCAL: "True"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Linting: yamllint"
@@ -89,7 +89,7 @@ jobs:
       PYTHON_VER: "${{ matrix.python-version }}"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Get image version"
@@ -124,7 +124,7 @@ jobs:
       PYTHON_VER: "${{ matrix.python-version }}"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Get image version"
@@ -161,7 +161,7 @@ jobs:
       PYTHON_VER: "${{ matrix.python-version }}"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Get image version"
@@ -194,7 +194,7 @@ jobs:
     if: "startsWith(github.ref, 'refs/tags/v')"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Set up Python"
         uses: "actions/setup-python@v2"
         with:
@@ -223,7 +223,7 @@ jobs:
     if: "startsWith(github.ref, 'refs/tags/v')"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Set up Python"
         uses: "actions/setup-python@v2"
         with:
