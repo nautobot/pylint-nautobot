@@ -1,0 +1,14 @@
+{
+  "cookiecutter": {
+    "codeowner_github_usernames": "@cmsirbu @Kircheneer",
+    "description": "Custom Pylint rules for Nautobot",
+    "project_name": "Pylint Nautobot",
+    "project_slug": "pylint-nautobot",
+    "project_python_name": "pylint_nautobot",
+    "project_python_base_version": "3.7",
+    "project_with_config_settings": "yes",
+    "generate_docs": "no",
+    "version": "0.1.0",
+    "_template": "python"
+  }
+}
