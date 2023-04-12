@@ -1,3 +1,4 @@
+"""Check for imports whose paths have changed in 2.0."""
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
@@ -33,6 +34,8 @@ NAUTOBOT_UTILITIES_MAP = {
 
 
 class NautobotCodeLocationChangesChecker(BaseChecker):
+    """Visit 'import from' statements to find import locations that are gone in 2.0."""
+
     __implements__ = IAstroidChecker
 
     name = "nautobot-code-location-changes"

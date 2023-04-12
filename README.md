@@ -165,4 +165,4 @@ nautobot_golden_config/forms.py:10:0: E4251: Import location has changed (nautob
 Your code has been rated at 7.73/10 (previous run: 7.73/10, +0.00)
 ```
 
-Enjoyt the new rules (codes starting with `E42`) and ignore all the new stuff pylint 2.17 complains about!
+Enjoy the new rules (codes starting with `E42`) and ignore all the new stuff pylint 2.17 complains about!
