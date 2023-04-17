@@ -1,4 +1,9 @@
 """Initialization file for library."""
+from pathlib import Path
+
+from pylint.lint import PyLinter
+from packaging.version import Version
+import tomli
 
 try:
     from importlib import metadata
@@ -12,7 +17,26 @@ from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
 
 
-def register(linter):
+def register(linter: PyLinter):
     """Pylint plugin entrypoint - register all the checks to the linter."""
-    linter.register_checker(NautobotCodeLocationChangesChecker(linter))
-    linter.register_checker(NautobotReplacedModelsImportChecker(linter))
+    # Try to discover the target projects 'pyproject.toml' to access its pylint-nautobot configuration.
+    # TODO: It would be great if we could infer this from the Nautobot dependency constraint for the target project.
+    pyproject_toml_content = None
+    for directory in [*Path.cwd().parents, Path.cwd()]:
+        pyproject_toml_path = directory / "pyproject.toml"
+        if pyproject_toml_path.exists():
+            with open(pyproject_toml_path, "rb") as file:
+                pyproject_toml_content = tomli.load(file)
+                break
+    supported_nautobot_versions = [
+        Version(version) for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
+    ]
+
+    for checker in [
+        NautobotCodeLocationChangesChecker,
+        NautobotReplacedModelsImportChecker,
+    ]:
+        if not checker.version_specifier or any(
+            (version in checker.version_specifier for version in supported_nautobot_versions)
+        ):
+            linter.register_checker(checker(linter))

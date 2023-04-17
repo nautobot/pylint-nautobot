@@ -1,4 +1,5 @@
 """Check for usage of models that were replaced in 2.0."""
+from packaging.specifiers import SpecifierSet
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
@@ -7,6 +8,8 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
     """Visit 'import from' statements to find usage of models that have been replaced in 2.0."""
 
     __implements__ = IAstroidChecker
+
+    version_specifier = SpecifierSet(">=2,<3")
 
     name = "nautobot-replaced-models"
     msgs = {
