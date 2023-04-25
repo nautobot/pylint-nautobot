@@ -49,8 +49,8 @@ def test_errors(test_file_path):
                 [
                     str(test_file_path["py"]),
                     "--load-plugins=pylint_nautobot",
-                    "--disable=all",
-                    f"--enable={checker_name}",
+                    # "--disable=all",
+                    # f"--enable={checker_name}",
                 ]
             )
         except SystemExit as error:

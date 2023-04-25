@@ -1,0 +1,1 @@
+E4242: Uses correct base classes. (nb-incorrect-base-class)
