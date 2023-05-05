@@ -1,40 +1,11 @@
 """Check for imports whose paths have changed in 2.0."""
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
-
-
-NAUTOBOT_UTILITIES_MAP = {
-    "nautobot.utilities.api": "nautobot.core.api.utils",
-    "nautobot.utilities.apps": "nautobot.core.apps",
-    "nautobot.utilities.checks": "nautobot.core.checks",
-    "nautobot.utilities.choices": "nautobot.core.choices",
-    "nautobot.utilities.config": "nautobot.core.utils.config",
-    "nautobot.utilities.constants": "nautobot.core.constants",
-    "nautobot.utilities.deprecation": "nautobot.core.utils.deprecation",
-    "nautobot.utilities.error_handlers": "nautobot.core.views.utils",
-    "nautobot.utilities.exceptions": "nautobot.core.exceptions",
-    "nautobot.utilities.factory": "nautobot.core.factory",
-    "nautobot.utilities.fields": "nautobot.core.models.fields",
-    "nautobot.utilities.filters": "nautobot.core.filters",
-    "nautobot.utilities.forms": "nautobot.core.forms",
-    "nautobot.utilities.git": "nautobot.core.utils.git",
-    "nautobot.utilities.logging": "nautobot.core.utils.logging",
-    "nautobot.utilities.management": "nautobot.core.management",
-    "nautobot.utilities.ordering": "nautobot.core.utils.ordering",
-    "nautobot.utilities.paginator": "nautobot.core.views.paginator",
-    "nautobot.utilities.permissions": "nautobot.core.utils.permissions",
-    "nautobot.utilities.query_functions": "nautobot.core.models.query_functions",
-    "nautobot.utilities.querysets": "nautobot.core.models.querysets",
-    "nautobot.utilities.tables": "nautobot.core.tables",
-    "nautobot.utilities.tasks": "nautobot.core.tasks",
-    "nautobot.utilities.templatetags": "nautobot.core.templatetags",
-    "nautobot.utilities.testing": "nautobot.core.testing",
-    "nautobot.utilities.tree_queries": "nautobot.core.models.tree_queries",
-}
+from pylint_nautobot.utils import MAP_CODE_LOCATION_CHANGES
 
 
 class NautobotCodeLocationChangesChecker(BaseChecker):
-    """Visit 'import from' statements to find import locations that are gone in 2.0."""
+    """Visit 'import from' statements to find import locations that have moved in 2.0."""
 
     __implements__ = IAstroidChecker
 
@@ -42,15 +13,32 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
     msgs = {
         "E4251": (
             "Import location has changed (%s -> %s).",
-            "nb-code-location-utilities",
+            "nb-code-location-changed",
+            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#python-code-location-changes",
+        ),
+        "E4252": (
+            "Import location has changed for %s (%s -> %s).",
+            "nb-code-location-changed-object",
             "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#python-code-location-changes",
         ),
     }
 
     def visit_importfrom(self, node):
-        if node.modname in NAUTOBOT_UTILITIES_MAP:
-            self.add_message(
-                "nb-code-location-utilities",
-                node=node,
-                args=(node.modname, NAUTOBOT_UTILITIES_MAP[node.modname]),
-            )
+        """Verifies whether entire module imports or individual objects have moved."""
+        if node.modname in MAP_CODE_LOCATION_CHANGES:
+            import_changed_to = MAP_CODE_LOCATION_CHANGES[node.modname]
+            if "(all)" in import_changed_to:
+                # from nautobot.utilities.templatetags import ...
+                self.add_message(
+                    "nb-code-location-changed",
+                    node=node,
+                    args=(node.modname, import_changed_to["(all)"]),
+                )
+            for imported_name in (n for n, _ in node.names):
+                # from nautobot.core.api.utils import TreeModelSerializerMixin
+                if imported_name in import_changed_to:
+                    self.add_message(
+                        "nb-code-location-changed-object",
+                        node=node,
+                        args=(imported_name, node.modname, import_changed_to[imported_name]),
+                    )

@@ -20,7 +20,7 @@ Install `pylint-nautobot` in editable mode from your cloned repo:
 
 ```
 vagrant@ants:~/nautobot-plugin-golden-config (develop *=)
-> poetry add --editable /vagrant/
+> poetry add --editable /path/to/pylint-nautobot/
 
 Updating dependencies
 Resolving dependencies... (0.8s)
