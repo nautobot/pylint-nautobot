@@ -1,6 +1,7 @@
 """Initialization file for library."""
 from pathlib import Path
 
+from packaging.specifiers import SpecifierSet
 from pylint.lint import PyLinter
 from packaging.version import Version
 import tomli
@@ -28,15 +29,19 @@ def register(linter: PyLinter):
             with open(pyproject_toml_path, "rb") as file:
                 pyproject_toml_content = tomli.load(file)
                 break
-    supported_nautobot_versions = [
-        Version(version) for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
-    ]
+    try:
+        supported_nautobot_versions = [
+            Version(version) for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
+        ]
+    except KeyError as e:
+        raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from e
 
     for checker in [
         NautobotCodeLocationChangesChecker,
         NautobotReplacedModelsImportChecker,
     ]:
-        if not checker.version_specifier or any(
-            (version in checker.version_specifier for version in supported_nautobot_versions)
+        version_specifier_set = SpecifierSet(checker.version_specifier)
+        if not version_specifier_set or any(
+            (version in version_specifier_set for version in supported_nautobot_versions)
         ):
             linter.register_checker(checker(linter))

@@ -32,6 +32,8 @@ mkdocstrings = "0.19"
 mkdocstrings-python = "0.7.1"
 
 [tool.pylint-nautobot]
+# Normally this configuration goes into the apps that should be linted, but this is required so that the checkers
+# activate correctly during unit testing.
 supported_nautobot_versions = [
     "1",
     "2"
