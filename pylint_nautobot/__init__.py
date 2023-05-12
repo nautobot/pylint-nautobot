@@ -31,7 +31,8 @@ def register(linter: PyLinter):
                 break
     try:
         supported_nautobot_versions = [
-            Version(version) for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
+            Version(version)
+            for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
         ]
     except KeyError as e:
         raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from e
