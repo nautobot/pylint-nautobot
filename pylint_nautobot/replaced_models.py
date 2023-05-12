@@ -1,5 +1,4 @@
 """Check for usage of models that were replaced in 2.0."""
-from packaging.specifiers import SpecifierSet
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
