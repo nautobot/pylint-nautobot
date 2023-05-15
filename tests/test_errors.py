@@ -7,9 +7,8 @@ from pathlib import Path
 import pytest
 from packaging.specifiers import SpecifierSet, InvalidSpecifier
 from pylint import run_pylint
-from pylint.lint import PyLinter
 
-from pylint_nautobot import register, CHECKERS
+from pylint_nautobot import CHECKERS
 
 
 def get_tests():

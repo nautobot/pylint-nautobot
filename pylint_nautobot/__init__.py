@@ -2,8 +2,8 @@
 from pathlib import Path
 
 from packaging.specifiers import SpecifierSet
-from pylint.lint import PyLinter
 from packaging.version import Version
+from pylint.lint import PyLinter
 import tomli
 
 try:
@@ -22,6 +22,7 @@ CHECKERS = [
     NautobotReplacedModelsImportChecker,
 ]
 
+
 def register(linter: PyLinter):
     """Pylint plugin entrypoint - register all the checks to the linter."""
     # Try to discover the target projects 'pyproject.toml' to access its pylint-nautobot configuration.
@@ -38,8 +39,8 @@ def register(linter: PyLinter):
             Version(version)
             for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
         ]
-    except KeyError as e:
-        raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from e
+    except KeyError as error:
+        raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from error
 
     for checker in CHECKERS:
         version_specifier_set = SpecifierSet(checker.version_specifier)
