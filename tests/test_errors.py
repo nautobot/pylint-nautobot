@@ -5,7 +5,11 @@ from contextlib import redirect_stdout
 from pathlib import Path
 
 import pytest
+from packaging.specifiers import SpecifierSet, InvalidSpecifier
 from pylint import run_pylint
+from pylint.lint import PyLinter
+
+from pylint_nautobot import register, CHECKERS
 
 
 def get_tests():
@@ -20,6 +24,14 @@ def get_tests():
 
 
 TESTS = get_tests()
+
+
+def test_version_specifiers():
+    for checker in CHECKERS:
+        try:
+            SpecifierSet(checker.version_specifier)
+        except InvalidSpecifier:
+            pytest.fail(f"Version specifier {checker.version_specifier} doesn't parse.")
 
 
 @pytest.mark.parametrize("test_file_path", TESTS, ids=[test["py"].stem for test in TESTS])

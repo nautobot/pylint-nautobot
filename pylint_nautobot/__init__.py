@@ -17,6 +17,10 @@ __version__ = metadata.version(__name__)
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
 
+CHECKERS = [
+    NautobotCodeLocationChangesChecker,
+    NautobotReplacedModelsImportChecker,
+]
 
 def register(linter: PyLinter):
     """Pylint plugin entrypoint - register all the checks to the linter."""
@@ -37,10 +41,7 @@ def register(linter: PyLinter):
     except KeyError as e:
         raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from e
 
-    for checker in [
-        NautobotCodeLocationChangesChecker,
-        NautobotReplacedModelsImportChecker,
-    ]:
+    for checker in CHECKERS:
         version_specifier_set = SpecifierSet(checker.version_specifier)
         if not version_specifier_set or any(
             (version in version_specifier_set for version in supported_nautobot_versions)
