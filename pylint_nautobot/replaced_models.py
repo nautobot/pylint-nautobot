@@ -8,6 +8,8 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
 
     __implements__ = IAstroidChecker
 
+    version_specifier = ">=2,<3"
+
     name = "nautobot-replaced-models"
     msgs = {
         "E4211": (

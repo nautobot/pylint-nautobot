@@ -9,6 +9,8 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
 
     __implements__ = IAstroidChecker
 
+    version_specifier = ">=2,<3"
+
     name = "nautobot-code-location-changes"
     msgs = {
         "E4251": (

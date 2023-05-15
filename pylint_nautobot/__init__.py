@@ -1,4 +1,10 @@
 """Initialization file for library."""
+from pathlib import Path
+
+from packaging.specifiers import SpecifierSet
+from packaging.version import Version
+from pylint.lint import PyLinter
+import tomli
 
 try:
     from importlib import metadata
@@ -11,8 +17,34 @@ __version__ = metadata.version(__name__)
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
 
+CHECKERS = [
+    NautobotCodeLocationChangesChecker,
+    NautobotReplacedModelsImportChecker,
+]
 
-def register(linter):
+
+def register(linter: PyLinter):
     """Pylint plugin entrypoint - register all the checks to the linter."""
-    linter.register_checker(NautobotCodeLocationChangesChecker(linter))
-    linter.register_checker(NautobotReplacedModelsImportChecker(linter))
+    # Try to discover the target projects 'pyproject.toml' to access its pylint-nautobot configuration.
+    # TODO: It would be great if we could infer this from the Nautobot dependency constraint for the target project.
+    pyproject_toml_content = None
+    for directory in [*Path.cwd().parents, Path.cwd()]:
+        pyproject_toml_path = directory / "pyproject.toml"
+        if pyproject_toml_path.exists():
+            with open(pyproject_toml_path, "rb") as file:
+                pyproject_toml_content = tomli.load(file)
+                break
+    try:
+        supported_nautobot_versions = [
+            Version(version)
+            for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
+        ]
+    except KeyError as error:
+        raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from error
+
+    for checker in CHECKERS:
+        version_specifier_set = SpecifierSet(checker.version_specifier)
+        if not version_specifier_set or any(
+            (version in version_specifier_set for version in supported_nautobot_versions)
+        ):
+            linter.register_checker(checker(linter))
