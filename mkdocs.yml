@@ -1,10 +1,9 @@
 ---
 dev_addr: "127.0.0.1:8001"
-edit_uri: "edit/develop/docs"
-site_dir: "pylint_nautobot/static/pylint_nautobot/docs"
+edit_uri: "blob/main/docs"
 site_name: "Pylint Nautobot Documentation"
 site_url: "https://docs.nautobot.com/projects/pylint-nautobot/en/latest/"
-repo_url: "https://github.com/nautobot/nautobot-plugin-pylint-nautobot"
+repo_url: "https://github.com/nautobot/pylint-nautobot"
 copyright: "Copyright &copy; The Authors"
 theme:
   name: "material"
@@ -14,13 +13,17 @@ theme:
     - "django"
     - "yaml"
   features:
+    - "navigation.indexes"
     - "navigation.tracking"
     - "navigation.tabs"
     - "navigation.tabs.sticky"
+    - "navigation.footer"
     - "search.suggest"
     - "search.highlight"
     - "search.share"
-    - "navigation.indexes"
+    - "content.code.copy"
+    - "content.action.edit"
+    - "content.action.view"
   favicon: "assets/favicon.ico"
   logo: "assets/nautobot_logo.svg"
   palette:
@@ -94,5 +97,7 @@ watch:
 
 nav:
   - Overview: "index.md"
+  - Getting Started: "getting_started.md"
+  - Release Notes: "release_notes.md"
   - Development: "development.md"
   - Nautobot Docs Home ↗︎: "https://docs.nautobot.com"

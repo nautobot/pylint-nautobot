@@ -167,3 +167,10 @@ def tests(context, local=INVOKE_LOCAL):
     pytest(context, local)
 
     print("All tests have passed!")
+
+@task
+def docs(context):
+    """Build and serve docs locally for development."""
+    command = "poetry run mkdocs serve -v"
+    print("Serving Documentation...")
+    run_cmd(context, command, local=True)
