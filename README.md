@@ -17,7 +17,7 @@ This project contains custom [pylint](https://github.com/pylint-dev/pylint) rule
 
 ## Documentation
 
-Full documentation for this App can be found over on the [Nautobot Docs](https://docs.nautobot.com) website:
+Full documentation for this project can be found over on the [Nautobot Docs](https://docs.nautobot.com) website:
 
 - [Getting Started](https://docs.nautobot.com/projects/pylint-nautobot/en/latest/getting_started/).
 - [Development](https://docs.nautobot.com/projects/pylint-nautobot/en/latest/development).

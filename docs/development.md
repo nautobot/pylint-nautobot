@@ -26,7 +26,7 @@ Extending the rules is welcome, however it is best to open an issue first, to en
 
 To add new rules, either add them to an existing category/checker (if it makes sense) or create a new one. Each checker is a class (e.g. `class NautobotCodeLocationChangesChecker(BaseChecker)`) which implements one or more `pylint` rules.
 
-### Version specifiers
+### Version Specifiers
 
 Every check should have a class variable called `version_specifier` which is a string that follows the `packaging.specifiers.SpecifierSet` syntax. It is used as a filter for which versions of Nautobot a check applies to.
 
@@ -76,7 +76,7 @@ supported_nautobot_versions = [
 ```
 
 !!! note
-    Here, you are telling `pylint` that you want all rules for Nautobot versions 1.x.x and 2.x.x to be checked.
+    Here, you are telling `pylint` that you want all rules for Nautobot versions 1.x.y and 2.x.y to be checked.
 
 Test whether the new rules are enabled, replacing the message codes with your own, by running the following in the `nautobot-plugin-golden-config` folder:
 
