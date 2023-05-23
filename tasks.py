@@ -168,6 +168,7 @@ def tests(context, local=INVOKE_LOCAL):
 
     print("All tests have passed!")
 
+
 @task
 def docs(context):
     """Build and serve docs locally for development."""
