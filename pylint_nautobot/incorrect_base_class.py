@@ -2,7 +2,6 @@
 import inspect
 
 from astroid import ClassDef, Assign, Const
-from packaging.specifiers import SpecifierSet
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
@@ -39,7 +38,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
 
     __implements__ = IAstroidChecker
 
-    version_specifier = SpecifierSet(">=1,<3")
+    version_specifier = ">=1,<3"
 
     # Maps a non-Nautobot-specific base class to a Nautobot-specific base classes which has to be in the class hierarchy
     # for every class that has the base class in its hierarchy.
