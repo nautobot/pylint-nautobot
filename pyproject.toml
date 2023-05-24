@@ -30,6 +30,7 @@ mkdocs-version-annotations = "1.0.0"
 # Automatic documentation from sources, for MkDocs
 mkdocstrings = "0.21.2"
 mkdocstrings-python = "0.10.1"
+nautobot = "^1.5.19"
 
 [tool.pylint-nautobot]
 # Normally this configuration goes into the apps that should be linted, but this is required so that the checkers
