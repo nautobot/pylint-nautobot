@@ -102,6 +102,7 @@ jobs:
           build-args: |
             PYTHON_VER=${{ env.PYTHON_VER }}
     needs:
+      - "black"
       - "bandit"
       - "pydocstyle"
       - "flake8"
