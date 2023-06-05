@@ -18,7 +18,7 @@ Nautobot ecosystem developers and maintainers can add these rules to their devel
 `pylint-nautobot` is published on PyPI and can be installed with any of the usual Python packaging tools (e.g. `pip`, `poetry` etc.).
 
 !!! warning
-    Currently we only support use in environments managed by `poetry` and require configuration via `pyproject.toml`.
+    Currently we only support providing plugin configuration via `pyproject.toml`.
 
 To add `pylint-nautobot` to an existing project, first add it as a "dev" dependency via `poetry`:
 
