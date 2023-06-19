@@ -14,7 +14,7 @@ class NautobotStringFieldBlankNull(BaseChecker):
     name = "nautobot-string-field-blank-null"
     msgs = {
         "E4261": (
-            "Uses bad parameters for TextField/CharField.",
+            "Uses bad parameter combination for TextField/CharField.",
             "nb-string-field-blank-null",
             "Don't use blank=true and null=true on TextField or CharField",
         ),
