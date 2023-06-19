@@ -5,7 +5,7 @@ from pylint.interfaces import IAstroidChecker
 
 
 class NautobotStringFieldBlankNull(BaseChecker):
-    """Visit 'import from' statements to find usage of models that have been replaced in 2.0."""
+    """Visit classes to find class children on models who are CharField's or TextField's and check whether they are configured well."""
 
     __implements__ = IAstroidChecker
 

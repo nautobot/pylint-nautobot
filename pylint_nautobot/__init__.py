@@ -19,10 +19,11 @@ except ImportError:
 
 __version__ = metadata.version(__name__)
 
-CHECKERS = [NautobotCodeLocationChangesChecker, NautobotReplacedModelsImportChecker, NautobotIncorrectBaseClassChecker]
+CHECKERS = [
     NautobotCodeLocationChangesChecker,
     NautobotReplacedModelsImportChecker,
     NautobotStringFieldBlankNull,
+    NautobotIncorrectBaseClassChecker,
 ]
 
 
