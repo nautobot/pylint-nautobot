@@ -14,11 +14,13 @@ except ImportError:
 
 __version__ = metadata.version(__name__)
 
-from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
+from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
+from pylint_nautobot.status_field_instead_of_status_model import NautobotDeprecatedStatusModelChecker
 
 CHECKERS = [
     NautobotCodeLocationChangesChecker,
+    NautobotDeprecatedStatusModelChecker,
     NautobotReplacedModelsImportChecker,
 ]
 
