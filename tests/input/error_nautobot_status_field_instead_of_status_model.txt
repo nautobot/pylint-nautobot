@@ -1,1 +1,1 @@
-E4292: Declare status on the model explicitly with a StatusField, as StatusModel is deprecated
+E4292: Declare status on the model explicitly with a `StatusField`, as `StatusModel` is deprecated
