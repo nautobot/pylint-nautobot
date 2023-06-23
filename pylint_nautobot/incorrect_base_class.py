@@ -51,7 +51,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     name = "nautobot-incorrect-base-class"
     msgs = {
         "E4242": (
-            "Uses correct base classes.",
+            "Uses incorrect base classes.",
             "nb-incorrect-base-class",
             "All classes should inherit from the correct base classes.",
         )
