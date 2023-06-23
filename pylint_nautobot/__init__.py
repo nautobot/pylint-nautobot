@@ -6,6 +6,10 @@ from packaging.version import Version
 from pylint.lint import PyLinter
 import tomli
 
+from pylint_nautobot.incorrect_base_class import NautobotIncorrectBaseClassChecker
+from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
+from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
+
 try:
     from importlib import metadata
 except ImportError:
@@ -14,13 +18,7 @@ except ImportError:
 
 __version__ = metadata.version(__name__)
 
-from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
-from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
-
-CHECKERS = [
-    NautobotCodeLocationChangesChecker,
-    NautobotReplacedModelsImportChecker,
-]
+CHECKERS = [NautobotCodeLocationChangesChecker, NautobotReplacedModelsImportChecker, NautobotIncorrectBaseClassChecker]
 
 
 def register(linter: PyLinter):
