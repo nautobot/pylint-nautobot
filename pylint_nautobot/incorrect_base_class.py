@@ -40,7 +40,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
 
     version_specifier = ">=1,<3"
 
-    # Maps a non-Nautobot-specific base class to a Nautobot-specific base classes which has to be in the class hierarchy
+    # Maps a non-Nautobot-specific base class to a Nautobot-specific base class which has to be in the class hierarchy
     # for every class that has the base class in its hierarchy.
     external_to_nautobot_class_mapping = [
         ("django_filters.filters.FilterSet", "django_filters.filters.BaseFilterSet"),
