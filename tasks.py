@@ -107,10 +107,10 @@ def pytest(context, local=INVOKE_LOCAL):
 
 
 @task(help={"local": "Run locally or within the Docker container"})
-def black(context, local=INVOKE_LOCAL):
+def black(context, local=INVOKE_LOCAL, autoformat=False):
     """Run black to check that Python files adherence to black standards."""
-    exec_cmd = "black --check --diff ."
-    run_cmd(context, exec_cmd, local)
+    command = ["black", "" if autoformat else "--check --diff", "./"]
+    run_cmd(context, " ".join(command), local)
 
 
 @task(help={"local": "Run locally or within the Docker container"})
