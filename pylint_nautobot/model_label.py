@@ -10,11 +10,12 @@ from pylint.interfaces import HIGH
 from pylint.interfaces import IAstroidChecker
 
 
-def _get_model_name(node: NodeNG, attrname: str) -> str:
+def _get_model_name_for_meta_attr(node: NodeNG, expected_attrname: str) -> str:
+    """Return the <model name> if the node is a FormattedValue containing `<model name>._meta.<expected_attrname>."""
     if not isinstance(node, FormattedValue):
         return ""
     value = node.value
-    if not isinstance(value, Attribute) or value.attrname != attrname:
+    if not isinstance(value, Attribute) or value.attrname != expected_attrname:
         return ""
     expr = value.expr
     if not isinstance(expr, Attribute) or expr.attrname != "_meta":
@@ -24,7 +25,7 @@ def _get_model_name(node: NodeNG, attrname: str) -> str:
 
 
 def _expect_app_label(state, node: NodeNG) -> bool:
-    name = _get_model_name(node, "app_label")
+    name = _get_model_name_for_meta_attr(node, "app_label")
     if name:
         state["model_name"] = name
         return True
@@ -37,7 +38,7 @@ def _expect_dot(_, node: NodeNG) -> bool:
 
 
 def _expect_model(state, node: NodeNG) -> bool:
-    return _get_model_name(node, "model") == state["model_name"]
+    return _get_model_name_for_meta_attr(node, "model") == state["model_name"]
 
 
 _EXPECTATIONS = (
