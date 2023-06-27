@@ -56,7 +56,7 @@ class NautobotModelLabelChecker(BaseChecker):
 
     name = "model-label-checker"
     msgs = {
-        "E7401": (
+        "C4701": (
             "Model's app_label.model_name should be retrieved with `model._meta.label_lower`",
             "used-model-label-construction",
             "Replace f-string `{model._meta.app_label}.{model._meta.model}` with `{model._meta.label_lower}`",
