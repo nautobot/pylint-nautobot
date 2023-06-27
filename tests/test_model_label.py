@@ -5,7 +5,7 @@ from pylint.testutils import CheckerTestCase
 from pylint.testutils import MessageTest
 from pytest import mark
 
-from pylint_nautobot.model_label_checker import NautobotModelLabelChecker
+from pylint_nautobot.model_label import NautobotModelLabelChecker
 
 
 _COL_OFFSET = 11

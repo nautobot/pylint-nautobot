@@ -54,7 +54,7 @@ class NautobotModelLabelChecker(BaseChecker):
 
     version_specifier = ">=1,<3"
 
-    name = "model-label-checker"
+    name = "nautobot-model-label"
     msgs = {
         "C4701": (
             "Model's app_label.model_name should be retrieved with `model._meta.label_lower`",

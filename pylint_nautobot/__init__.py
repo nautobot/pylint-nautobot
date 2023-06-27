@@ -8,7 +8,7 @@ from pylint.lint import PyLinter
 
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
 from pylint_nautobot.incorrect_base_class import NautobotIncorrectBaseClassChecker
-from pylint_nautobot.model_label_checker import NautobotModelLabelChecker
+from pylint_nautobot.model_label import NautobotModelLabelChecker
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
 
 try:
