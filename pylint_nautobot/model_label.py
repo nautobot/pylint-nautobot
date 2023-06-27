@@ -11,7 +11,7 @@ from pylint.interfaces import IAstroidChecker
 
 
 def _get_model_name_for_meta_attr(node: NodeNG, expected_attrname: str) -> str:
-    """Return the <model name> if the node is a FormattedValue containing `<model name>._meta.<expected_attrname>."""
+    """Return `<model name>` if `node` contains `<model name>._meta.<expected_attrname>`."""
     if not isinstance(node, FormattedValue):
         return ""
     value = node.value
