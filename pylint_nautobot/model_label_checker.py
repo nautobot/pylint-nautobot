@@ -52,7 +52,7 @@ class NautobotModelLabelChecker(BaseChecker):
 
     __implements__ = IAstroidChecker
 
-    version_specifier = ">=2,<3"
+    version_specifier = ">=1,<3"
 
     name = "model-label-checker"
     msgs = {
