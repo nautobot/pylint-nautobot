@@ -64,14 +64,26 @@ class NautobotModelLabelChecker(BaseChecker):
     }
 
     def visit_joinedstr(self, node: JoinedStr):
-        """Check for f-strings that construct a model's label."""
-        state_index = 0
+        """Check for f-strings that construct a model's label.
+
+        Matches the following pattern inside the f-string:
+            {model._meta.app_label}.{model._meta.model}
+
+        `model` can be any variable name, its value is cached inside `state["model_name"]` and used to check the next
+        node.
+
+        Function iterates node.values (list of AST nodes the f-string is composed of) and checks if the nodes match
+        the expectations. Expectations are functions that return True if the node matches, False otherwise.
+        When the node matches the expectation, the next function is called for the next node.
+        If all functions return True, the message is emitted.
+        """
+        expectation_index = 0
         state = {"model_name": ""}
         for value in node.values:
-            if _EXPECTATIONS[state_index](state, value):
-                state_index += 1
-                if state_index >= len(_EXPECTATIONS):
+            if _EXPECTATIONS[expectation_index](state, value):
+                expectation_index += 1
+                if expectation_index >= len(_EXPECTATIONS):
                     self.add_message("used-model-label-construction", node=node, confidence=HIGH)
                     break
             else:
-                state_index = 0
+                expectation_index = 0
