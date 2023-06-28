@@ -59,7 +59,7 @@ class NautobotModelLabelChecker(BaseChecker):
     msgs = {
         "C4701": (
             "Model's app_label.model_name should be retrieved with `model._meta.label_lower`",
-            "used-model-label-construction",
+            "nb-used-model-label-construction",
             "Replace f-string `{model._meta.app_label}.{model._meta.model}` with `{model._meta.label_lower}`",
         ),
     }
@@ -84,7 +84,7 @@ class NautobotModelLabelChecker(BaseChecker):
             if _EXPECTATIONS[expectation_index](state, value):
                 expectation_index += 1
                 if expectation_index >= len(_EXPECTATIONS):
-                    self.add_message("used-model-label-construction", node=node, confidence=HIGH)
+                    self.add_message("nb-used-model-label-construction", node=node, confidence=HIGH)
                     break
             else:
                 expectation_index = 0
