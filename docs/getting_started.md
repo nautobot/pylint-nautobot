@@ -7,46 +7,60 @@ hide:
 
 ## Overview
 
-This project packages together custom rules for the `pylint` Python linter. These rules are meant to aid developers within the Nautobot ecosystem (i.e. core application, plugins/apps, jobs etc.) by highlighting good practices, unwanted coding patterns, or outright errors when migrating code between major releases of Nautobot (which have backwards incompatible changes).
+This project packages together custom rules for the `pylint` Python linter.
+These rules are meant to aid developers within the Nautobot ecosystem (i.e. core
+application, plugins/apps, jobs etc.) by highlighting good practices, unwanted
+coding patterns, or outright errors when migrating code between major releases
+of Nautobot (which have backwards incompatible changes).
 
 ### Audience (User Personas) - Who should use this project?
 
-Nautobot ecosystem developers and maintainers can add these rules to their development environment and CI pipelines.
+Nautobot ecosystem developers and maintainers can add these rules to their
+development environment and CI pipelines.
 
 ## Usage in an Existing Project
 
-`pylint-nautobot` is published on PyPI and can be installed with any of the usual Python packaging tools (e.g. `pip`, `poetry` etc.).
+`pylint-nautobot` is published on PyPI and can be installed with any of the
+usual Python packaging tools (e.g. `pip`, `poetry` etc.).
 
 !!! warning
-    Currently we only support use in environments managed by `poetry` and require configuration via `pyproject.toml`.
+    Currently we only support use in environments managed by `poetry` and
+    require configuration via `pyproject.toml`.
 
-To add `pylint-nautobot` to an existing project, first add it as a "dev" dependency via `poetry`:
+To add `pylint-nautobot` to an existing project, first add it as a "dev"
+dependency via `poetry`:
 
 ```
 > poetry add pylint-nautobot --group dev
 ```
 
-`pylint-nautobot` is a `pylint` plugin, so you need to enable in its respective `pyproject.toml` section (add it to the comma-separated list if there's already others in place):
+`pylint-nautobot` is a `pylint` plugin, so you need to enable in its respective
+`pyproject.toml` section (add it to the comma-separated list if there's already
+others in place):
 
 ```
 [tool.pylint.master]
 load-plugins="pylint_nautobot"
 ```
 
-Then, add a configuration section for `pylint-nautobot` itself, which dynamically enables or disables rules based on the target supported Nautobot version(s) for your code:
+Then, add a configuration section for `pylint-nautobot` itself, which
+dynamically enables or disables rules based on the target supported Nautobot
+version(s) for your code:
 
 ```
 [tool.pylint-nautobot]
 supported_nautobot_versions = [
     "1",
-    "2"
+    "2",
 ]
 ```
 
 !!! note
-    Here, you are telling `pylint` that you want all rules for Nautobot versions 1.x.y and 2.x.y to be checked.
+    Here, you are telling `pylint` that you want all rules for Nautobot versions
+    1.x.y and 2.x.y to be checked.
 
-Test whether the new rules are enabled by running the following (this is just a subset of the available rules):
+Test whether the new rules are enabled by running the following (this is just a
+subset of the available rules):
 
 ```
 > poetry run pylint --list-msgs-enabled | grep E42
@@ -59,7 +73,8 @@ Test whether the new rules are enabled by running the following (this is just a 
   nb-code-location-utilities (E4251)
 ```
 
-You can now run `pylint` within your project as you normally would and the additional rules will be automatically checked.
+You can now run `pylint` within your project as you normally would and the
+additional rules will be automatically checked.
 
 ## Authors and Maintainers
 
@@ -69,4 +84,6 @@ You can now run `pylint` within your project as you normally would and the addit
 
 ## Frequently Asked Questions
 
-Please ask us questions! You can swing by the [Network to Code Slack](https://networktocode.slack.com/) (channel `#nautobot`), sign up [here](http://slack.networktocode.com/) if you don't have an account.
+Please ask us questions! You can swing by the [Network to Code Slack](https://networktocode.slack.com/)
+(channel `#nautobot`), sign up [here](http://slack.networktocode.com/) if you
+don't have an account.
