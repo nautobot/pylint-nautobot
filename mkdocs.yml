@@ -100,4 +100,9 @@ nav:
   - Getting Started: "getting_started.md"
   - Release Notes: "release_notes.md"
   - Development: "development.md"
+  - Linters:
+    - Linters: "linters/index.md"
+    - Code Location Changes: "linters/code_location_changes.md"
+    - Incorrect Base Classes: "linters/incorrect_base_classes.md"
+    - Replaced Models: "linters/replaced_models.md"
   - Nautobot Docs Home ↗︎: "https://docs.nautobot.com"
