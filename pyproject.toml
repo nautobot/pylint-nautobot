@@ -107,10 +107,10 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 testpaths = [
-    "tests/"
+    "tests",
 ]
 norecursedirs = [
-    "tests/inputs/",
+    "tests/inputs",
 ]
 addopts = "-vv --doctest-modules"
 
