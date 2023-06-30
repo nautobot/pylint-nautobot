@@ -1,11 +1,10 @@
-# pylint: disable=duplicate-code
 """Tests for code location changes checker."""
-import astroid
 from pylint.testutils import CheckerTestCase
-from pylint.testutils import MessageTest
 from pytest import mark
 
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
+
+from .utils import assert_no_message, assert_import_error
 
 
 class TestCodeLocationChangesChecker(CheckerTestCase):
@@ -21,20 +20,7 @@ class TestCodeLocationChangesChecker(CheckerTestCase):
         ),
     )
     def test_code_location_changed(self, test_code, expected_args):
-        module_node = astroid.parse(test_code)
-        import_node = module_node.body[0]  # type: ignore
-        with self.assertAddsMessages(
-            MessageTest(
-                msg_id="nb-code-location-changed",
-                node=import_node,
-                line=1,
-                end_line=1,
-                col_offset=0,
-                end_col_offset=len(test_code),
-                args=expected_args,
-            ),
-        ):
-            self.walk(module_node)
+        assert_import_error(self, "nb-code-location-changed", test_code, expected_args)
 
     @mark.parametrize(
         ("test_code", "expected_args"),
@@ -50,20 +36,7 @@ class TestCodeLocationChangesChecker(CheckerTestCase):
         ),
     )
     def test_code_location_changed_object(self, test_code, expected_args):
-        module_node = astroid.parse(test_code)
-        import_node = module_node.body[0]  # type: ignore
-        with self.assertAddsMessages(
-            MessageTest(
-                msg_id="nb-code-location-changed-object",
-                node=import_node,
-                line=1,
-                end_line=1,
-                col_offset=0,
-                end_col_offset=len(test_code),
-                args=expected_args,
-            ),
-        ):
-            self.walk(module_node)
+        assert_import_error(self, "nb-code-location-changed-object", test_code, expected_args)
 
     @mark.parametrize(
         "test_code",
@@ -76,6 +49,4 @@ class TestCodeLocationChangesChecker(CheckerTestCase):
         ),
     )
     def test_no_issues(self, test_code):
-        module_node = astroid.parse(test_code)
-        with self.assertNoMessages():
-            self.walk(module_node)
+        assert_no_message(self, test_code)

@@ -8,6 +8,8 @@ from pytest import mark
 
 from pylint_nautobot.incorrect_base_class import NautobotIncorrectBaseClassChecker
 
+from .utils import assert_no_message
+
 _INPUTS_PATH = Path(__file__).parent / "inputs/incorrect-base-class"
 _EXPECTED_ERROR_ARGS = {
     "model": {
@@ -49,7 +51,4 @@ class TestIncorrectBaseClassChecker(CheckerTestCase):
         (file.name for file in _INPUTS_PATH.glob("ok_*.py")),
     )
     def test_no_issues(self, filename):
-        test_code = (_INPUTS_PATH / filename).read_text(encoding="utf-8")
-        module_node = astroid.parse(test_code)
-        with self.assertNoMessages():
-            self.walk(module_node)
+        assert_no_message(self, (_INPUTS_PATH / filename).read_text(encoding="utf-8"))

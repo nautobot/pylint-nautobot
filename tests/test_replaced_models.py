@@ -1,11 +1,10 @@
-# pylint: disable=duplicate-code
 """Tests for replaced models checker."""
-import astroid
 from pylint.testutils import CheckerTestCase
-from pylint.testutils import MessageTest
 from pytest import mark
 
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
+
+from .utils import assert_no_message, assert_import_error
 
 
 class TestReplacedModelsImportChecker(CheckerTestCase):
@@ -25,19 +24,7 @@ class TestReplacedModelsImportChecker(CheckerTestCase):
         ),
     )
     def test_code_location_changed(self, msg_id, test_code):
-        module_node = astroid.parse(test_code)
-        import_node = module_node.body[0]  # type: ignore
-        with self.assertAddsMessages(
-            MessageTest(
-                msg_id=msg_id,
-                node=import_node,
-                line=1,
-                end_line=1,
-                col_offset=0,
-                end_col_offset=len(test_code),
-            ),
-        ):
-            self.walk(module_node)
+        assert_import_error(self, msg_id, test_code)
 
     @mark.parametrize(
         "test_code",
@@ -47,6 +34,4 @@ class TestReplacedModelsImportChecker(CheckerTestCase):
         ),
     )
     def test_no_issues(self, test_code):
-        module_node = astroid.parse(test_code)
-        with self.assertNoMessages():
-            self.walk(module_node)
+        assert_no_message(self, test_code)

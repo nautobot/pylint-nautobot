@@ -7,6 +7,7 @@ from pytest import mark
 
 from pylint_nautobot.model_label import NautobotModelLabelChecker
 
+from .utils import assert_no_message
 
 _COL_OFFSET = 11
 
@@ -48,6 +49,4 @@ class TestModelLabelChecker(CheckerTestCase):
         ),
     )
     def test_no_issues(self, test_string):
-        module_node = astroid.parse(f"def get_label(model, another_model):\n    return {test_string}")
-        with self.assertNoMessages():
-            self.walk(module_node)
+        assert_no_message(self, f"def get_label(model, another_model):\n    return {test_string}")
