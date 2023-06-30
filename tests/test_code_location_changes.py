@@ -16,8 +16,7 @@ class TestCodeLocationChangesChecker(CheckerTestCase):
     @mark.parametrize(
         ("test_code", "expected_args"),
         (
-            # TODO: Fix the following test param, should emit a message too
-            # "import nautobot.core.fields",
+            ("import nautobot.core.fields", ("nautobot.core.fields", "nautobot.core.models.fields")),
             ("from nautobot.core.fields import anything", ("nautobot.core.fields", "nautobot.core.models.fields")),
         ),
     )
