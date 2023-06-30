@@ -67,7 +67,7 @@ exclude = '''
 [tool.pylint.master]
 ignore=[
     ".venv",
-    "tests/inputs",
+    "tests/inputs/",
 ]
 
 [tool.pylint.basic]
@@ -107,14 +107,17 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 testpaths = [
-    "tests"
+    "tests/"
 ]
 norecursedirs = [
-    "tests/inputs"
+    "tests/inputs/",
 ]
 addopts = "-vv --doctest-modules"
 
 [tool.bandit]
 skips = []
 # No need to check for security issues in the test scripts!
-exclude_dirs = ["./tests/", "./.venv/"]
+exclude_dirs = [
+    "./tests/",
+    "./.venv/",
+]
