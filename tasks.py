@@ -2,6 +2,7 @@
 import os
 import sys
 from distutils.util import strtobool
+
 from invoke import task
 
 try:
@@ -114,7 +115,11 @@ def pytest(context, local=INVOKE_LOCAL, verbose=False, names=""):
 @task(help={"local": "Run locally or within the Docker container"})
 def black(context, local=INVOKE_LOCAL, autoformat=False):
     """Run black to check that Python files adherence to black standards."""
-    command = ["black", "" if autoformat else "--check --diff", "./"]
+    command = [
+        "black",
+        "" if autoformat else "--check --diff",
+        "./",
+    ]
     run_cmd(context, " ".join(command), local)
 
 
@@ -131,7 +136,7 @@ def pylint(context, local=INVOKE_LOCAL):
     command = [
         "pylint",
         "*.py",
-        "./pylint_nautobot",
+        "./pylint_nautobot/",
         "./tests/",
     ]
     run_cmd(context, " ".join(command), local)
