@@ -65,7 +65,10 @@ exclude = '''
 '''
 
 [tool.pylint.master]
-ignore=".venv"
+ignore=[
+    ".venv",
+    "tests/inputs",
+]
 
 [tool.pylint.basic]
 # No docstrings required for private methods (Pylint default), or for test_ functions, or for inner Meta classes.
@@ -107,7 +110,7 @@ testpaths = [
     "tests"
 ]
 norecursedirs = [
-    "tests/input"
+    "tests/inputs"
 ]
 addopts = "-vv --doctest-modules"
 
