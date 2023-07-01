@@ -1,0 +1,21 @@
+---
+dcim:
+  DeviceRole:
+    new_app: "extras"
+    new_model: "Role"
+  RackRole:
+    new_app: "extras"
+    new_model: "Role"
+  Region:
+    new_app: "dcim"
+    new_model: "Location"
+  Site:
+    new_app: "dcim"
+    new_model: "Location"
+ipam:
+  Aggregate:
+    new_app: "ipam"
+    new_model: "Prefix"
+  Role:
+    new_app: "extras"
+    new_model: "Role"
