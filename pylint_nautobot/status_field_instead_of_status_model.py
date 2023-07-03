@@ -1,10 +1,10 @@
-"""Check for deprecated `StatusModel` usage and encourage the usage of `StatusField` instead."""
+"""Check for deprecated StatusModel usage and encourage the usage of StatusField instead."""
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
 
 class NautobotDeprecatedStatusModelChecker(BaseChecker):
-    """Discourage the usage of deprecated `StatusModel` and encourage the usage of `StatusField`."""
+    """Discourage the usage of deprecated StatusModel and encourage the usage of StatusField."""
 
     __implements__ = IAstroidChecker
 

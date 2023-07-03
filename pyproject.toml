@@ -30,8 +30,6 @@ mkdocs-version-annotations = "1.0.0"
 # Automatic documentation from sources, for MkDocs
 mkdocstrings = "0.21.2"
 mkdocstrings-python = "0.10.1"
-# Django and nautobot have to be installed for the inference in the tests of the class hierarchy to work correctly
-django = "3.2.19"
 nautobot = "^1.5.19"
 
 [tool.pylint-nautobot]
