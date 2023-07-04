@@ -13,7 +13,7 @@ class NautobotDeprecatedStatusModelChecker(BaseChecker):
     name = "nautobot-status-field-instead-of-status-model"
     msgs = {
         "E4292": (
-            "Declare status on the model explicitly with a `StatusField`, as `StatusModel` is deprecated",
+            "Inherits from the deprecated StatusModel instead of declaring status on the model explicitly with StatusField",
             "nb-status-field-instead-of-status-model",
             "https://docs.nautobot.com/projects/core/en/next/models/extras/status/#status-internals",
         ),
