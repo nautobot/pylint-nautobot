@@ -80,4 +80,5 @@ def run_test(test_file_path: Dict[str, Path], error: bool):
     # Since we only have an expected output for error tests, only compare if we are
     # running an error test.
     if error:
-        assert expected_output in actual_output
+        for expected_error in expected_output.strip().splitlines():
+            assert expected_error in actual_output
