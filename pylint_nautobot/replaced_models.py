@@ -1,15 +1,19 @@
 """Check for usage of models that were replaced in 2.0."""
+from typing import Optional
+
 import importlib_resources
 
 import yaml
 
-from astroid import AssignName, Call
+from astroid import AssignName, Call, nodes
 
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
 
-with open(importlib_resources.files("pylint_nautobot").joinpath("data/v2/v2-database-replaced-models.yaml")) as fh:
+with open(
+    importlib_resources.files("pylint_nautobot").joinpath("data/v2/v2-database-replaced-models.yaml"), encoding="utf-8"
+) as fh:
     V2_REPLACED_MODELS = yaml.safe_load(fh)
 
 
@@ -75,76 +79,82 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
                 elif name == "Aggregate":
                     self.add_message("nb-replaced-aggregate", node=node)
 
-class NautobotReplacedModelsImportChecker(BaseChecker):
-    """Visit 'import from' statements to find usage of models that have been replaced in 2.0."""
+
+class NautobotReplacedModelsRelatedObjectChecker(BaseChecker):
+    """Visit Model field definitions to find usage of models that have been replaced.
+
+    This iterates through class attributes looking for instantiation of foriegn
+    key class fields, and verifies that the relation is not assigned to a
+    Nautobot Model that has been replaced.
+    """
 
     __implements__ = IAstroidChecker
 
     version_specifier = ">=2,<3"
 
-    name = "nautobot-replaced-models-relationship-fields"
+    name = "nautobot-replaced-models-related-object-fields"
     msgs = {
         "E4311": (
-            "Relationship field is related to a model that has been replaced (%s -> %s).",
-            "nb-replaced-model-relationship-field",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#generic-role-model",
+            "Related object field is related to a model that has been replaced (%s -> %s).",
+            "nb-replaced-model-related-object-field",
+            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#replaced-models",
         ),
     }
 
-    def visit_classdef(self, node):
-        class_attrs = [
+    @staticmethod
+    def _get_related_model(relationship_field: Call) -> Optional[str]:
+        """Get app.Model of related object."""
+        # Check if args were passed
+        if relationship_field.args:
+            # The `to` arg is the first argument
+            return relationship_field.args[0].value
+        # Check keyword args if args were not passed
+        for keyword in relationship_field.keywords:
+            if keyword.arg == "to":
+                return keyword.value.value
+
+        # Check kwargs as a last resort
+        for kwargs in relationship_field.kwargs:
+            # `relationship_field.kwargs` is a list of `Keyword` instances
+            for kwarg in kwargs.value.items:
+                # `kwargs.value.items` is a list of key,value tuples
+                if kwarg[0].value == "to":
+                    return kwarg[1].value
+
+        # Unable to find the model that is being related to
+        return None
+
+    def visit_classdef(self, node: nodes.ClassDef) -> None:
+        """Reports related object fields that use a model that has been replaced."""
+        relationship_fields = [
             value.assign_type().value
             for value in node.values()
-            if isinstance(value, AssignName)  # Filters out things like method definitions
-            and isinstance(value.assign_type().value, Call)  # Filters out attrs that are not assigned callables
-        ]
-        relationship_fields = [
-            class_attr for class_attr in class_attrs
-            if class_attr.func.attrname in RELATIONSHIP_CLASS_NAMES
+            # Filters out things like method definitions
+            if isinstance(value, AssignName)
+            # Filters out attrs that are not assigned callables
+            and isinstance(value.assign_type().value, Call)
+            # Filters out non relationship fields
+            and value.assign_type().value.func.attrname in RELATIONSHIP_CLASS_NAMES
         ]
 
         related_model = None
         for relationship_field in relationship_fields:
-            # Check if args were passed
-            if relationship_field.args:
-                # The `to` arg is the first argument
-                related_model = relationship_field.args[0].value
-            else:
-                # Check keyword args if args were not passed
-                for keyword in relationship_field.keywords:
-                    if keyword.arg == "to":
-                        related_model = keyword.value.value
-                        break
-                else:
-                    # Check kwargs as a last resort
-                    for keyword in relationship_field.kwargs:
-                        # `relationship_field.kwargs` is a list of `Keyword` instances
-                        for kwarg in keyword.value.items:
-                            # `keyword.value.items` is a list of key,value tuples
-                            if kwarg[0].value == "to":
-                                related_model = kwarg[1].value
-                                break
-                        else:
-                            # Only break outer loop if inner loop found `to`
-                            continue
-                        break
+            related_model = self._get_related_model(relationship_field)
+            if related_model is None:
+                continue  # Relationship cannot not be determined, so ignore
 
-            if related_model is not None:
-                try:
-                    app, model = related_model.split(".")
-                except ValueError:
-                    continue
-                except Exception:
-                    breakpoint()
+            try:
+                app, model = related_model.split(".")
+            except ValueError:
+                continue  # App/Model cannot be determined, so ignore
 
-                replaced_app = V2_REPLACED_MODELS.get(app)
-                if replaced_app:
-                    replaced_model = replaced_app.get(model)
-
-                    if replaced_model:
-                        replaced_app_model = f"{replaced_model['new_app']}.{replaced_model['new_model']}"
-                        self.add_message(
-                            "nb-replaced-model-relationship-field",
-                            node=node,
-                            args=(related_model, replaced_app_model),
-                        )
+            replaced_app = V2_REPLACED_MODELS.get(app, {})
+            replaced_model = replaced_app.get(model)
+            # Only log an error when Model has been replaced
+            if replaced_model:
+                replaced_app_model = f"{replaced_model['new_app']}.{replaced_model['new_model']}"
+                self.add_message(
+                    "nb-replaced-model-related-object-field",
+                    node=node,
+                    args=(related_model, replaced_app_model),
+                )
