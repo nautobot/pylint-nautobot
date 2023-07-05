@@ -20,7 +20,6 @@ class NautobotDeprecatedStatusModelChecker(BaseChecker):
     }
 
     def visit_classdef(self, node):
-        # Wait until pylint-nautobot #9 is merged.
         ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
         if "nautobot.extras.models.statuses.StatusModel" in ancestor_class_types:
             self.add_message("nb-status-field-instead-of-status-model", node=node)
