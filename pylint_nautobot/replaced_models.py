@@ -1,11 +1,11 @@
 """Check for usage of models that were replaced in 2.0."""
-from typing import Optional
+from typing import Optional, Union
 
 import importlib_resources
 
 import yaml
 
-from astroid import AssignName, Call, nodes
+import astroid
 
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
@@ -83,12 +83,10 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
 class NautobotReplacedModelsRelatedObjectChecker(BaseChecker):
     """Visit Model field definitions to find usage of models that have been replaced.
 
-    This iterates through class attributes looking for instantiation of foriegn
+    This iterates through class attributes looking for instantiation of foreign
     key class fields, and verifies that the relation is not assigned to a
     Nautobot Model that has been replaced.
     """
-
-    __implements__ = IAstroidChecker
 
     version_specifier = ">=2,<3"
 
@@ -102,16 +100,32 @@ class NautobotReplacedModelsRelatedObjectChecker(BaseChecker):
     }
 
     @staticmethod
-    def _get_related_model(relationship_field: Call) -> Optional[str]:
+    def _extract_to_field_contents(to_field: Union[astroid.Attribute, astroid.Const, astroid.Name]) -> Optional[str]:
+        """Get string representation from `to` args value."""
+        # call as string, e.g. `ForeignKey("dcim.Site")`
+        if isinstance(to_field, astroid.Const):
+            if isinstance(to_field.value, str):
+                return to_field.value
+            # The `to` arg seems to be invalid, e.g. `ForeignKey(1)`
+            return None
+        # call as app.Model or Model, e.g. `ForeignKey(dcim.Site)` or `ForeignKey(Site)`
+        if isinstance(to_field, (astroid.Attribute, astroid.Name)):
+            return to_field.as_string()
+
+        # Unable to find the model that is beign related to, e.g. `ForeignKey(lambda x: x)`
+        return None
+
+    def _get_related_model(self, relationship_field: astroid.Call) -> Optional[str]:
         """Get app.Model of related object."""
         # Check if args were passed
         if relationship_field.args:
             # The `to` arg is the first argument
-            return relationship_field.args[0].value
+            return self._extract_to_field_contents(relationship_field.args[0])
+
         # Check keyword args if args were not passed
         for keyword in relationship_field.keywords:
             if keyword.arg == "to":
-                return keyword.value.value
+                return self._extract_to_field_contents(keyword.value)
 
         # Check kwargs as a last resort
         for kwargs in relationship_field.kwargs:
@@ -119,20 +133,20 @@ class NautobotReplacedModelsRelatedObjectChecker(BaseChecker):
             for kwarg in kwargs.value.items:
                 # `kwargs.value.items` is a list of key,value tuples
                 if kwarg[0].value == "to":
-                    return kwarg[1].value
+                    return self._extract_to_field_contents(kwarg[1])
 
         # Unable to find the model that is being related to
         return None
 
-    def visit_classdef(self, node: nodes.ClassDef) -> None:
+    def visit_classdef(self, node: astroid.ClassDef) -> None:
         """Reports related object fields that use a model that has been replaced."""
         relationship_fields = [
             value.assign_type().value
             for value in node.values()
             # Filters out things like method definitions
-            if isinstance(value, AssignName)
+            if isinstance(value, astroid.AssignName)
             # Filters out attrs that are not assigned callables
-            and isinstance(value.assign_type().value, Call)
+            and isinstance(value.assign_type().value, astroid.Call)
             # Filters out non relationship fields
             and value.assign_type().value.func.attrname in RELATIONSHIP_CLASS_NAMES
         ]
@@ -146,7 +160,11 @@ class NautobotReplacedModelsRelatedObjectChecker(BaseChecker):
             try:
                 app, model = related_model.split(".")
             except ValueError:
-                continue  # App/Model cannot be determined, so ignore
+                # App/Model cannot be determined, so ignore
+                # This would be the case for example if the relationship was defined
+                # using `ForeignKey(to=Site)`, where static analysis is unable to
+                # easily identify what app `Site` is defined in.
+                continue
 
             replaced_app = V2_REPLACED_MODELS.get(app, {})
             replaced_model = replaced_app.get(model)
