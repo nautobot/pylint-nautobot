@@ -1,0 +1,6 @@
+E4311: Related object field is related to a model that has been replaced (dcim.DeviceRole -> extras.Role). (nb-replaced-model-related-object-field)
+E4311: Related object field is related to a model that has been replaced (dcim.RackRole -> extras.Role). (nb-replaced-model-related-object-field)
+E4311: Related object field is related to a model that has been replaced (dcim.Region -> dcim.Location). (nb-replaced-model-related-object-field)
+E4311: Related object field is related to a model that has been replaced (dcim.Site -> dcim.Location). (nb-replaced-model-related-object-field)
+E4311: Related object field is related to a model that has been replaced (ipam.Aggregate -> ipam.Prefix). (nb-replaced-model-related-object-field)
+E4311: Related object field is related to a model that has been replaced (ipam.Role -> extras.Role). (nb-replaced-model-related-object-field)
