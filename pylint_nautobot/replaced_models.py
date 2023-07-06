@@ -88,6 +88,8 @@ class NautobotReplacedModelsRelatedObjectChecker(BaseChecker):
     Nautobot Model that has been replaced.
     """
 
+    __implements__ = IAstroidChecker
+
     version_specifier = ">=2,<3"
 
     name = "nautobot-replaced-models-related-object-fields"
