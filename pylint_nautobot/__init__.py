@@ -11,6 +11,7 @@ from pylint_nautobot.string_field_null_blank import NautobotStringFieldBlankNull
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
 from pylint_nautobot.status_field_instead_of_status_model import NautobotDeprecatedStatusModelChecker
+from pylint_nautobot.removed_python_code import NautobotRemovedCodeImportChecker
 
 
 try:
@@ -27,6 +28,7 @@ CHECKERS = [
     NautobotReplacedModelsImportChecker,
     NautobotStringFieldBlankNull,
     NautobotIncorrectBaseClassChecker,
+    NautobotRemovedCodeImportChecker,
 ]
 
 
@@ -47,7 +49,7 @@ def register(linter: PyLinter):
             for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
         ]
     except KeyError as error:
-        raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from error
+        raise AttributeError("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from error
 
     for checker in CHECKERS:
         version_specifier_set = SpecifierSet(checker.version_specifier)

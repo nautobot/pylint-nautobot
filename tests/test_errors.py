@@ -51,7 +51,7 @@ def test_no_errors(test_file_path):
 def run_test(test_file_path: Dict[str, Path], error: bool):
     """Run a single test."""
     # Extract the checker name from the file name
-    checker_name = test_file_path["py"].stem.strip("error_").replace("_", "-")
+    checker_name = test_file_path["py"].stem[6:].replace("_", "-")
 
     # We only have error output for error tests
     if error:
@@ -80,4 +80,5 @@ def run_test(test_file_path: Dict[str, Path], error: bool):
     # Since we only have an expected output for error tests, only compare if we are
     # running an error test.
     if error:
-        assert expected_output in actual_output
+        for expected_error in expected_output.strip().splitlines():
+            assert expected_error in actual_output
