@@ -47,7 +47,7 @@ def register(linter: PyLinter):
             for version in pyproject_toml_content["tool"]["pylint-nautobot"]["supported_nautobot_versions"]
         ]
     except KeyError as error:
-        raise Exception("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from error
+        raise AttributeError("[tool.pylint-nautobot] configuration missing from pyproject.toml.") from error
 
     for checker in CHECKERS:
         version_specifier_set = SpecifierSet(checker.version_specifier)
