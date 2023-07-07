@@ -3,7 +3,6 @@ import inspect
 
 from astroid import ClassDef, Assign, Const
 from pylint.checkers import BaseChecker
-from pylint.interfaces import IAstroidChecker
 
 
 def to_path(obj):
@@ -35,8 +34,6 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
 
     Example: Every model that you define in the Nautobot ecosystem should inherit from 'nautobot.core.models.BaseModel'.
     """
-
-    __implements__ = IAstroidChecker
 
     version_specifier = ">=1,<3"
 

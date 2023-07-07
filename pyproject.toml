@@ -6,8 +6,8 @@ authors = ["Cristian Sirbu <cristian.sirbu@networktocode.com>", "Leo Kirchner <l
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.7"
-pylint = "^2.13"
+python = "^3.7.2"
+pylint = "^2.17"
 pyyaml = "^6.0"
 importlib-resources = "^5.12.0"
 tomli = "^2.0.1"
