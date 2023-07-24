@@ -10,6 +10,8 @@ from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChe
 from pylint_nautobot.incorrect_base_class import NautobotIncorrectBaseClassChecker
 from pylint_nautobot.model_label import NautobotModelLabelChecker
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
+from pylint_nautobot.status_field_instead_of_status_model import NautobotDeprecatedStatusModelChecker
+from pylint_nautobot.string_field_null_blank import NautobotStringFieldBlankNull
 
 try:
     from importlib import metadata
@@ -21,9 +23,11 @@ __version__ = metadata.version(__name__)
 
 CHECKERS = [
     NautobotCodeLocationChangesChecker,
+    NautobotDeprecatedStatusModelChecker,
     NautobotIncorrectBaseClassChecker,
     NautobotModelLabelChecker,
     NautobotReplacedModelsImportChecker,
+    NautobotStringFieldBlankNull,
 ]
 
 
