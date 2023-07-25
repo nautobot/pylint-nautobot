@@ -24,6 +24,7 @@ class TestModelLabelChecker(CheckerTestCase):
     )
     def test_finds_model_label_construction(self, test_string):
         module_node = astroid.parse(f"NAME = {test_string}\n")
+        # Find the f-string node in the parsed module AST to be passed to the expected message.
         fnode = module_node.body[0].value  # type: ignore
         with self.assertAddsMessages(
             MessageTest(msg_id="nb-used-model-label-construction", confidence=HIGH, node=fnode, line=1, col_offset=7),

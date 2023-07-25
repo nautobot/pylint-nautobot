@@ -30,7 +30,7 @@ class TestReplacedModelsImportChecker(CheckerTestCase):
         "test_code",
         (
             "from nautobot.dcim.models import Device",
-            "from nautobot.ipam.models import IpAddress",
+            "from nautobot.ipam.models import IPAddress",
         ),
     )
     def test_no_issues(self, test_code):
