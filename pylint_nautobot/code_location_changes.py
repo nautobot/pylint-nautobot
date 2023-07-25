@@ -41,7 +41,10 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
                     )
 
     def visit_importfrom(self, node):
-        """Verifies whether entire module imports or individual objects have moved."""
+        """Verifies whether entire module imports or individual objects have moved.
+
+        e.g. `from nautobot.utilities import templatetags` is invalid.
+        """
         if node.modname in MAP_CODE_LOCATION_CHANGES:
             import_changed_to = MAP_CODE_LOCATION_CHANGES[node.modname]
             if "(all)" in import_changed_to:

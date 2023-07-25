@@ -8,7 +8,7 @@ from .utils import assert_no_message, assert_import_error
 
 
 class TestCodeLocationChangesChecker(CheckerTestCase):
-    """Test model label construction checker."""
+    """Test code location changes checker."""
 
     CHECKER_CLASS = NautobotCodeLocationChangesChecker
 

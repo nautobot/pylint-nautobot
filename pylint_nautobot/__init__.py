@@ -7,11 +7,11 @@ from packaging.version import Version
 from pylint.lint import PyLinter
 
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
+from pylint_nautobot.deprecated_status_model import NautobotDeprecatedStatusModelChecker
 from pylint_nautobot.incorrect_base_class import NautobotIncorrectBaseClassChecker
 from pylint_nautobot.model_label import NautobotModelLabelChecker
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
-from pylint_nautobot.status_field_instead_of_status_model import NautobotDeprecatedStatusModelChecker
-from pylint_nautobot.string_field_null_blank import NautobotStringFieldBlankNull
+from pylint_nautobot.string_field_blank_null import NautobotStringFieldBlankNull
 
 try:
     from importlib import metadata

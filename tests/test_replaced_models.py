@@ -8,7 +8,7 @@ from .utils import assert_no_message, assert_import_error
 
 
 class TestReplacedModelsImportChecker(CheckerTestCase):
-    """Test model label construction checker."""
+    """Test replaced models import checker."""
 
     CHECKER_CLASS = NautobotReplacedModelsImportChecker
 

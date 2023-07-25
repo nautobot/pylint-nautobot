@@ -9,8 +9,6 @@ from pylint_nautobot.model_label import NautobotModelLabelChecker
 
 from .utils import assert_no_message
 
-_COL_OFFSET = 11
-
 
 class TestModelLabelChecker(CheckerTestCase):
     """Test model label construction checker."""
@@ -25,18 +23,10 @@ class TestModelLabelChecker(CheckerTestCase):
         ),
     )
     def test_finds_model_label_construction(self, test_string):
-        module_node = astroid.parse(f"def get_label(model, another_model):\n    return {test_string}")
-        fnode = module_node.body[0].body[0].value  # type: ignore
+        module_node = astroid.parse(f"NAME = {test_string}\n")
+        fnode = module_node.body[0].value  # type: ignore
         with self.assertAddsMessages(
-            MessageTest(
-                msg_id="nb-used-model-label-construction",
-                confidence=HIGH,
-                node=fnode,
-                line=2,
-                end_line=2,
-                col_offset=_COL_OFFSET,
-                end_col_offset=_COL_OFFSET + len(test_string),
-            ),
+            MessageTest(msg_id="nb-used-model-label-construction", confidence=HIGH, node=fnode, line=1, col_offset=7),
         ):
             self.walk(module_node)
 
@@ -49,4 +39,4 @@ class TestModelLabelChecker(CheckerTestCase):
         ),
     )
     def test_no_issues(self, test_string):
-        assert_no_message(self, f"def get_label(model, another_model):\n    return {test_string}")
+        assert_no_message(self, f"NAME = {test_string}\n")
