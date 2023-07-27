@@ -25,8 +25,26 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
         ),
     }
 
+    def visit_import(self, node):
+        """Verifies whether entire module imports have moved.
+
+        e.g.: `import nautobot.core.fields` is invalid.
+        """
+        for name, _ in node.names:
+            if name in MAP_CODE_LOCATION_CHANGES:
+                import_changed_to = MAP_CODE_LOCATION_CHANGES[name]
+                if "(all)" in import_changed_to:
+                    self.add_message(
+                        "nb-code-location-changed",
+                        node=node,
+                        args=(name, import_changed_to["(all)"]),
+                    )
+
     def visit_importfrom(self, node):
-        """Verifies whether entire module imports or individual objects have moved."""
+        """Verifies whether entire module imports or individual objects have moved.
+
+        e.g. `from nautobot.utilities import templatetags` is invalid.
+        """
         if node.modname in MAP_CODE_LOCATION_CHANGES:
             import_changed_to = MAP_CODE_LOCATION_CHANGES[node.modname]
             if "(all)" in import_changed_to:

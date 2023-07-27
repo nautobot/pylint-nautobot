@@ -1,1 +1,0 @@
-E4292: Inherits from the deprecated StatusModel instead of declaring status on the model explicitly with StatusField

@@ -5,4 +5,4 @@ ignore = E501, W503
 exclude =
   __pycache__,
   .venv,
-  tests/input
+  tests/inputs
