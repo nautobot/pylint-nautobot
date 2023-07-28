@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pylint-nautobot"
-version = "0.1.0"
+version = "0.2.0"
 description = "Custom Pylint Rules for Nautobot"
 authors = ["Cristian Sirbu <cristian.sirbu@networktocode.com>", "Leo Kirchner <leo.kirchner@networktocode.com>"]
 readme = "README.md"
@@ -30,6 +30,9 @@ mkdocs-version-annotations = "1.0.0"
 # Automatic documentation from sources, for MkDocs
 mkdocstrings = "0.21.2"
 mkdocstrings-python = "0.10.1"
+# Django and nautobot have to be installed for the inference in the tests of the class hierarchy to work correctly
+django = "3.2.19"
+nautobot = "^1.5.19"
 
 [tool.pylint-nautobot]
 # Normally this configuration goes into the apps that should be linted, but this is required so that the checkers
@@ -63,7 +66,10 @@ exclude = '''
 '''
 
 [tool.pylint.master]
-ignore=".venv"
+ignore=[
+    ".venv",
+    "tests/inputs/",
+]
 
 [tool.pylint.basic]
 # No docstrings required for private methods (Pylint default), or for test_ functions, or for inner Meta classes.
@@ -102,14 +108,17 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 testpaths = [
-    "tests"
+    "tests",
 ]
 norecursedirs = [
-    "tests/input"
+    "tests/inputs",
 ]
 addopts = "-vv --doctest-modules"
 
 [tool.bandit]
 skips = []
 # No need to check for security issues in the test scripts!
-exclude_dirs = ["./tests/", "./.venv/"]
+exclude_dirs = [
+    "./tests/",
+    "./.venv/",
+]

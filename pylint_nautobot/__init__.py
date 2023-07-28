@@ -1,10 +1,17 @@
 """Initialization file for library."""
 from pathlib import Path
 
+import tomli
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 from pylint.lint import PyLinter
-import tomli
+
+from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
+from pylint_nautobot.deprecated_status_model import NautobotDeprecatedStatusModelChecker
+from pylint_nautobot.incorrect_base_class import NautobotIncorrectBaseClassChecker
+from pylint_nautobot.model_label import NautobotModelLabelChecker
+from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
+from pylint_nautobot.string_field_blank_null import NautobotStringFieldBlankNull
 
 try:
     from importlib import metadata
@@ -14,26 +21,32 @@ except ImportError:
 
 __version__ = metadata.version(__name__)
 
-from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
-from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
-
 CHECKERS = [
     NautobotCodeLocationChangesChecker,
+    NautobotDeprecatedStatusModelChecker,
+    NautobotIncorrectBaseClassChecker,
+    NautobotModelLabelChecker,
     NautobotReplacedModelsImportChecker,
+    NautobotStringFieldBlankNull,
 ]
 
 
-def register(linter: PyLinter):
-    """Pylint plugin entrypoint - register all the checks to the linter."""
-    # Try to discover the target projects 'pyproject.toml' to access its pylint-nautobot configuration.
+def _read_target_pyproject_toml() -> dict:
+    """Try to discover the target projects 'pyproject.toml' to access its pylint-nautobot configuration."""
     # TODO: It would be great if we could infer this from the Nautobot dependency constraint for the target project.
-    pyproject_toml_content = None
     for directory in [*Path.cwd().parents, Path.cwd()]:
         pyproject_toml_path = directory / "pyproject.toml"
         if pyproject_toml_path.exists():
             with open(pyproject_toml_path, "rb") as file:
-                pyproject_toml_content = tomli.load(file)
-                break
+                return tomli.load(file)
+
+    raise RuntimeError("Unable to find pyproject.toml for target project.")
+
+
+def register(linter: PyLinter):
+    """Pylint plugin entrypoint - register all the checks to the linter."""
+    pyproject_toml_content = _read_target_pyproject_toml()
+
     try:
         supported_nautobot_versions = [
             Version(version)

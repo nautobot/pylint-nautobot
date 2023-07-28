@@ -2,6 +2,7 @@
 import os
 import sys
 from distutils.util import strtobool
+
 from invoke import task
 
 try:
@@ -100,17 +101,26 @@ def rebuild(context):
 
 
 @task(help={"local": "Run locally or within the Docker container"})
-def pytest(context, local=INVOKE_LOCAL):
+def pytest(context, local=INVOKE_LOCAL, verbose=False, names=""):
     """Run pytest test cases."""
-    exec_cmd = "pytest"
-    run_cmd(context, exec_cmd, local)
+    command = [
+        "pytest",
+        "-vvv" if verbose else "",
+        names if names else "",
+    ]
+
+    run_cmd(context, " ".join(command), local)
 
 
 @task(help={"local": "Run locally or within the Docker container"})
-def black(context, local=INVOKE_LOCAL):
+def black(context, local=INVOKE_LOCAL, autoformat=False):
     """Run black to check that Python files adherence to black standards."""
-    exec_cmd = "black --check --diff ."
-    run_cmd(context, exec_cmd, local)
+    command = [
+        "black",
+        "" if autoformat else "--check --diff",
+        "./",
+    ]
+    run_cmd(context, " ".join(command), local)
 
 
 @task(help={"local": "Run locally or within the Docker container"})
@@ -123,8 +133,13 @@ def flake8(context, local=INVOKE_LOCAL):
 @task(help={"local": "Run locally or within the Docker container"})
 def pylint(context, local=INVOKE_LOCAL):
     """Run pylint code analysis."""
-    exec_cmd = 'find . -name "*.py" -not -path "./tests/input/*.py" | xargs pylint'
-    run_cmd(context, exec_cmd, local)
+    command = [
+        "pylint",
+        "*.py",
+        "./pylint_nautobot/",
+        "./tests/",
+    ]
+    run_cmd(context, " ".join(command), local)
 
 
 @task(help={"local": "Run locally or within the Docker container"})
