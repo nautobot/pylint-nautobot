@@ -3,6 +3,8 @@ from astroid import ClassDef, Assign, Const
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
+from pylint_nautobot.utils import is_nautobot_v2_installed
+
 
 def is_abstract(node):
     """Given a node, returns whether it is an abstract base model."""
@@ -38,7 +40,12 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     external_to_nautobot_class_mapping = [
         ("django_filters.filters.FilterSet", "django_filters.filters.BaseFilterSet"),
         ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
-        ("django.forms.forms.Form", "nautobot.core.forms.forms.BootstrapMixin"),
+        (
+            "django.forms.forms.Form",
+            "nautobot.core.forms.forms.BootstrapMixin"
+            if is_nautobot_v2_installed()
+            else "nautobot.utilities.forms.forms.BootstrapMixin",
+        ),
     ]
 
     name = "nautobot-incorrect-base-class"
