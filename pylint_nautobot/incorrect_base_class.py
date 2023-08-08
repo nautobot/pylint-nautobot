@@ -6,11 +6,6 @@ from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
 
-def to_path(obj):
-    """Given an object, return its fully qualified import path."""
-    return f"{inspect.getmodule(obj).__name__}.{obj.__name__}"
-
-
 def is_abstract(node):
     """Given a node, returns whether it is an abstract base model."""
     for child_node in node.get_children():
@@ -45,7 +40,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     external_to_nautobot_class_mapping = [
         ("django_filters.filters.FilterSet", "django_filters.filters.BaseFilterSet"),
         ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
-        ("django.forms.forms.Form", "nautobot.utilities.forms.forms.BootstrapMixin"),
+        ("django.forms.forms.Form", "nautobot.core.forms.forms.BootstrapMixin"),
     ]
 
     name = "nautobot-incorrect-base-class"
