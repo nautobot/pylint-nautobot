@@ -1,6 +1,4 @@
 """Check for imports whose paths have changed in 2.0."""
-import inspect
-
 from astroid import ClassDef, Assign, Const
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
