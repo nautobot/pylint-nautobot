@@ -1,14 +1,9 @@
 """Check for imports whose paths have changed in 2.0."""
-import inspect
-
 from astroid import ClassDef, Assign, Const
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 
-
-def to_path(obj):
-    """Given an object, return its fully qualified import path."""
-    return f"{inspect.getmodule(obj).__name__}.{obj.__name__}"
+from pylint_nautobot.utils import is_nautobot_v2_installed
 
 
 def is_abstract(node):
@@ -45,7 +40,12 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     external_to_nautobot_class_mapping = [
         ("django_filters.filters.FilterSet", "django_filters.filters.BaseFilterSet"),
         ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
-        ("django.forms.forms.Form", "nautobot.utilities.forms.forms.BootstrapMixin"),
+        (
+            "django.forms.forms.Form",
+            "nautobot.core.forms.forms.BootstrapMixin"
+            if is_nautobot_v2_installed()
+            else "nautobot.utilities.forms.forms.BootstrapMixin",
+        ),
     ]
 
     name = "nautobot-incorrect-base-class"
