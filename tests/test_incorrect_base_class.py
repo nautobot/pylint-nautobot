@@ -16,6 +16,7 @@ _EXPECTED_ERROR_ARGS = {
         "line": 4,
         "col_offset": 0,
         "node": lambda module_node: module_node.body[1],
+        "args": ('django.db.models.base.Model', 'nautobot.core.models.BaseModel')
     },
 }
 

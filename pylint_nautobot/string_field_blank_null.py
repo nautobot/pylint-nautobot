@@ -37,8 +37,11 @@ class NautobotStringFieldBlankNull(BaseChecker):
             # We are only interested in assignments to a call
             if not isinstance(child_node.value, Call):
                 continue
+            # Encountered values: "CharField" or "models.CharField"
+            # because they can be ast Name or Attribute nodes
+            child_node_name = child_node.value.func.as_string().split(".")[-1]
             # We are only interested in calls to these two models
-            if child_node.value.func.attrname not in ("TextField", "CharField"):
+            if child_node_name not in ("TextField", "CharField"):
                 continue
             for keyword in child_node.value.keywords:
                 if keyword.arg == "blank" and keyword.value.value is True:
