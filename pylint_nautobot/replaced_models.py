@@ -15,32 +15,32 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
         "E4211": (
             "Imports a model that has been replaced (dcim.DeviceRole -> extras.Role).",
             "nb-replaced-device-role",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#generic-role-model",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/extras/#replace-role-related-models-with-generic-role-model",
         ),
         "E4212": (
             "Imports a model that has been replaced (dcim.RackRole -> extras.Role).",
             "nb-replaced-rack-role",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#generic-role-model",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/extras/#replace-role-related-models-with-generic-role-model",
         ),
         "E4213": (
             "Imports a model that has been replaced (ipam.Role -> extras.Role).",
             "nb-replaced-ipam-role",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#generic-role-model",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/extras/#replace-role-related-models-with-generic-role-model",
         ),
         "E4214": (
             "Imports a model that has been replaced (dcim.Region -> dcim.Location).",
             "nb-replaced-region",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#site-and-region-models",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/dcim/#replace-site-and-region-with-location-model",
         ),
         "E4215": (
             "Imports a model that has been replaced (dcim.Site -> dcim.Location).",
             "nb-replaced-site",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#site-and-region-models",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/dcim/#replace-site-and-region-with-location-model",
         ),
         "E4216": (
             "Imports a model that has been replaced (ipam.Aggregate -> ipam.Prefix).",
             "nb-replaced-aggregate",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#aggregate-migrated-to-prefix",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/ipam/#replace-aggregate-with-prefix",
         ),
     }
 
