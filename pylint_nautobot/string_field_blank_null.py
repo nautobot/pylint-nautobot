@@ -16,7 +16,9 @@ class NautobotStringFieldBlankNull(BaseChecker):
         "E4261": (
             "Uses bad parameter combination for TextField/CharField.",
             "nb-string-field-blank-null",
-            "Don't use blank=true and null=true on TextField or CharField",
+            'Don\'t use blank=true and null=true on TextField or CharField. \
+             It avoids confusion between a value of None and a value of ""\
+             potentially having different meanings.',
         ),
     }
 
@@ -35,10 +37,13 @@ class NautobotStringFieldBlankNull(BaseChecker):
             # We are only interested in assignments to a call
             if not isinstance(child_node.value, Call):
                 continue
+            # We are only interested in calls to these two models
+            if child_node.value.func.attrname not in ("TextField", "CharField"):
+                continue
             for keyword in child_node.value.keywords:
                 if keyword.arg == "blank" and keyword.value.value is True:
                     blank = True
                 if keyword.arg == "null" and keyword.value.value is True:
                     null = True
             if null and blank:
-                self.add_message(msgid="nb-string-field-blank-null", node=node)
+                self.add_message(msgid="nb-string-field-blank-null", node=child_node)
