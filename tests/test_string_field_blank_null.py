@@ -15,7 +15,7 @@ _EXPECTED_ERRORS = {
         "msg_id": "nb-string-field-blank-null",
         "line": 6,
         "col_offset": 4,
-        "node": lambda module_node: module_node.body[2],
+        "node": lambda module_node: module_node.body[2].body[0],
     },
 }
 
