@@ -58,9 +58,9 @@ class NautobotModelLabelChecker(BaseChecker):
     name = "nautobot-model-label"
     msgs = {
         "C4701": (
-            "Model's app_label.model_name should be retrieved with `model._meta.label_lower`",
+            "Model's 'app_label.model_name' should be retrieved with 'model._meta.label_lower'",
             "nb-used-model-label-construction",
-            "Replace f-string `{model._meta.app_label}.{model._meta.model}` with `{model._meta.label_lower}`",
+            "Replace f-string '{model._meta.app_label}.{model._meta.model}' with '{model._meta.label_lower}'.",
         ),
     }
 
@@ -70,7 +70,7 @@ class NautobotModelLabelChecker(BaseChecker):
         Matches the following pattern inside the f-string:
             {model._meta.app_label}.{model._meta.model}
 
-        `model` can be any variable name, its value is cached inside `state["model_name"]` and used to check the next
+        'model' can be any variable name, its value is cached inside 'state["model_name"]' and used to check the next
         node.
 
         Function iterates node.values (list of AST nodes the f-string is composed of) and checks if the nodes match

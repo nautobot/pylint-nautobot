@@ -4,6 +4,10 @@
 # Swap files
 *.swp
 
+# Vagrant
+.vagrant
+Vagrantfile
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

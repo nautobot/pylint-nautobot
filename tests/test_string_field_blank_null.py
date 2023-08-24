@@ -13,9 +13,9 @@ _INPUTS_PATH = Path(__file__).parent / "inputs/string-field-blank-null/"
 _EXPECTED_ERRORS = {
     "field": {
         "msg_id": "nb-string-field-blank-null",
-        "line": 5,
-        "col_offset": 0,
-        "node": lambda module_node: module_node.body[2],
+        "line": 6,
+        "col_offset": 4,
+        "node": lambda module_node: module_node.body[2].body[0],
     },
 }
 

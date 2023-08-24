@@ -51,7 +51,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     name = "nautobot-incorrect-base-class"
     msgs = {
         "E4242": (
-            "Uses incorrect base classes.",
+            "Uses incorrect base classes (%s -> %s).",
             "nb-incorrect-base-class",
             "All classes should inherit from the correct base classes.",
         )
@@ -68,4 +68,4 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
         ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
         for base_class, nautobot_base_class in self.external_to_nautobot_class_mapping:
             if base_class in ancestor_class_types and nautobot_base_class not in ancestor_class_types:
-                self.add_message(msgid="nb-incorrect-base-class", node=node)
+                self.add_message(msgid="nb-incorrect-base-class", node=node, args=(base_class, nautobot_base_class))
