@@ -61,6 +61,25 @@ Test whether the new rules are enabled by running the following (this is just a 
 
 You can now run `pylint` within your project as you normally would and the additional rules will be automatically checked.
 
+### Viewing a rule's extended description
+
+Sometimes the short name of the rule displayed in the output of `pylint` will not be enough to understand the problem:
+
+```
+nautobot_golden_config/models.py:216:4: E4261: Uses bad parameter combination for TextField/CharField. (nb-string-field-blank-null)
+```
+
+All rules also have additional information that can be viewed with the `--help-msg=rule-id` command line parameter:
+
+```
+> poetry run pylint --help-msg=E4261
+:nb-string-field-blank-null (E4261): *Uses bad parameter combination for TextField/CharField.*
+  Don't use blank=true and null=true on TextField or CharField. It avoids
+  confusion between a value of None and a value of "" potentially having
+  different meanings. This message belongs to the nautobot-string-field-blank-
+  null checker.
+```
+
 ## Authors and Maintainers
 
 - [Cristian Sirbu](https://github.com/cmsirbu)

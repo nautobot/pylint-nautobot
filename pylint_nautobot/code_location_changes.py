@@ -16,12 +16,12 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
         "E4251": (
             "Import location has changed (%s -> %s).",
             "nb-code-location-changed",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#python-code-location-changes",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",
         ),
         "E4252": (
             "Import location has changed for %s (%s -> %s).",
             "nb-code-location-changed-object",
-            "https://docs.nautobot.com/projects/core/en/next/installation/upgrading-from-nautobot-v1/#python-code-location-changes",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",
         ),
     }
 
