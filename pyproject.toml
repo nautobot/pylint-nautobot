@@ -32,7 +32,7 @@ mkdocstrings = "0.22.0"         # Last version with python 3.7 support
 mkdocstrings-python = "1.1.2"   # Last version with python 3.7 support
 griffe = "0.30.1"               # Last version with python 3.7 support
 # Django and nautobot have to be installed for the inference in the tests of the class hierarchy to work correctly
-django = "3.2.19"
+django = "^3.2.19"
 nautobot = "^1.5.19"
 
 [tool.pylint-nautobot]
