@@ -1,5 +1,5 @@
 """Utilities for managing data."""
-from importlib.resources import files
+from importlib_resources import files
 from yaml import safe_load
 
 
