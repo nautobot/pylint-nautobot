@@ -8,9 +8,6 @@ x-nautobot-build: &nautobot-build
     dockerfile: "development/Dockerfile"
 x-nautobot-base: &nautobot-base
   image: "pylint-nautobot/nautobot:${NAUTOBOT_VER}-py${PYTHON_VER}"
-  env_file:
-    - "development.env"
-    - "creds.env"
   tty: true
 
 version: "3.8"
