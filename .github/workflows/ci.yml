@@ -136,7 +136,7 @@ jobs:
         run: "cp development/creds.example.env development/creds.env"
       - name: "Linting: pylint"
         run: "poetry run invoke pylint"
-  unittest:
+  pytest:
     needs:
       - "pylint"
     strategy:
@@ -176,7 +176,7 @@ jobs:
       - name: "Copy credentials"
         run: "cp development/creds.example.env development/creds.env"
       - name: "Run Tests"
-        run: "poetry run invoke unittest"
+        run: "poetry run invoke pytest"
   changelog:
     if: |
       contains(fromJson('["develop","ltm-1.6"]'), github.base_ref) &&
@@ -195,7 +195,7 @@ jobs:
           poetry run towncrier check --compare-with origin/${{ github.base_ref }}
   publish_gh:
     needs:
-      - "unittest"
+      - "pytest"
     name: "Publish to GitHub"
     runs-on: "ubuntu-22.04"
     if: "startsWith(github.ref, 'refs/tags/v')"
@@ -230,7 +230,7 @@ jobs:
           file_glob: true
   publish_pypi:
     needs:
-      - "unittest"
+      - "pytest"
     name: "Push Package to PyPI"
     runs-on: "ubuntu-22.04"
     if: "startsWith(github.ref, 'refs/tags/v')"
