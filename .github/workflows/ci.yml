@@ -17,7 +17,7 @@ env:
 
 jobs:
   black:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
     steps:
@@ -28,7 +28,7 @@ jobs:
       - name: "Linting: black"
         run: "poetry run invoke black"
   bandit:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
     steps:
@@ -39,7 +39,7 @@ jobs:
       - name: "Linting: bandit"
         run: "poetry run invoke bandit"
   ruff:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
     steps:
@@ -50,7 +50,7 @@ jobs:
       - name: "Linting: ruff"
         run: "poetry run invoke ruff"
   check-docs-build:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
     steps:
@@ -61,7 +61,7 @@ jobs:
       - name: "Check Docs Build"
         run: "poetry run invoke build-and-check-docs"
   flake8:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
     steps:
@@ -72,7 +72,7 @@ jobs:
       - name: "Linting: flake8"
         run: "poetry run invoke flake8"
   poetry:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
     steps:
@@ -83,7 +83,7 @@ jobs:
       - name: "Checking: poetry lock file"
         run: "poetry run invoke lock --check"
   yamllint:
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
     steps:
@@ -101,7 +101,7 @@ jobs:
       - "poetry"
       - "yamllint"
       - "black"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     strategy:
       fail-fast: true
       matrix:
@@ -132,8 +132,6 @@ jobs:
           build-args: |
             NAUTOBOT_VER=${{ matrix.nautobot-version }}
             PYTHON_VER=${{ matrix.python-version }}
-      - name: "Copy credentials"
-        run: "cp development/creds.example.env development/creds.env"
       - name: "Linting: pylint"
         run: "poetry run invoke pylint"
   pytest:
@@ -147,7 +145,7 @@ jobs:
         include:
           - python-version: "3.8"
             nautobot-version: "2.1"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"
       INVOKE_PYLINT_NAUTOBOT_NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
@@ -173,15 +171,13 @@ jobs:
           build-args: |
             NAUTOBOT_VER=${{ matrix.nautobot-version }}
             PYTHON_VER=${{ matrix.python-version }}
-      - name: "Copy credentials"
-        run: "cp development/creds.example.env development/creds.env"
       - name: "Run Tests"
         run: "poetry run invoke pytest"
   publish_gh:
     needs:
       - "pytest"
     name: "Publish to GitHub"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     if: "startsWith(github.ref, 'refs/tags/v')"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
@@ -189,7 +185,7 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@v4"
       - name: "Set up Python"
-        uses: "actions/setup-python@v4"
+        uses: "actions/setup-python@v5"
         with:
           python-version: "3.11"
       - name: "Install Python Packages"
@@ -216,7 +212,7 @@ jobs:
     needs:
       - "pytest"
     name: "Push Package to PyPI"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     if: "startsWith(github.ref, 'refs/tags/v')"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
@@ -224,7 +220,7 @@ jobs:
       - name: "Check out repository code"
         uses: "actions/checkout@v4"
       - name: "Set up Python"
-        uses: "actions/setup-python@v4"
+        uses: "actions/setup-python@v5"
         with:
           python-version: "3.11"
       - name: "Install Python Packages"
@@ -248,7 +244,7 @@ jobs:
     needs:
       - "publish_gh"
       - "publish_pypi"
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-latest"
     env:
       SLACK_WEBHOOK_URL: "${{ secrets.SLACK_WEBHOOK_URL }}"
       SLACK_MESSAGE: >-
