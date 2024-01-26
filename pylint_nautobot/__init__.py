@@ -10,6 +10,7 @@ from .incorrect_base_class import NautobotIncorrectBaseClassChecker
 from .model_label import NautobotModelLabelChecker
 from .replaced_models import NautobotReplacedModelsImportChecker
 from .string_field_blank_null import NautobotStringFieldBlankNull
+from .use_fields_all import NautobotUseFieldsAllChecker
 from .utils import MINIMUM_NAUTOBOT_VERSION
 
 __version__ = metadata.version(__name__)
@@ -21,6 +22,7 @@ CHECKERS = [
     NautobotModelLabelChecker,
     NautobotReplacedModelsImportChecker,
     NautobotStringFieldBlankNull,
+    NautobotUseFieldsAllChecker,
 ]
 
 
