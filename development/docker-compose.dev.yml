@@ -6,8 +6,6 @@
 version: "3.8"
 services:
   nautobot:
-    ports:
-      - "8080:8080"
     volumes:
       - "./nautobot_config.py:/opt/nautobot/nautobot_config.py"
       - "../:/source"
