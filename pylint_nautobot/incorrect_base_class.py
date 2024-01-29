@@ -1,7 +1,8 @@
 """Check for imports whose paths have changed in 2.0."""
-from astroid import ClassDef, Assign, Const
+from astroid import Assign
+from astroid import ClassDef
+from astroid import Const
 from pylint.checkers import BaseChecker
-from pylint.interfaces import IAstroidChecker
 
 from pylint_nautobot.utils import is_nautobot_v2_installed
 
@@ -31,8 +32,6 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     Example: Every model that you define in the Nautobot ecosystem should inherit from 'nautobot.core.models.BaseModel'.
     """
 
-    __implements__ = IAstroidChecker
-
     version_specifier = ">=1,<3"
 
     # Maps a non-Nautobot-specific base class to a Nautobot-specific base class which has to be in the class hierarchy
@@ -58,6 +57,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     }
 
     def visit_classdef(self, node):
+        """Visit class definitions."""
         if is_abstract(node):
             return
 

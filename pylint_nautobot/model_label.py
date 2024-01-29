@@ -7,7 +7,6 @@ from astroid import Name
 from astroid import NodeNG
 from pylint.checkers import BaseChecker
 from pylint.interfaces import HIGH
-from pylint.interfaces import IAstroidChecker
 
 
 def _get_model_name_for_meta_attr(node: NodeNG, expected_attrname: str) -> str:
@@ -50,8 +49,6 @@ _EXPECTATIONS = (
 
 class NautobotModelLabelChecker(BaseChecker):
     """Model label construction checker."""
-
-    __implements__ = IAstroidChecker
 
     version_specifier = ">=1,<3"
 
