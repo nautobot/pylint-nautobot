@@ -41,10 +41,8 @@ mkdocs-material = "9.1.15"
 mkdocs-version-annotations = "1.0.0"
 mkdocstrings = "0.22.0"
 mkdocstrings-python = "1.5.2"
-pylint = "*"
 pytest = "^7.3.0"
 ruff = "*"
-toml = "*"
 yamllint = "*"
 
 [tool.poetry.extras]
