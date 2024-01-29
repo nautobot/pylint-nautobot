@@ -1,21 +1,24 @@
-"""Check for imports whose paths have changed in 2.0."""
+"""Check for incorrect base classes."""
+from typing import NamedTuple
+
 from astroid import Assign
 from astroid import ClassDef
 from astroid import Const
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.utils import is_nautobot_v2_installed
+from .utils import is_version_compatible
 
 
-def is_abstract(node):
+def is_abstract(node: ClassDef) -> bool:
     """Given a node, returns whether it is an abstract base model."""
     for child_node in node.get_children():
         if not (isinstance(child_node, ClassDef) and child_node.name == "Meta"):
             continue
+
         for meta_child in child_node.get_children():
             if (
                 not isinstance(meta_child, Assign)
-                or not meta_child.targets[0].name == "abstract"
+                or not meta_child.targets[0].name == "abstract"  # type: ignore
                 or not isinstance(meta_child.value, Const)
             ):
                 continue
@@ -23,7 +26,52 @@ def is_abstract(node):
             # 'Meta' class. Therefore, we can assume the value of that to be whether the node is an abstract base model
             # or not.
             return meta_child.value.value
+
     return False
+
+
+_CLASS_MAPPING = (
+    {
+        "incorrect": "django_filters.filters.FilterSet",
+        "correct": "django_filters.filters.BaseFilterSet",
+    },
+    {
+        "incorrect": "django.db.models.base.Model",
+        "correct": "nautobot.core.models.BaseModel",
+    },
+    {
+        "versions": "<2.0",
+        "incorrect": "django.forms.forms.Form",
+        "correct": "nautobot.utilities.forms.forms.BootstrapMixin",
+    },
+    {
+        "versions": ">=2.0",
+        "incorrect": "django.forms.forms.Form",
+        "correct": "nautobot.core.forms.forms.BootstrapMixin",
+    },
+    {
+        "versions": ">=2.0",
+        "incorrect": "django.forms.ModelForm",
+        "correct": "nautobot.apps.forms.NautobotModelForm",
+    },
+    {
+        "versions": ">=2.0",
+        "incorrect": "nautobot.extras.plugins.PluginConfig",
+        "correct": "nautobot.apps.NautobotAppConfig",
+    },
+)
+
+
+class _Mapping(NamedTuple):
+    incorrect: str
+    correct: str
+
+
+_COMPATIBLE_MAPPING = (
+    _Mapping(item["incorrect"], item["correct"])
+    for item in _CLASS_MAPPING
+    if is_version_compatible(item.get("versions", ""))
+)
 
 
 class NautobotIncorrectBaseClassChecker(BaseChecker):
@@ -36,17 +84,6 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
 
     # Maps a non-Nautobot-specific base class to a Nautobot-specific base class which has to be in the class hierarchy
     # for every class that has the base class in its hierarchy.
-    external_to_nautobot_class_mapping = [
-        ("django_filters.filters.FilterSet", "django_filters.filters.BaseFilterSet"),
-        ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
-        (
-            "django.forms.forms.Form",
-            "nautobot.core.forms.forms.BootstrapMixin"
-            if is_nautobot_v2_installed()
-            else "nautobot.utilities.forms.forms.BootstrapMixin",
-        ),
-    ]
-
     name = "nautobot-incorrect-base-class"
     msgs = {
         "E4242": (
@@ -56,7 +93,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
         )
     }
 
-    def visit_classdef(self, node):
+    def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
         if is_abstract(node):
             return
@@ -66,6 +103,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
             return
 
         ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
-        for base_class, nautobot_base_class in self.external_to_nautobot_class_mapping:
-            if base_class in ancestor_class_types and nautobot_base_class not in ancestor_class_types:
-                self.add_message(msgid="nb-incorrect-base-class", node=node, args=(base_class, nautobot_base_class))
+        for mapping in _COMPATIBLE_MAPPING:
+            if mapping.incorrect in ancestor_class_types and mapping.correct not in ancestor_class_types:
+                self.add_message(msgid="nb-incorrect-base-class", node=node, args=(mapping.incorrect, mapping.correct))
+                return

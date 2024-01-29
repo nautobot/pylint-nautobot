@@ -11,11 +11,6 @@ from packaging.version import Version
 from yaml import safe_load
 
 
-def is_nautobot_v2_installed() -> bool:
-    """Return True if Nautobot v2.x is installed."""
-    return MINIMUM_NAUTOBOT_VERSION.major == 2
-
-
 def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
     """Return True if the Nautobot version is compatible with the given version specifier_set."""
     if isinstance(specifier_set, str):
