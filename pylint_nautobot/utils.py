@@ -18,6 +18,8 @@ def is_nautobot_v2_installed() -> bool:
 
 def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
     """Return True if the Nautobot version is compatible with the given version specifier_set."""
+    if not specifier_set:
+        return True
     if isinstance(specifier_set, str):
         specifier_set = SpecifierSet(specifier_set)
     return specifier_set.contains(MINIMUM_NAUTOBOT_VERSION)
@@ -25,7 +27,7 @@ def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
 
 def load_v2_code_location_changes():
     """Black magic data transform, needs schema badly."""
-    with open(files("pylint_nautobot") / "data" / "v2" / "v2-code-location-changes.yaml", encoding="utf-8") as rules:
+    with open(files("pylint_nautobot") / "data" / "v2" / "v2-code-location-changes.yaml", encoding="utf-8") as rules:  # type: ignore
         changes = safe_load(rules)
     changes_map = {}
     for change in changes:

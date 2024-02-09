@@ -1,13 +1,13 @@
 """Tests for use fields all"""
-from pathlib import Path
 
 from pylint.testutils import CheckerTestCase
-from pytest import mark
 
 from pylint_nautobot.use_fields_all import NautobotUseFieldsAllChecker
 
 from .utils import assert_error_file
 from .utils import assert_good_file
+from .utils import parametrize_error_files
+from .utils import parametrize_good_files
 
 
 def _find_fields_node(module_node):
@@ -17,7 +17,6 @@ def _find_fields_node(module_node):
     return list(meta.get_children())[1].value
 
 
-_INPUTS_PATH = Path(__file__).parent / "inputs/use-fields-all/"
 _EXPECTED_ERRORS = {
     "table": {
         "msg_id": "nb-use-fields-all",
@@ -33,10 +32,10 @@ class TestUseFieldsAllChecker(CheckerTestCase):
 
     CHECKER_CLASS = NautobotUseFieldsAllChecker
 
-    @mark.parametrize("path", _INPUTS_PATH.glob("error_*.py"))
-    def test_use_fields_all(self, path):
-        assert_error_file(self, path, _EXPECTED_ERRORS)
+    @parametrize_error_files(__file__, _EXPECTED_ERRORS)
+    def test_sub_class_name(self, path, expected_error):
+        assert_error_file(self, path, expected_error)
 
-    @mark.parametrize("path", _INPUTS_PATH.glob("good_*.py"))
+    @parametrize_good_files(__file__)
     def test_no_issues(self, path):
         assert_good_file(self, path)

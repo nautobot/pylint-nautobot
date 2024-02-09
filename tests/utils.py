@@ -1,6 +1,35 @@
 """Test utilities."""
+
+from pathlib import Path
+
 import astroid
 from pylint.testutils import MessageTest
+from pytest import mark
+
+from pylint_nautobot.utils import is_version_compatible
+
+
+def parametrize_good_files(module):
+    path = Path(module)
+    checker_name = path.stem[5:].replace("_", "-")
+    return mark.parametrize("path", (path.parent / "inputs" / checker_name).glob("good_*.py"))
+
+
+def parametrize_error_files(module, expected_errors):
+    path = Path(module)
+    checker_name = path.stem[5:].replace("_", "-")
+    inputs_path = path.parent / "inputs" / checker_name
+    names = set(item.stem[6:] for item in (inputs_path).glob("error_*.py")) | set(expected_errors)
+
+    def get_params():
+        for name in names:
+            expected_error = {**expected_errors[name]}
+            version = expected_error.pop("version", "")
+            if is_version_compatible(version):
+                path = inputs_path / f"error_{name}.py"
+                yield path, expected_error
+
+    return mark.parametrize(("path", "expected_error"), get_params())
 
 
 def assert_no_message(test_case, test_code):
@@ -15,7 +44,7 @@ def assert_good_file(test_case, path):
     assert_no_message(test_case, path.read_text(encoding="utf-8"))
 
 
-def assert_error_file(test_case, path, expected_errors):
+def assert_error_file(test_case, path, expected_error):
     """Assert that the given messages are emitted for the given file.
 
     Args:
@@ -26,15 +55,8 @@ def assert_error_file(test_case, path, expected_errors):
             e.g. `error_status_model.py` becomes `status_model` key in the dictionary.
 
     """
-    name = path.name[6:-3]
     test_code = path.read_text(encoding="utf-8")
     module_node = astroid.parse(test_code)
-    try:
-        expected_error = expected_errors[name]
-    except KeyError:
-        raise KeyError(
-            f"Missing expected error args for {name}. Perhaps you need to add it to `expected_errors`?"
-        ) from None
     node = expected_error.pop("node")
     with test_case.assertAddsMessages(
         MessageTest(

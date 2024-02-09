@@ -1,16 +1,15 @@
 """Tests for incorrect base class checker."""
-from pathlib import Path
 
 from pylint.testutils import CheckerTestCase
-from pytest import mark
 
 from pylint_nautobot.incorrect_base_class import NautobotIncorrectBaseClassChecker
 
 from .utils import assert_error_file
 from .utils import assert_good_file
+from .utils import parametrize_error_files
+from .utils import parametrize_good_files
 
-_INPUTS_PATH = Path(__file__).parent / "inputs/incorrect-base-class"
-_EXPECTED_ERROR_ARGS = {
+_EXPECTED_ERRORS = {
     "model": {
         "msg_id": "nb-incorrect-base-class",
         "line": 4,
@@ -26,10 +25,10 @@ class TestIncorrectBaseClassChecker(CheckerTestCase):
 
     CHECKER_CLASS = NautobotIncorrectBaseClassChecker
 
-    @mark.parametrize("path", _INPUTS_PATH.glob("error_*.py"))
-    def test_incorrect_base_class(self, path):
-        assert_error_file(self, path, _EXPECTED_ERROR_ARGS)
+    @parametrize_error_files(__file__, _EXPECTED_ERRORS)
+    def test_sub_class_name(self, path, expected_error):
+        assert_error_file(self, path, expected_error)
 
-    @mark.parametrize("path", _INPUTS_PATH.glob("good_*.py"))
+    @parametrize_good_files(__file__)
     def test_no_issues(self, path):
         assert_good_file(self, path)
