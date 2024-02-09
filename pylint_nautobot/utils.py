@@ -1,14 +1,72 @@
 """Utilities for managing data."""
+
 from importlib import metadata
 from pathlib import Path
+from typing import List
 from typing import Optional
 from typing import Union
 
 import toml
+from astroid import Assign
+from astroid import Attribute
+from astroid import ClassDef
+from astroid import Name
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 from yaml import safe_load
+
+
+def get_model_name(ancestor: str, node: ClassDef) -> str:
+    """Get the model name from the class definition."""
+    if ancestor == "from nautobot.apps.views.NautobotUIViewSet":
+        raise NotImplementedError("This ancestor is not yet supported.")
+
+    meta = next((n for n in node.body if isinstance(n, ClassDef) and n.name == "Meta"), None)
+    if not meta:
+        raise NotImplementedError("This class does not have a Meta class.")
+
+    model_attr = next(
+        (
+            attr
+            for attr in meta.body
+            if isinstance(attr, Assign)
+            and any(
+                isinstance(target, (Name, Attribute))
+                and getattr(target, "attrname", None) == "model"
+                or getattr(target, "name", None) == "model"
+                for target in attr.targets
+            )
+        ),
+        None,
+    )
+    if not model_attr:
+        raise NotImplementedError("The Meta class does not define a model attribute.")
+
+    if isinstance(model_attr.value, Name):
+        return model_attr.value.name
+    if not isinstance(model_attr.value, Attribute):
+        raise NotImplementedError("This utility supports only direct assignment or attribute based model names.")
+
+    model_attr_chain = []
+    while isinstance(model_attr.value, Attribute):
+        model_attr_chain.insert(0, model_attr.value.attrname)
+        model_attr.value = model_attr.value.expr
+
+    if isinstance(model_attr.value, Name):
+        model_attr_chain.insert(0, model_attr.value.name)
+
+    return model_attr_chain[-1]
+
+
+def find_ancestor(node: ClassDef, ancestors: List[str]) -> str:
+    """Find the class ancestor from the list of ancestors."""
+    ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
+    for checked_ancestor in ancestors:
+        if checked_ancestor in ancestor_class_types:
+            return checked_ancestor
+
+    return ""
 
 
 def is_nautobot_v2_installed() -> bool:
