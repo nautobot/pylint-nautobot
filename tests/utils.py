@@ -24,8 +24,8 @@ def parametrize_error_files(module, expected_errors):
     def get_params():
         for name in names:
             expected_error = {**expected_errors[name]}
-            version = expected_error.pop("version", "")
-            if is_version_compatible(version):
+            versions = expected_error.pop("versions", "")
+            if is_version_compatible(versions):
                 path = inputs_path / f"error_{name}.py"
                 yield path, expected_error
 

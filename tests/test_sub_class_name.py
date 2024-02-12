@@ -16,7 +16,7 @@ def _find_failing_node(module_node):
 
 _EXPECTED_ERRORS = {
     "filter_set": {
-        "version": ">=2",
+        "versions": ">=2",
         "msg_id": "nb-sub-class-name",
         "line": 9,
         "col_offset": 0,
