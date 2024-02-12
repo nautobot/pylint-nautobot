@@ -18,7 +18,8 @@ _CLASS_MAPPING = (
     },
     {
         "incorrect": "django.db.models.base.Model",
-        "correct": "nautobot.core.models.BaseModel",
+        "correct": "nautobot.core.models.generics.PrimaryModel",
+        "display": "nautobot.apps.models.PrimaryModel",
     },
     {
         "versions": ">=2.0",

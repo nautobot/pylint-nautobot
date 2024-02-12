@@ -37,7 +37,7 @@ _EXPECTED_ERRORS = {
         "line": 4,
         "col_offset": 0,
         "node": _find_error_node,
-        "args": ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
+        "args": ("django.db.models.base.Model", "nautobot.apps.models.PrimaryModel"),
     },
     "model_form": {
         "versions": ">=2",
