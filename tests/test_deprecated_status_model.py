@@ -25,10 +25,10 @@ class TestDeprecatedStatusModelChecker(CheckerTestCase):
     CHECKER_CLASS = NautobotDeprecatedStatusModelChecker
 
     @parametrize_error_files(__file__, _EXPECTED_ERRORS)
-    def test_sub_class_name(self, path, expected_error):
-        assert_error_file(self, path, expected_error)
+    def test_error(self, filename, expected_error):
+        assert_error_file(self, filename, expected_error)
 
     # TBD: Missing test for good_status_model.py
     @parametrize_good_files(__file__)
-    def test_no_issues(self, path):
-        assert_good_file(self, path)
+    def test_good(self, filename):
+        assert_good_file(self, filename)

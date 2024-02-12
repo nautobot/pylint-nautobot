@@ -1,29 +1,9 @@
 """Check for imports whose paths have changed in 2.0."""
-from astroid import Assign
-from astroid import ClassDef
-from astroid import Const
+
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.utils import is_nautobot_v2_installed
-
-
-def is_abstract(node):
-    """Given a node, returns whether it is an abstract base model."""
-    for child_node in node.get_children():
-        if not (isinstance(child_node, ClassDef) and child_node.name == "Meta"):
-            continue
-        for meta_child in child_node.get_children():
-            if (
-                not isinstance(meta_child, Assign)
-                or not meta_child.targets[0].name == "abstract"
-                or not isinstance(meta_child.value, Const)
-            ):
-                continue
-            # At this point we know we are dealing with an assignment to a constant for the 'abstract' field on the
-            # 'Meta' class. Therefore, we can assume the value of that to be whether the node is an abstract base model
-            # or not.
-            return meta_child.value.value
-    return False
+from .utils import is_abstract_class
+from .utils import is_version_compatible
 
 
 class NautobotIncorrectBaseClassChecker(BaseChecker):
@@ -41,9 +21,11 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
         ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
         (
             "django.forms.forms.Form",
-            "nautobot.core.forms.forms.BootstrapMixin"
-            if is_nautobot_v2_installed()
-            else "nautobot.utilities.forms.forms.BootstrapMixin",
+            (
+                "nautobot.core.forms.forms.BootstrapMixin"
+                if is_version_compatible(">=2")
+                else "nautobot.utilities.forms.forms.BootstrapMixin"
+            ),
         ),
     ]
 
@@ -58,7 +40,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
 
     def visit_classdef(self, node):
         """Visit class definitions."""
-        if is_abstract(node):
+        if is_abstract_class(node):
             return
 
         # Skip mixin classes

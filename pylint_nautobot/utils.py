@@ -10,11 +10,57 @@ import toml
 from astroid import Assign
 from astroid import Attribute
 from astroid import ClassDef
+from astroid import Const
 from astroid import Name
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 from yaml import safe_load
+
+
+def _read_poetry_lock() -> dict:
+    for directory in (Path.cwd(), *Path.cwd().parents):
+        path = directory / "poetry.lock"
+        if path.exists():
+            return toml.load(Path(path))
+
+    return {}
+
+
+def _read_locked_nautobot_version() -> Optional[str]:
+    poetry_lock = _read_poetry_lock()
+    if not poetry_lock:
+        return None
+
+    for package in poetry_lock.get("package", []):
+        if package["name"] == "nautobot":
+            return package["version"]
+
+    return None
+
+
+MINIMUM_NAUTOBOT_VERSION = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
+
+
+def is_abstract_class(node: ClassDef) -> bool:
+    """Given a node, returns whether it is an abstract base model."""
+    for child_node in node.get_children():
+        if not (isinstance(child_node, ClassDef) and child_node.name == "Meta"):
+            continue
+
+        for meta_child in child_node.get_children():
+            if (
+                not isinstance(meta_child, Assign)
+                or not meta_child.targets[0].name == "abstract"  # type: ignore
+                or not isinstance(meta_child.value, Const)
+            ):
+                continue
+            # At this point we know we are dealing with an assignment to a constant for the 'abstract' field on the
+            # 'Meta' class. Therefore, we can assume the value of that to be whether the node is an abstract base model
+            # or not.
+            return meta_child.value.value
+
+    return False
 
 
 def get_model_name(ancestor: str, node: ClassDef) -> str:
@@ -69,11 +115,6 @@ def find_ancestor(node: ClassDef, ancestors: List[str]) -> str:
     return ""
 
 
-def is_nautobot_v2_installed() -> bool:
-    """Return True if Nautobot v2.x is installed."""
-    return MINIMUM_NAUTOBOT_VERSION.major == 2
-
-
 def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
     """Return True if the Nautobot version is compatible with the given version specifier_set."""
     if not specifier_set:
@@ -95,26 +136,4 @@ def load_v2_code_location_changes():
     return changes_map
 
 
-def _read_poetry_lock() -> dict:
-    for directory in (Path.cwd(), *Path.cwd().parents):
-        path = directory / "poetry.lock"
-        if path.exists():
-            return toml.load(Path(path))
-
-    return {}
-
-
-def _read_locked_nautobot_version() -> Optional[str]:
-    poetry_lock = _read_poetry_lock()
-    if not poetry_lock:
-        return None
-
-    for package in poetry_lock.get("package", []):
-        if package["name"] == "nautobot":
-            return package["version"]
-
-    return None
-
-
 MAP_CODE_LOCATION_CHANGES = load_v2_code_location_changes()
-MINIMUM_NAUTOBOT_VERSION = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))

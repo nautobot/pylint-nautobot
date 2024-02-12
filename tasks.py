@@ -146,9 +146,10 @@ def run_command(context, command, **kwargs):
     help={
         "force_rm": "Always remove intermediate containers",
         "cache": "Whether to use Docker's cache when building the image (defaults to enabled)",
+        "pull": "Always attempt to pull a newer version of the base image",
     }
 )
-def build(context, force_rm=False, cache=True):
+def build(context, force_rm=False, cache=True, pull=False):
     """Build Nautobot docker image."""
     command = "build"
 
@@ -156,6 +157,8 @@ def build(context, force_rm=False, cache=True):
         command += " --no-cache"
     if force_rm:
         command += " --force-rm"
+    if pull:
+        command += " --pull"
 
     print(f"Building Nautobot with Python {context.pylint_nautobot.python_ver}...")
     docker_compose(context, command)

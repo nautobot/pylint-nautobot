@@ -9,12 +9,18 @@ from .utils import assert_good_file
 from .utils import parametrize_error_files
 from .utils import parametrize_good_files
 
+
+def _find_error_node(module_node):
+    return module_node.body[1]
+
+
 _EXPECTED_ERRORS = {
     "model": {
+        "versions": ">=2",
         "msg_id": "nb-incorrect-base-class",
         "line": 4,
         "col_offset": 0,
-        "node": lambda module_node: module_node.body[1],
+        "node": _find_error_node,
         "args": ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
     },
 }
@@ -26,9 +32,9 @@ class TestIncorrectBaseClassChecker(CheckerTestCase):
     CHECKER_CLASS = NautobotIncorrectBaseClassChecker
 
     @parametrize_error_files(__file__, _EXPECTED_ERRORS)
-    def test_sub_class_name(self, path, expected_error):
-        assert_error_file(self, path, expected_error)
+    def test_error(self, filename, expected_error):
+        assert_error_file(self, filename, expected_error)
 
     @parametrize_good_files(__file__)
-    def test_no_issues(self, path):
-        assert_good_file(self, path)
+    def test_good(self, filename):
+        assert_good_file(self, filename)
