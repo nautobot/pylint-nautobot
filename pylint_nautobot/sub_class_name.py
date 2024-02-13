@@ -1,17 +1,58 @@
 """Check for imports whose paths have changed in 2.0."""
 
+from typing import NamedTuple
+
 from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
 from .utils import find_ancestor
 from .utils import get_model_name
+from .utils import is_abstract_class
 from .utils import is_version_compatible
+from .utils import trim_first_pascal_word
 
-_ANCESTORS = {
-    "nautobot.extras.filters.NautobotFilterSet": ">=2",
-}
+_ANCESTORS = (
+    {
+        "versions": ">=2",
+        "ancestor": "nautobot.extras.filters.NautobotFilterSet",
+    },
+    {
+        "versions": "<1",  # Disabled, unable to find a model inside the class
+        "ancestor": "nautobot.extras.forms.base.BulkEditForm",
+    },
+    {
+        "versions": ">=2",
+        "ancestor": "nautobot.extras.forms.base.NautobotFilterForm",
+    },
+    {
+        "versions": ">=2",
+        "ancestor": "nautobot.extras.forms.base.NautobotModelForm",
+        "suffix": "Form",
+    },
+    {
+        "versions": ">=2",
+        "ancestor": "nautobot.core.api.serializers.NautobotModelSerializer",
+        "suffix": "Serializer",
+    },
+    {
+        "versions": ">=2",
+        "ancestor": "nautobot.core.views.viewsets.NautobotUIViewSet",
+    },
+    {
+        "versions": ">=2",
+        "ancestor": "nautobot.core.tables.BaseTable",
+    },
+)
 
-_VERSION_COMPATIBLE_ANCESTORS = [key for key, value in _ANCESTORS.items() if is_version_compatible(value)]
+
+class _Ancestor(NamedTuple):
+    ancestor: str
+    suffix: str
+
+
+def _get_ancestor(item: dict) -> _Ancestor:
+    ancestor = item["ancestor"]
+    return _Ancestor(ancestor, item.get("suffix", trim_first_pascal_word(ancestor.split(".")[-1])))
 
 
 class NautobotSubClassNameChecker(BaseChecker):
@@ -20,7 +61,7 @@ class NautobotSubClassNameChecker(BaseChecker):
     This can typically be done via <ancestor class name>.replace("Nautobot", <model class name>)
     """
 
-    version_specifier = ">1,<3"
+    version_specifier = ">=2,<3"
 
     name = "nautobot-sub-class-name"
     msgs = {
@@ -31,14 +72,21 @@ class NautobotSubClassNameChecker(BaseChecker):
         )
     }
 
+    def __init__(self, *args, **kwargs):
+        """Initialize the checker."""
+        super().__init__(*args, **kwargs)
+
+        self.ancestors = tuple(_get_ancestor(item) for item in _ANCESTORS if is_version_compatible(item["versions"]))
+
     def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
-        ancestor = find_ancestor(node, _VERSION_COMPATIBLE_ANCESTORS)
+        if is_abstract_class(node):
+            return
+
+        ancestor = find_ancestor(node, self.ancestors, lambda item: item.ancestor)
         if not ancestor:
             return
 
-        class_name = node.name
-        model_name = get_model_name(ancestor, node)
-        expected_name = ancestor.split(".")[-1].replace("Nautobot", model_name)
-        if expected_name != class_name:
+        expected_name = get_model_name(node) + ancestor.suffix
+        if expected_name != node.name:
             self.add_message("nb-sub-class-name", node=node, args=(expected_name,))

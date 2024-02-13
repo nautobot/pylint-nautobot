@@ -15,12 +15,52 @@ def _find_failing_node(module_node):
 
 
 _EXPECTED_ERRORS = {
+    "filter_form": {
+        "versions": ">=2",
+        "msg_id": "nb-sub-class-name",
+        "line": 9,
+        "col_offset": 0,
+        "args": ("AddressObjectFilterForm",),
+        "node": _find_failing_node,
+    },
     "filter_set": {
         "versions": ">=2",
         "msg_id": "nb-sub-class-name",
         "line": 9,
         "col_offset": 0,
         "args": ("AddressObjectFilterSet",),
+        "node": _find_failing_node,
+    },
+    "model_form": {
+        "versions": ">=2",
+        "msg_id": "nb-sub-class-name",
+        "line": 9,
+        "col_offset": 0,
+        "args": ("AddressObjectForm",),
+        "node": _find_failing_node,
+    },
+    "serializer": {
+        "versions": ">=2",
+        "msg_id": "nb-sub-class-name",
+        "line": 9,
+        "col_offset": 0,
+        "args": ("AddressObjectSerializer",),
+        "node": _find_failing_node,
+    },
+    "viewset": {
+        "versions": ">=2",
+        "msg_id": "nb-sub-class-name",
+        "line": 9,
+        "col_offset": 0,
+        "args": ("AddressObjectUIViewSet",),
+        "node": _find_failing_node,
+    },
+    "table": {
+        "versions": ">=2",
+        "msg_id": "nb-sub-class-name",
+        "line": 9,
+        "col_offset": 0,
+        "args": ("AddressObjectTable",),
         "node": _find_failing_node,
     },
 }
