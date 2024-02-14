@@ -1,9 +1,50 @@
-"""Check for imports whose paths have changed in 2.0."""
+"""Check for incorrect base classes."""
 
+from typing import NamedTuple
+
+from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
 from .utils import is_abstract_class
 from .utils import is_version_compatible
+
+# Sorted from most specific to least specific
+_CLASS_MAPPING = (
+    {
+        "versions": ">=2.0",
+        "incorrect": "django_filters.filterset.BaseFilterSet",
+        "correct": "nautobot.extras.filters.NautobotFilterSet",
+        "display": "nautobot.apps.filters.NautobotFilterSet",
+    },
+    {
+        "incorrect": "django.db.models.base.Model",
+        "correct": "nautobot.core.models.generics.PrimaryModel",
+        "display": "nautobot.apps.models.PrimaryModel",
+    },
+    {
+        "versions": ">=2.0",
+        "incorrect": "django.forms.models.BaseModelForm",
+        "correct": "nautobot.extras.forms.base.NautobotModelForm",
+        "display": "nautobot.apps.forms.NautobotModelForm",
+    },
+    {
+        "versions": "<2.0",
+        "incorrect": "django.forms.forms.BaseForm",
+        "correct": "nautobot.utilities.forms.forms.BootstrapMixin",
+    },
+    {
+        "versions": ">=2.0",
+        "incorrect": "django.forms.forms.BaseForm",
+        "correct": "nautobot.core.forms.forms.BootstrapMixin",
+        "display": "nautobot.apps.forms.BootstrapMixin",
+    },
+)
+
+
+class _Mapping(NamedTuple):
+    incorrect: str
+    correct: str
+    display: str
 
 
 class NautobotIncorrectBaseClassChecker(BaseChecker):
@@ -14,21 +55,6 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
 
     version_specifier = ">=1,<3"
 
-    # Maps a non-Nautobot-specific base class to a Nautobot-specific base class which has to be in the class hierarchy
-    # for every class that has the base class in its hierarchy.
-    external_to_nautobot_class_mapping = [
-        ("django_filters.filters.FilterSet", "django_filters.filters.BaseFilterSet"),
-        ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
-        (
-            "django.forms.forms.Form",
-            (
-                "nautobot.core.forms.forms.BootstrapMixin"
-                if is_version_compatible(">=2")
-                else "nautobot.utilities.forms.forms.BootstrapMixin"
-            ),
-        ),
-    ]
-
     name = "nautobot-incorrect-base-class"
     msgs = {
         "E4242": (
@@ -38,7 +64,17 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
         )
     }
 
-    def visit_classdef(self, node):
+    def __init__(self, *args, **kwargs):
+        """Initialize the checker."""
+        super().__init__(*args, **kwargs)
+
+        self.mappings = (
+            _Mapping(item["incorrect"], item["correct"], item.get("display", item["correct"]))
+            for item in _CLASS_MAPPING
+            if is_version_compatible(item.get("versions", ""))
+        )
+
+    def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
         if is_abstract_class(node):
             return
@@ -48,6 +84,8 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
             return
 
         ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
-        for base_class, nautobot_base_class in self.external_to_nautobot_class_mapping:
-            if base_class in ancestor_class_types and nautobot_base_class not in ancestor_class_types:
-                self.add_message(msgid="nb-incorrect-base-class", node=node, args=(base_class, nautobot_base_class))
+
+        for mapping in self.mappings:
+            if mapping.incorrect in ancestor_class_types and mapping.correct not in ancestor_class_types:
+                self.add_message(msgid="nb-incorrect-base-class", node=node, args=(mapping.incorrect, mapping.display))
+                return

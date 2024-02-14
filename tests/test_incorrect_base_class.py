@@ -15,13 +15,37 @@ def _find_error_node(module_node):
 
 
 _EXPECTED_ERRORS = {
+    "filter_set": {
+        "versions": ">=2",
+        "msg_id": "nb-incorrect-base-class",
+        "line": 4,
+        "col_offset": 0,
+        "node": _find_error_node,
+        "args": ("django_filters.filterset.BaseFilterSet", "nautobot.apps.filters.NautobotFilterSet"),
+    },
+    "form": {
+        "versions": ">=2",
+        "msg_id": "nb-incorrect-base-class",
+        "line": 4,
+        "col_offset": 0,
+        "node": _find_error_node,
+        "args": ("django.forms.forms.BaseForm", "nautobot.apps.forms.BootstrapMixin"),
+    },
     "model": {
         "versions": ">=2",
         "msg_id": "nb-incorrect-base-class",
         "line": 4,
         "col_offset": 0,
         "node": _find_error_node,
-        "args": ("django.db.models.base.Model", "nautobot.core.models.BaseModel"),
+        "args": ("django.db.models.base.Model", "nautobot.apps.models.PrimaryModel"),
+    },
+    "model_form": {
+        "versions": ">=2",
+        "msg_id": "nb-incorrect-base-class",
+        "line": 4,
+        "col_offset": 0,
+        "node": _find_error_node,
+        "args": ("django.forms.models.BaseModelForm", "nautobot.apps.forms.NautobotModelForm"),
     },
 }
 
