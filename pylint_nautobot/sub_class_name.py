@@ -65,7 +65,7 @@ class NautobotSubClassNameChecker(BaseChecker):
 
     name = "nautobot-sub-class-name"
     msgs = {
-        "E4242": (
+        "E4281": (
             "Sub-class name should be %s.",
             "nb-sub-class-name",
             "All classes should have a sub-class name that is <model class name><ancestor class type>.",
