@@ -138,8 +138,10 @@ def get_model_name_from_queryset(node: NodeNG) -> str:
         elif isinstance(node, Attribute):
             if node.attrname == "objects":
                 if isinstance(node.expr, Name):
+                    # Covers `queryset = AddressObject.objects.all()`
                     return node.expr.name
                 if isinstance(node.expr, Attribute):
+                    # Covers `queryset = models.AddressObject.objects.all()`
                     return node.expr.attrname
             node = node.expr
         else:
