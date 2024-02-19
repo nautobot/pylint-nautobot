@@ -62,7 +62,7 @@ _EXPECTED_ERRORS = {
     "viewset_model": {
         "versions": ">=2",
         "msg_id": "nb-sub-class-name",
-        "line": 5,
+        "line": 6,
         "col_offset": 0,
         "args": ("AddressObjectUIViewSet",),
         "node": _find_failing_node_model,
@@ -78,7 +78,7 @@ _EXPECTED_ERRORS = {
     "table_model": {
         "versions": ">=2",
         "msg_id": "nb-sub-class-name",
-        "line": 5,
+        "line": 6,
         "col_offset": 0,
         "args": ("AddressObjectTable",),
         "node": _find_failing_node_model,
