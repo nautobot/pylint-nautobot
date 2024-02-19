@@ -14,6 +14,10 @@ def _find_failing_node(module_node):
     return module_node.body[3]
 
 
+def _find_failing_node_model(module_node):
+    return module_node.body[2]
+
+
 _EXPECTED_ERRORS = {
     "filter_form": {
         "versions": ">=2",
@@ -55,6 +59,14 @@ _EXPECTED_ERRORS = {
         "args": ("AddressObjectUIViewSet",),
         "node": _find_failing_node,
     },
+    "viewset_model": {
+        "versions": ">=2",
+        "msg_id": "nb-sub-class-name",
+        "line": 6,
+        "col_offset": 0,
+        "args": ("AddressObjectUIViewSet",),
+        "node": _find_failing_node_model,
+    },
     "table": {
         "versions": ">=2",
         "msg_id": "nb-sub-class-name",
@@ -62,6 +74,14 @@ _EXPECTED_ERRORS = {
         "col_offset": 0,
         "args": ("AddressObjectTable",),
         "node": _find_failing_node,
+    },
+    "table_model": {
+        "versions": ">=2",
+        "msg_id": "nb-sub-class-name",
+        "line": 6,
+        "col_offset": 0,
+        "args": ("AddressObjectTable",),
+        "node": _find_failing_node_model,
     },
 }
 
