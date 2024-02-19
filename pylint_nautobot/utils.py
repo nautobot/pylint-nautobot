@@ -116,7 +116,7 @@ def get_model_name(node: ClassDef) -> str:
     """Get the model name from the class definition."""
     queryset = find_attr(node, "queryset")
     if queryset:
-        return find_model_name_from_queryset(queryset.value)
+        return get_model_name_from_queryset(queryset.value)
 
     model_attr = find_attr(node, "model")
     if not model_attr:
@@ -130,14 +130,17 @@ def get_model_name(node: ClassDef) -> str:
     return get_model_name_from_attr(model_attr)
 
 
-def find_model_name_from_queryset(node: NodeNG) -> str:
+def get_model_name_from_queryset(node: NodeNG) -> str:
     """Get the model name from the queryset assignment value."""
     while node:
         if isinstance(node, Call):
             node = node.func
         elif isinstance(node, Attribute):
-            if node.attrname == "objects" and isinstance(node.expr, Name):
-                return node.expr.name
+            if node.attrname == "objects":
+                if isinstance(node.expr, Name):
+                    return node.expr.name
+                if isinstance(node.expr, Attribute):
+                    return node.expr.attrname
             node = node.expr
         else:
             break
