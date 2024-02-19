@@ -2,20 +2,26 @@
 
 from importlib import metadata
 from pathlib import Path
-from typing import List
+from typing import Callable
+from typing import Iterable
 from typing import Optional
+from typing import TypeVar
 from typing import Union
 
 import toml
 from astroid import Assign
 from astroid import Attribute
+from astroid import Call
 from astroid import ClassDef
 from astroid import Const
 from astroid import Name
+from astroid import NodeNG
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 from yaml import safe_load
+
+T = TypeVar("T")
 
 
 def _read_poetry_lock() -> dict:
@@ -42,6 +48,27 @@ def _read_locked_nautobot_version() -> Optional[str]:
 MINIMUM_NAUTOBOT_VERSION = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
 
 
+def trim_first_pascal_word(pascal_case_string: str) -> str:
+    """Remove the first word from a pascal case string.
+
+    Examples:
+    >>> trim_first_pascal_word("NautobotFilterSet")
+    'FilterSet'
+    >>> trim_first_pascal_word("BaseTable")
+    'Table'
+    >>> trim_first_pascal_word("FQDNModel")
+    'Model'
+    """
+    start_index = 0
+
+    for i in range(1, len(pascal_case_string)):
+        if pascal_case_string[i].isupper():
+            start_index = i
+            break
+
+    return pascal_case_string[start_index:]
+
+
 def is_abstract_class(node: ClassDef) -> bool:
     """Given a node, returns whether it is an abstract base model."""
     for child_node in node.get_children():
@@ -63,32 +90,63 @@ def is_abstract_class(node: ClassDef) -> bool:
     return False
 
 
-def get_model_name(ancestor: str, node: ClassDef) -> str:
+def find_attr(node: ClassDef, attr_name: str) -> Optional[Assign]:
+    """Get the attribute from the class definition."""
+    for attr in node.body:
+        if isinstance(attr, Assign):
+            for target in attr.targets:
+                if (
+                    isinstance(target, (Name, Attribute))
+                    and getattr(target, "attrname", None) == attr_name
+                    or getattr(target, "name", None) == attr_name
+                ):
+                    return attr
+    return None
+
+
+def find_meta(node: ClassDef) -> Optional[ClassDef]:
+    """Find the Meta class from the class definition."""
+    for child in node.body:
+        if isinstance(child, ClassDef) and child.name == "Meta":
+            return child
+    return None
+
+
+def get_model_name(node: ClassDef) -> str:
     """Get the model name from the class definition."""
-    if ancestor == "from nautobot.apps.views.NautobotUIViewSet":
-        raise NotImplementedError("This ancestor is not yet supported.")
+    queryset = find_attr(node, "queryset")
+    if queryset:
+        return find_model_name_from_queryset(queryset.value)
 
-    meta = next((n for n in node.body if isinstance(n, ClassDef) and n.name == "Meta"), None)
-    if not meta:
-        raise NotImplementedError("This class does not have a Meta class.")
-
-    model_attr = next(
-        (
-            attr
-            for attr in meta.body
-            if isinstance(attr, Assign)
-            and any(
-                isinstance(target, (Name, Attribute))
-                and getattr(target, "attrname", None) == "model"
-                or getattr(target, "name", None) == "model"
-                for target in attr.targets
-            )
-        ),
-        None,
-    )
+    model_attr = find_attr(node, "model")
     if not model_attr:
-        raise NotImplementedError("The Meta class does not define a model attribute.")
+        meta = find_meta(node)
+        if not meta:
+            raise NotImplementedError("This class does not have a Meta class.")
+        model_attr = find_attr(meta, "model")
+        if not model_attr:
+            raise NotImplementedError("The Meta class does not define a model attribute.")
 
+    return get_model_name_from_attr(model_attr)
+
+
+def find_model_name_from_queryset(node: NodeNG) -> str:
+    """Get the model name from the queryset assignment value."""
+    while node:
+        if isinstance(node, Call):
+            node = node.func
+        elif isinstance(node, Attribute):
+            if node.attrname == "objects" and isinstance(node.expr, Name):
+                return node.expr.name
+            node = node.expr
+        else:
+            break
+
+    raise NotImplementedError("Model was not found")
+
+
+def get_model_name_from_attr(model_attr: Assign) -> str:
+    """Get the model name from the model attribute."""
     if isinstance(model_attr.value, Name):
         return model_attr.value.name
     if not isinstance(model_attr.value, Attribute):
@@ -105,14 +163,14 @@ def get_model_name(ancestor: str, node: ClassDef) -> str:
     return model_attr_chain[-1]
 
 
-def find_ancestor(node: ClassDef, ancestors: List[str]) -> str:
+def find_ancestor(node: ClassDef, ancestors: Iterable[T], get_value: Callable[[T], str]) -> Optional[T]:
     """Find the class ancestor from the list of ancestors."""
     ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
     for checked_ancestor in ancestors:
-        if checked_ancestor in ancestor_class_types:
+        if get_value(checked_ancestor) in ancestor_class_types:
             return checked_ancestor
 
-    return ""
+    return None
 
 
 def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
