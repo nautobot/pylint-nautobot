@@ -6,7 +6,7 @@ from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
 from .utils import find_ancestor
-from .utils import get_model_name
+from .utils import find_model_name
 from .utils import is_abstract_class
 from .utils import is_version_compatible
 from .utils import trim_first_pascal_word
@@ -69,6 +69,11 @@ class NautobotSubClassNameChecker(BaseChecker):
             "Sub-class name should be %s.",
             "nb-sub-class-name",
             "All classes should have a sub-class name that is <model class name><ancestor class type>.",
+        ),
+        "I4282": (
+            "Model was not found in the class.",
+            "nb-no-model-found",
+            "Model was not found in the class.",
         )
     }
 
@@ -87,6 +92,10 @@ class NautobotSubClassNameChecker(BaseChecker):
         if not ancestor:
             return
 
-        expected_name = get_model_name(node) + ancestor.suffix
-        if expected_name != node.name:
-            self.add_message("nb-sub-class-name", node=node, args=(expected_name,))
+        model_name = find_model_name(node)
+        if model_name:
+            expected_name = model_name + ancestor.suffix
+            if expected_name != node.name:
+                self.add_message("nb-sub-class-name", node=node, args=(expected_name,))
+        else:
+            self.add_message("nb-no-model-found", node=node)
