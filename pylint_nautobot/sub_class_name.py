@@ -74,7 +74,7 @@ class NautobotSubClassNameChecker(BaseChecker):
             "Model was not found in the class.",
             "nb-no-model-found",
             "Model was not found in the class.",
-        )
+        ),
     }
 
     def __init__(self, *args, **kwargs):
