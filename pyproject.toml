@@ -1,50 +1,57 @@
 [tool.poetry]
 name = "pylint-nautobot"
-version = "0.2.1"
+version = "0.2.2b1"
 description = "Custom Pylint Rules for Nautobot"
 authors = ["Cristian Sirbu <cristian.sirbu@networktocode.com>", "Leo Kirchner <leo.kirchner@networktocode.com>"]
+license = "Apache-2.0"
 readme = "README.md"
+homepage = "https://github.com/nautobot/pylint-nautobot"
+repository = "https://github.com/nautobot/pylint-nautobot"
+keywords = ["nautobot", "pylint"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+packages = [
+    { include = "pylint_nautobot" },
+]
 
 [tool.poetry.dependencies]
-python = "^3.7"
-pylint = "^2.13"
-pyyaml = "^6.0"
-importlib-resources = "^5.12.0"
-tomli = "^2.0.1"
+importlib-resources = ">=5.12.0"
+pylint = ">=2.17.5"
+python = ">=3.8,<3.12"
+pyyaml = ">=6.0.1"
+toml = ">=0.10.2"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-pydocstyle = "^6.3.0"
-flake8 = "^3.9.2"
-bandit = "^1.7.5"
-invoke = "^2.0.0"
-toml = "^0.10.2"
-yamllint = "^1.30.0"
-pytest = "^7.3.0"
-# Rendering docs to HTML
-mkdocs = "~1.4.3"
-# Material for MkDocs theme
-mkdocs-material = "9.1.14"
-# Render custom markdown for version added/changed/remove notes
+Markdown = "*"
+bandit = "*"
+black = "*"
+coverage = "*"
+flake8 = "*"
+invoke = "*"
+ipython = "*"
+mkdocs = "1.5.2"
+mkdocs-material = "9.1.15"
 mkdocs-version-annotations = "1.0.0"
-# Automatic documentation from sources, for MkDocs
-mkdocstrings = "0.21.2"
-mkdocstrings-python = "0.10.1"
-# Django and nautobot have to be installed for the inference in the tests of the class hierarchy to work correctly
-django = "3.2.19"
-nautobot = "^1.5.19"
+mkdocstrings = "0.22.0"
+mkdocstrings-python = "1.5.2"
+pytest = "^7.3.0"
+ruff = "*"
+yamllint = "*"
 
-[tool.pylint-nautobot]
-# Normally this configuration goes into the apps that should be linted, but this is required so that the checkers
-# activate correctly during unit testing.
-supported_nautobot_versions = [
-    "1",
-    "2"
+[tool.poetry.extras]
+all = [
 ]
 
 [tool.black]
 line-length = 120
-target-version = ['py37']
+target-version = ['py38', 'py39', 'py310', 'py311']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -59,6 +66,7 @@ exclude = '''
     | buck-out
     | build
     | dist
+    | var
   )/
   | settings.py     # This is where you define files that should not be stylized by black
                      # the root of the project
@@ -73,38 +81,21 @@ ignore=[
 
 [tool.pylint.basic]
 # No docstrings required for private methods (Pylint default), or for test_ functions, or for inner Meta classes.
-no-docstring-rgx="^(_|test_|Meta$|visit_)"
+no-docstring-rgx="^(_|test_|Meta$)"
 
 [tool.pylint.messages_control]
 # Line length is enforced by Black, so pylint doesn't need to check it.
 # Pylint and Black disagree about how to format multi-line arrays; Black wins.
-disable = """,
-    line-too-long
-    """
+disable = [
+    "line-too-long",
+]
 
 [tool.pylint.miscellaneous]
 # Don't flag TODO as a failure, let us commit with things that still need to be done in the code
-notes = """,
-    FIXME,
-    XXX,
-    """
-
-[tool.pydocstyle]
-convention = "google"
-inherit = false
-match = "(?!__init__).*\\.py"
-match-dir = "(?!tests|migrations|development|visit_)[^\\.].*"
-# D212 is enabled by default in google convention, and complains if we have a docstring like:
-# """
-# My docstring is on the line after the opening quotes instead of on the same line as them.
-# """
-# We've discussed and concluded that we consider this to be a valid style choice.
-# D012 is enforced by pylint as well, doubling up here provides no additional value.
-add_ignore = "D102, D212"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+notes = [
+    "FIXME",
+    "XXX",
+]
 
 [tool.pytest.ini_options]
 testpaths = [
@@ -114,6 +105,44 @@ norecursedirs = [
     "tests/inputs",
 ]
 addopts = "-vv --doctest-modules"
+filterwarnings = [
+    "ignore:The end_col_offset attribute of MessageTest.*:DeprecationWarning",
+    "ignore:The end_line attribute of MessageTest.*:DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "D",  # pydocstyle
+]
+ignore = [
+    # warning: `one-blank-line-before-class` (D203) and `no-blank-line-before-class` (D211) are incompatible.
+    "D203",  # 1 blank line required before class docstring
+
+    # D212 is enabled by default in google convention, and complains if we have a docstring like:
+    # """
+    # My docstring is on the line after the opening quotes instead of on the same line as them.
+    # """
+    # We've discussed and concluded that we consider this to be a valid style choice.
+    "D212",  # Multi-line docstring summary should start at the first line
+    "D213",  # Multi-line docstring summary should start at the second line
+
+    # Produces issues in the current codebase.
+    "D401",  # First line of docstring should be in imperative mood
+    "D407",  # Missing dashed underline after section
+    "D416",  # Section name ends in colon
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.per-file-ignores]
+"tests/*" = [
+    "D",  # pydocstyle
+]
 
 [tool.bandit]
 skips = []
@@ -122,3 +151,7 @@ exclude_dirs = [
     "./tests/",
     "./.venv/",
 ]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

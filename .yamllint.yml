@@ -9,4 +9,6 @@ rules:
   quoted-strings:
     quote-type: "double"
 ignore: |
-  .venv/
+  /.venv/
+  /compose.yaml
+  /var

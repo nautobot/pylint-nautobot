@@ -1,12 +1,9 @@
 """Check for usage of models that were replaced in 2.0."""
 from pylint.checkers import BaseChecker
-from pylint.interfaces import IAstroidChecker
 
 
 class NautobotReplacedModelsImportChecker(BaseChecker):
     """Visit 'import from' statements to find usage of models that have been replaced in 2.0."""
-
-    __implements__ = IAstroidChecker
 
     version_specifier = ">=2,<3"
 
@@ -45,6 +42,7 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
     }
 
     def visit_importfrom(self, node):
+        """Visit 'import from' statements."""
         if node.modname == "nautobot.dcim.models":
             for name, _ in node.names:
                 if name == "DeviceRole":
