@@ -112,7 +112,7 @@ def find_meta(node: ClassDef) -> Optional[ClassDef]:
     return None
 
 
-def get_model_name(node: ClassDef) -> str:
+def find_model_name(node: ClassDef) -> str:
     """Get the model name from the class definition."""
     queryset = find_attr(node, "queryset")
     if queryset:
@@ -122,10 +122,10 @@ def get_model_name(node: ClassDef) -> str:
     if not model_attr:
         meta = find_meta(node)
         if not meta:
-            raise NotImplementedError("This class does not have a Meta class.")
+            return ""
         model_attr = find_attr(meta, "model")
         if not model_attr:
-            raise NotImplementedError("The Meta class does not define a model attribute.")
+            return ""
 
     return get_model_name_from_attr(model_attr)
 
