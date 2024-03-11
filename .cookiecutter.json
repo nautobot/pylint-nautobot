@@ -5,7 +5,7 @@
     "project_name": "Pylint Nautobot",
     "project_slug": "pylint-nautobot",
     "project_python_name": "pylint_nautobot",
-    "project_python_base_version": "3.7",
+    "project_python_base_version": "3.8",
     "project_with_config_settings": "yes",
     "generate_docs": "no",
     "version": "0.1.0",

@@ -1,25 +1,195 @@
 """Utilities for managing data."""
+
+from importlib import metadata
+from pathlib import Path
+from typing import Callable
+from typing import Iterable
+from typing import Optional
+from typing import TypeVar
+from typing import Union
+
+import toml
+from astroid import Assign
+from astroid import Attribute
+from astroid import Call
+from astroid import ClassDef
+from astroid import Const
+from astroid import Name
+from astroid import NodeNG
 from importlib_resources import files
+from packaging.specifiers import SpecifierSet
+from packaging.version import Version
 from yaml import safe_load
 
+T = TypeVar("T")
 
-def is_nautobot_v2_installed() -> bool:
-    """Return True if Nautobot v2.x is installed."""
-    try:
-        # pylint: disable-next=import-outside-toplevel
-        from importlib.metadata import version
 
-        # pylint: disable-next=import-outside-toplevel
-        from packaging.version import Version
+def _read_poetry_lock() -> dict:
+    for directory in (Path.cwd(), *Path.cwd().parents):
+        path = directory / "poetry.lock"
+        if path.exists():
+            return toml.load(Path(path))
 
-        return Version(version("nautobot")).major == 2
-    except ImportError:
-        return False
+    return {}
+
+
+def _read_locked_nautobot_version() -> Optional[str]:
+    poetry_lock = _read_poetry_lock()
+    if not poetry_lock:
+        return None
+
+    for package in poetry_lock.get("package", []):
+        if package["name"] == "nautobot":
+            return package["version"]
+
+    return None
+
+
+MINIMUM_NAUTOBOT_VERSION = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
+
+
+def trim_first_pascal_word(pascal_case_string: str) -> str:
+    """Remove the first word from a pascal case string.
+
+    Examples:
+    >>> trim_first_pascal_word("NautobotFilterSet")
+    'FilterSet'
+    >>> trim_first_pascal_word("BaseTable")
+    'Table'
+    >>> trim_first_pascal_word("FQDNModel")
+    'Model'
+    """
+    start_index = 0
+
+    for i in range(1, len(pascal_case_string)):
+        if pascal_case_string[i].isupper():
+            start_index = i
+            break
+
+    return pascal_case_string[start_index:]
+
+
+def is_abstract_class(node: ClassDef) -> bool:
+    """Given a node, returns whether it is an abstract base model."""
+    for child_node in node.get_children():
+        if not (isinstance(child_node, ClassDef) and child_node.name == "Meta"):
+            continue
+
+        for meta_child in child_node.get_children():
+            if (
+                not isinstance(meta_child, Assign)
+                or not meta_child.targets[0].name == "abstract"  # type: ignore
+                or not isinstance(meta_child.value, Const)
+            ):
+                continue
+            # At this point we know we are dealing with an assignment to a constant for the 'abstract' field on the
+            # 'Meta' class. Therefore, we can assume the value of that to be whether the node is an abstract base model
+            # or not.
+            return meta_child.value.value
+
+    return False
+
+
+def find_attr(node: ClassDef, attr_name: str) -> Optional[Assign]:
+    """Get the attribute from the class definition."""
+    for attr in node.body:
+        if isinstance(attr, Assign):
+            for target in attr.targets:
+                if (
+                    isinstance(target, (Name, Attribute))
+                    and getattr(target, "attrname", None) == attr_name
+                    or getattr(target, "name", None) == attr_name
+                ):
+                    return attr
+    return None
+
+
+def find_meta(node: ClassDef) -> Optional[ClassDef]:
+    """Find the Meta class from the class definition."""
+    for child in node.body:
+        if isinstance(child, ClassDef) and child.name == "Meta":
+            return child
+    return None
+
+
+def find_model_name(node: ClassDef) -> str:
+    """Get the model name from the class definition."""
+    queryset = find_attr(node, "queryset")
+    if queryset:
+        return get_model_name_from_queryset(queryset.value)
+
+    model_attr = find_attr(node, "model")
+    if not model_attr:
+        meta = find_meta(node)
+        if not meta:
+            return ""
+        model_attr = find_attr(meta, "model")
+        if not model_attr:
+            return ""
+
+    return get_model_name_from_attr(model_attr)
+
+
+def get_model_name_from_queryset(node: NodeNG) -> str:
+    """Get the model name from the queryset assignment value."""
+    while node:
+        if isinstance(node, Call):
+            node = node.func
+        elif isinstance(node, Attribute):
+            if node.attrname == "objects":
+                if isinstance(node.expr, Name):
+                    # Covers `queryset = AddressObject.objects.all()`
+                    return node.expr.name
+                if isinstance(node.expr, Attribute):
+                    # Covers `queryset = models.AddressObject.objects.all()`
+                    return node.expr.attrname
+            node = node.expr
+        else:
+            break
+
+    raise NotImplementedError("Model was not found")
+
+
+def get_model_name_from_attr(model_attr: Assign) -> str:
+    """Get the model name from the model attribute."""
+    if isinstance(model_attr.value, Name):
+        return model_attr.value.name
+    if not isinstance(model_attr.value, Attribute):
+        raise NotImplementedError("This utility supports only direct assignment or attribute based model names.")
+
+    model_attr_chain = []
+    while isinstance(model_attr.value, Attribute):
+        model_attr_chain.insert(0, model_attr.value.attrname)
+        model_attr.value = model_attr.value.expr
+
+    if isinstance(model_attr.value, Name):
+        model_attr_chain.insert(0, model_attr.value.name)
+
+    return model_attr_chain[-1]
+
+
+def find_ancestor(node: ClassDef, ancestors: Iterable[T], get_value: Callable[[T], str]) -> Optional[T]:
+    """Find the class ancestor from the list of ancestors."""
+    ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
+    for checked_ancestor in ancestors:
+        if get_value(checked_ancestor) in ancestor_class_types:
+            return checked_ancestor
+
+    return None
+
+
+def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
+    """Return True if the Nautobot version is compatible with the given version specifier_set."""
+    if not specifier_set:
+        return True
+    if isinstance(specifier_set, str):
+        specifier_set = SpecifierSet(specifier_set)
+    return specifier_set.contains(MINIMUM_NAUTOBOT_VERSION)
 
 
 def load_v2_code_location_changes():
     """Black magic data transform, needs schema badly."""
-    with open(files("pylint_nautobot") / "data" / "v2" / "v2-code-location-changes.yaml", encoding="utf-8") as rules:
+    with open(files("pylint_nautobot") / "data" / "v2" / "v2-code-location-changes.yaml", encoding="utf-8") as rules:  # type: ignore
         changes = safe_load(rules)
     changes_map = {}
     for change in changes:

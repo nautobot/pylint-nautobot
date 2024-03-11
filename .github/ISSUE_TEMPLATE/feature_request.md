@@ -5,6 +5,7 @@ about: Propose a new feature or enhancement
 ---
 
 ### Environment
+* Nautobot version:  <!-- Example: 2.0.0 -->
 * pylint-nautobot version:  <!-- Example: 1.0.0 -->
 
 <!--

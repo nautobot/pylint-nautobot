@@ -1,0 +1,18 @@
+---
+x-nautobot-build: &nautobot-build
+  build:
+    args:
+      NAUTOBOT_VER: "${NAUTOBOT_VER}"
+      PYTHON_VER: "${PYTHON_VER}"
+    context: "../"
+    dockerfile: "development/Dockerfile"
+x-nautobot-base: &nautobot-base
+  image: "pylint-nautobot/nautobot:${NAUTOBOT_VER}-py${PYTHON_VER}"
+  tty: true
+
+version: "3.8"
+services:
+  nautobot:
+    <<:
+      - *nautobot-base
+      - *nautobot-build
