@@ -48,7 +48,14 @@ def _read_locked_nautobot_version() -> Optional[str]:
     return None
 
 
-MINIMUM_NAUTOBOT_VERSION = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
+def _get_minimum_nautobot_version() -> Version:
+    try:
+        return Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
+    except metadata.PackageNotFoundError:
+        return Version("1")
+
+
+MINIMUM_NAUTOBOT_VERSION = _get_minimum_nautobot_version()
 
 
 def trim_first_pascal_word(pascal_case_string: str) -> str:
