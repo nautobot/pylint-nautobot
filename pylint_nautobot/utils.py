@@ -215,12 +215,13 @@ class RuleInfo(NamedTuple):
 
 
 class NautobotBaseChecker(BaseChecker):
+    """Base checker for Nautobot checkers."""
+
     version_specifier: str
 
 
 def get_checker_rules(checker: NautobotBaseChecker) -> Generator[RuleInfo, None, None]:
     """Return the list of all the rules with their versions."""
-
     for code, msg in checker.msgs.items():
         yield RuleInfo(
             code=code,
