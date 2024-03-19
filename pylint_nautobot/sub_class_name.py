@@ -3,8 +3,8 @@
 from typing import NamedTuple
 
 from astroid import ClassDef
-from pylint.checkers import BaseChecker
 
+from .utils import NautobotBaseChecker
 from .utils import find_ancestor
 from .utils import find_model_name
 from .utils import is_abstract_class
@@ -55,7 +55,7 @@ def _get_ancestor(item: dict) -> _Ancestor:
     return _Ancestor(ancestor, item.get("suffix", trim_first_pascal_word(ancestor.split(".")[-1])))
 
 
-class NautobotSubClassNameChecker(BaseChecker):
+class NautobotSubClassNameChecker(NautobotBaseChecker):
     """Ensure subclass name is <model class name><ancestor class type>.
 
     This can typically be done via <ancestor class name>.replace("Nautobot", <model class name>)

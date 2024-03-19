@@ -3,8 +3,8 @@
 from typing import NamedTuple
 
 from astroid import ClassDef
-from pylint.checkers import BaseChecker
 
+from .utils import NautobotBaseChecker
 from .utils import is_abstract_class
 from .utils import is_version_compatible
 
@@ -47,7 +47,7 @@ class _Mapping(NamedTuple):
     display: str
 
 
-class NautobotIncorrectBaseClassChecker(BaseChecker):
+class NautobotIncorrectBaseClassChecker(NautobotBaseChecker):
     """Check that all X inherits from Y.
 
     Example: Every model that you define in the Nautobot ecosystem should inherit from 'nautobot.core.models.BaseModel'.

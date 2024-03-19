@@ -4,8 +4,8 @@ from astroid import Assign
 from astroid import AssignName
 from astroid import ClassDef
 from astroid import Const
-from pylint.checkers import BaseChecker
 
+from .utils import NautobotBaseChecker
 from .utils import is_version_compatible
 
 _META_CLASSES = {
@@ -17,7 +17,7 @@ _META_CLASSES = {
 }
 
 
-class NautobotUseFieldsAllChecker(BaseChecker):
+class NautobotUseFieldsAllChecker(NautobotBaseChecker):
     """Visit Meta subclasses and check for use of `fields = "__all__"`, instead of `fields = ["field1", ...]`."""
 
     version_specifier = ">=1,<3"

@@ -3,7 +3,9 @@
 from importlib import metadata
 from pathlib import Path
 from typing import Callable
+from typing import Generator
 from typing import Iterable
+from typing import NamedTuple
 from typing import Optional
 from typing import TypeVar
 from typing import Union
@@ -19,6 +21,7 @@ from astroid import NodeNG
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
+from pylint.checkers import BaseChecker
 from yaml import safe_load
 
 T = TypeVar("T")
@@ -200,3 +203,28 @@ def load_v2_code_location_changes():
 
 
 MAP_CODE_LOCATION_CHANGES = load_v2_code_location_changes()
+
+
+class RuleInfo(NamedTuple):
+    """A rule with its version specifier."""
+
+    code: str
+    name: str
+    version_specifier: str
+    description: str
+
+
+class NautobotBaseChecker(BaseChecker):
+    version_specifier: str
+
+
+def get_checker_rules(checker: NautobotBaseChecker) -> Generator[RuleInfo, None, None]:
+    """Return the list of all the rules with their versions."""
+
+    for code, msg in checker.msgs.items():
+        yield RuleInfo(
+            code=code,
+            name=msg[1],
+            version_specifier=checker.version_specifier,
+            description=msg[2],
+        )

@@ -1,12 +1,14 @@
 """Check model label construction in f-strings."""
+
 from astroid import Attribute
 from astroid import Const
 from astroid import FormattedValue
 from astroid import JoinedStr
 from astroid import Name
 from astroid import NodeNG
-from pylint.checkers import BaseChecker
 from pylint.interfaces import HIGH
+
+from .utils import NautobotBaseChecker
 
 
 def _get_model_name_for_meta_attr(node: NodeNG, expected_attrname: str) -> str:
@@ -47,7 +49,7 @@ _EXPECTATIONS = (
 )
 
 
-class NautobotModelLabelChecker(BaseChecker):
+class NautobotModelLabelChecker(NautobotBaseChecker):
     """Model label construction checker."""
 
     version_specifier = ">=1,<3"

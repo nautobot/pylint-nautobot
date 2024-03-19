@@ -1,6 +1,7 @@
 """Initialization file for library."""
 
 from importlib import metadata
+from typing import Generator
 
 from pylint.lint import PyLinter
 
@@ -12,6 +13,8 @@ from .replaced_models import NautobotReplacedModelsImportChecker
 from .string_field_blank_null import NautobotStringFieldBlankNull
 from .sub_class_name import NautobotSubClassNameChecker
 from .use_fields_all import NautobotUseFieldsAllChecker
+from .utils import RuleInfo
+from .utils import get_checker_rules
 from .utils import is_version_compatible
 
 __version__ = metadata.version(__name__)
@@ -33,3 +36,9 @@ def register(linter: PyLinter):
     for checker in CHECKERS:
         if is_version_compatible(checker.version_specifier):
             linter.register_checker(checker(linter))
+
+
+def get_rules() -> Generator[RuleInfo, None, None]:
+    """Return the list of all the rules with their versions."""
+    for checker in CHECKERS:
+        yield from get_checker_rules(checker)

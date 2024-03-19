@@ -1,8 +1,9 @@
 """Check for deprecated StatusModel usage and encourage the usage of StatusField instead."""
-from pylint.checkers import BaseChecker
+
+from .utils import NautobotBaseChecker
 
 
-class NautobotDeprecatedStatusModelChecker(BaseChecker):
+class NautobotDeprecatedStatusModelChecker(NautobotBaseChecker):
     """Discourage the usage of deprecated StatusModel and encourage the usage of StatusField."""
 
     version_specifier = ">=2,<3"
