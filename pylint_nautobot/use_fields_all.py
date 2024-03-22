@@ -10,10 +10,8 @@ from .utils import is_version_compatible
 
 _META_CLASSES = {
     "nautobot.core.api.serializers.NautobotModelSerializer.Meta": ">1",
-    "nautobot.core.tables.BaseTable.Meta": ">=2",
     "nautobot.extras.filters.NautobotFilterSet.Meta": ">1",
     "nautobot.extras.forms.NautobotModelForm.Meta": ">1",
-    "nautobot.utilities.tables.BaseTable.Meta": ">1,<2",
 }
 
 
