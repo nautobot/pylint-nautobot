@@ -6,7 +6,4 @@ mkdocstrings-python==1.5.2
 mkdocstrings==0.22.0
 
 # Need to add all project dependencies to be able to import project files
-importlib-resources>=5.12.0
-pylint>=2.17.5
-pyyaml>=6.0.1
-toml>=0.10.2
+.
