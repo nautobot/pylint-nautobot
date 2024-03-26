@@ -6,12 +6,13 @@ from astroid import ClassDef
 from astroid import Const
 from pylint.checkers import BaseChecker
 
+from .utils import find_meta
 from .utils import is_version_compatible
 
 _META_CLASSES = {
-    "nautobot.core.api.serializers.NautobotModelSerializer.Meta": ">1",
-    "nautobot.extras.filters.NautobotFilterSet.Meta": ">1",
-    "nautobot.extras.forms.NautobotModelForm.Meta": ">1",
+    "nautobot.core.api.serializers.NautobotModelSerializer": ">1",
+    "nautobot.extras.filters.NautobotFilterSet": ">1",
+    "nautobot.extras.forms.base.NautobotModelForm": ">1",
 }
 
 
@@ -44,7 +45,11 @@ class NautobotUseFieldsAllChecker(BaseChecker):
         if not any(ancestor.qname() in self.meta_classes for ancestor in node.ancestors()):
             return
 
-        for child_node in node.get_children():
+        meta = find_meta(node)
+        if not meta:
+            return
+
+        for child_node in meta.get_children():
             if isinstance(child_node, Assign):
                 if any(isinstance(target, AssignName) and target.name == "fields" for target in child_node.targets):
                     value = child_node.value
