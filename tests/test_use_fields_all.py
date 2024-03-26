@@ -36,6 +36,7 @@ _EXPECTED_ERRORS = {
         "node": _find_fields_node,
     },
     "serializer": {
+        "versions": ">=2",
         "msg_id": "nb-use-fields-all",
         "line": 10,
         "col_offset": 17,

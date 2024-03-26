@@ -10,7 +10,7 @@ from .utils import find_meta
 from .utils import is_version_compatible
 
 _META_CLASSES = {
-    "nautobot.core.api.serializers.NautobotModelSerializer": ">1",
+    "nautobot.core.api.serializers.NautobotModelSerializer": ">=2",
     "nautobot.extras.filters.NautobotFilterSet": ">1",
     "nautobot.extras.forms.base.NautobotModelForm": ">1",
 }
