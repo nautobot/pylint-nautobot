@@ -1,5 +1,9 @@
 mkdocs==1.5.2
+mkdocs-macros-plugin==1.0.5
 mkdocs-material==9.1.15
 mkdocs-version-annotations==1.0.0
 mkdocstrings-python==1.5.2
 mkdocstrings==0.22.0
+
+# Need to add all project dependencies to be able to import project files
+.

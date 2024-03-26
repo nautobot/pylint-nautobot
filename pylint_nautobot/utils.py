@@ -3,7 +3,9 @@
 from importlib import metadata
 from pathlib import Path
 from typing import Callable
+from typing import Generator
 from typing import Iterable
+from typing import NamedTuple
 from typing import Optional
 from typing import TypeVar
 from typing import Union
@@ -19,6 +21,7 @@ from astroid import NodeNG
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
+from pylint.checkers import BaseChecker
 from yaml import safe_load
 
 T = TypeVar("T")
@@ -45,7 +48,14 @@ def _read_locked_nautobot_version() -> Optional[str]:
     return None
 
 
-MINIMUM_NAUTOBOT_VERSION = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
+def _get_minimum_nautobot_version() -> Version:
+    try:
+        return Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
+    except metadata.PackageNotFoundError:
+        return Version("1")
+
+
+MINIMUM_NAUTOBOT_VERSION = _get_minimum_nautobot_version()
 
 
 def trim_first_pascal_word(pascal_case_string: str) -> str:
@@ -200,3 +210,29 @@ def load_v2_code_location_changes():
 
 
 MAP_CODE_LOCATION_CHANGES = load_v2_code_location_changes()
+
+
+class RuleInfo(NamedTuple):
+    """A rule with its version specifier."""
+
+    code: str
+    name: str
+    version_specifier: str
+    description: str
+
+
+class NautobotBaseChecker(BaseChecker):
+    """Base checker for Nautobot checkers."""
+
+    version_specifier: str
+
+
+def get_checker_rules(checker: NautobotBaseChecker) -> Generator[RuleInfo, None, None]:
+    """Return the list of all the rules with their versions."""
+    for code, msg in checker.msgs.items():
+        yield RuleInfo(
+            code=code,
+            name=msg[1],
+            version_specifier=checker.version_specifier,
+            description=msg[2],
+        )

@@ -1,11 +1,13 @@
 """Check for CharField's or TextField's on models where null=True and blank=True."""
+
 from astroid import Assign
 from astroid import Call
 from astroid import ClassDef
-from pylint.checkers import BaseChecker
+
+from .utils import NautobotBaseChecker
 
 
-class NautobotStringFieldBlankNull(BaseChecker):
+class NautobotStringFieldBlankNull(NautobotBaseChecker):
     """Visit classes to find class children on models who are CharField's or TextField's and check whether they are configured well."""
 
     version_specifier = ">=1,<3"

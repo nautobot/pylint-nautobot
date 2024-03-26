@@ -1,8 +1,9 @@
 """Check for usage of models that were replaced in 2.0."""
-from pylint.checkers import BaseChecker
+
+from .utils import NautobotBaseChecker
 
 
-class NautobotReplacedModelsImportChecker(BaseChecker):
+class NautobotReplacedModelsImportChecker(NautobotBaseChecker):
     """Visit 'import from' statements to find usage of models that have been replaced in 2.0."""
 
     version_specifier = ">=2,<3"
