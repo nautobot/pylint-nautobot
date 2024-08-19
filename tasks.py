@@ -47,9 +47,9 @@ namespace = Collection("pylint_nautobot")
 namespace.configure(
     {
         "pylint_nautobot": {
-            "nautobot_ver": "2.2.2",
+            "nautobot_ver": "2.3.1",
             "project_name": "pylint-nautobot",
-            "python_ver": "3.11",
+            "python_ver": "3.12",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
             "compose_files": [
