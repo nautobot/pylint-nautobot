@@ -3,8 +3,7 @@
 from astroid import Assign, AssignName, ClassDef, Const
 from pylint.checkers import BaseChecker
 
-from .utils import find_meta
-from .utils import is_version_compatible
+from .utils import find_meta, is_version_compatible
 
 _META_CLASSES = {
     "nautobot.core.api.serializers.NautobotModelSerializer": ">=2",
