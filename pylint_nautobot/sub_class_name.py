@@ -5,11 +5,7 @@ from typing import NamedTuple
 from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
-from .utils import find_ancestor
-from .utils import find_model_name
-from .utils import is_abstract_class
-from .utils import is_version_compatible
-from .utils import trim_first_pascal_word
+from .utils import find_ancestor, find_model_name, is_abstract_class, is_version_compatible, trim_first_pascal_word
 
 _ANCESTORS = (
     {

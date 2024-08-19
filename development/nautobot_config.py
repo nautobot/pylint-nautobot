@@ -1,3 +1,3 @@
 """Nautobot development configuration file."""
 
-SECRET_KEY = "NOTASECRET"  # nosec
+SECRET_KEY = "NOTASECRET"  # noqa: S105

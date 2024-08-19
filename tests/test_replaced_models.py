@@ -5,7 +5,7 @@ from pytest import mark
 
 from pylint_nautobot.replaced_models import NautobotReplacedModelsImportChecker
 
-from .utils import assert_no_message, assert_import_error
+from .utils import assert_import_error, assert_no_message
 
 
 class TestReplacedModelsImportChecker(CheckerTestCase):

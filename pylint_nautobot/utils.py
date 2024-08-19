@@ -2,20 +2,10 @@
 
 from importlib import metadata
 from pathlib import Path
-from typing import Callable
-from typing import Iterable
-from typing import Optional
-from typing import TypeVar
-from typing import Union
+from typing import Callable, Iterable, Optional, TypeVar, Union
 
 import toml
-from astroid import Assign
-from astroid import Attribute
-from astroid import Call
-from astroid import ClassDef
-from astroid import Const
-from astroid import Name
-from astroid import NodeNG
+from astroid import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
