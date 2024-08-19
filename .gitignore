@@ -306,3 +306,7 @@ invoke.yml
 public
 /compose.yaml
 /pylint-nautobot/static/nautobot_firewall_models/docs
+
+# Vagrant
+.vagrant
+Vagrantfile
