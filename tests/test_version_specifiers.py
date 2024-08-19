@@ -1,4 +1,5 @@
 """Test version specifier parsing."""
+
 import pytest
 from packaging.specifiers import SpecifierSet, InvalidSpecifier
 

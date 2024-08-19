@@ -1,4 +1,5 @@
 """Tests for model label construction checker."""
+
 import astroid
 from pylint.interfaces import HIGH
 from pylint.testutils import CheckerTestCase

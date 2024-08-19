@@ -1,4 +1,5 @@
 """Check model label construction in f-strings."""
+
 from astroid import Attribute
 from astroid import Const
 from astroid import FormattedValue

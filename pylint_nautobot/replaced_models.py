@@ -1,4 +1,5 @@
 """Check for usage of models that were replaced in 2.0."""
+
 from pylint.checkers import BaseChecker
 
 

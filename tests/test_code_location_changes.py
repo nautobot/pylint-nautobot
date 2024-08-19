@@ -1,4 +1,5 @@
 """Tests for code location changes checker."""
+
 from pylint.testutils import CheckerTestCase
 from pytest import mark
 

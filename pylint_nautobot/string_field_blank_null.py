@@ -1,4 +1,5 @@
 """Check for CharField's or TextField's on models where null=True and blank=True."""
+
 from astroid import Assign
 from astroid import Call
 from astroid import ClassDef

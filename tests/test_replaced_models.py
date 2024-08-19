@@ -1,4 +1,5 @@
 """Tests for replaced models checker."""
+
 from pylint.testutils import CheckerTestCase
 from pytest import mark
 
