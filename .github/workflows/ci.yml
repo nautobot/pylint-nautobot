@@ -81,8 +81,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.12"]
-        nautobot-version: ["stable"]
+        python-version: ["3.11"]
+        nautobot-version: ["2.2.2"]
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"
       INVOKE_PYLINT_NAUTOBOT_NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
