@@ -49,7 +49,7 @@ namespace.configure(
         "pylint_nautobot": {
             "nautobot_ver": "2.3.1",
             "project_name": "pylint-nautobot",
-            "python_ver": "3.12",
+            "python_ver": "3.11",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
             "compose_files": [
@@ -367,7 +367,7 @@ def pylint(context):
 @task(aliases=("a",))
 def autoformat(context):
     """Run code autoformatting."""
-    ruff(context, fix=True)
+    ruff(context, action=["format"], fix=True)
 
 
 @task(

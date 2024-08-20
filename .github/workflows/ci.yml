@@ -81,7 +81,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.12"]
+        # TODO: Update to 3.12 once #89 is implemented
+        python-version: ["3.11"]
         nautobot-version: ["stable"]
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"
@@ -118,12 +119,13 @@ jobs:
       matrix:
         python-version: ["3.11"]
         # Incompatible with 2.2.3-2.3.0 due to https://github.com/nautobot/nautobot/pull/6116
-        nautobot-version: ["1.6", "2.0", "2.1", "2.2.2"]
+        nautobot-version: ["1.6", "2.0", "2.1", "2.2.2", "2.3"]
         include:
           - python-version: "3.8"
             nautobot-version: "stable"
-          - python-version: "3.12"
-            nautobot-version: "stable"
+          # TODO: Enable once #89 is implemented and remove 2.3 from matrix
+          # - python-version: "3.12"
+          #   nautobot-version: "stable"
     runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"
