@@ -10,7 +10,7 @@ The project is packaged with a light development environment using `invoke` task
 
 The project is following Network to Code software development guidelines and is leveraging the following:
 
-- Python linting and formatting: `black`, `pylint`, `ruff` (which includes rules from `bandit`, `flake8`, and `pydocstyle`).
+- Python linting and formatting: `pylint` and `ruff` (which includes rules from `bandit`, `flake8`, and `pydocstyle`).
 - YAML linting is done with `yamllint`.
 - Python unit tests to ensure the rules are working properly.
 
