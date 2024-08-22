@@ -47,7 +47,7 @@ namespace = Collection("pylint_nautobot")
 namespace.configure(
     {
         "pylint_nautobot": {
-            "nautobot_ver": "1.6.0",
+            "nautobot_ver": "2.3.1",
             "project_name": "pylint-nautobot",
             "python_ver": "3.11",
             "local": False,
@@ -350,30 +350,6 @@ def help_task(context):
 # ------------------------------------------------------------------------------
 # TESTS
 # ------------------------------------------------------------------------------
-@task(
-    help={
-        "autoformat": "Apply formatting recommendations automatically, rather than failing if formatting is incorrect.",
-    }
-)
-def black(context, autoformat=False):
-    """Check Python code style with Black."""
-    if autoformat:
-        black_command = "black"
-    else:
-        black_command = "black --check --diff"
-
-    command = f"{black_command} ."
-
-    run_command(context, command)
-
-
-@task
-def flake8(context):
-    """Check for PEP8 compliance and other style issues."""
-    command = "flake8 . --config .flake8"
-    run_command(context, command)
-
-
 @task
 def hadolint(context):
     """Check Dockerfile for hadolint compliance and other style issues."""
@@ -391,26 +367,30 @@ def pylint(context):
 @task(aliases=("a",))
 def autoformat(context):
     """Run code autoformatting."""
-    black(context, autoformat=True)
-    ruff(context, action="both", fix=True)
+    ruff(context, action=["format"], fix=True)
 
 
 @task(
     help={
-        "action": "One of 'lint', 'format', or 'both'",
-        "fix": "Automatically fix selected action. May not be able to fix all.",
-        "output_format": "see https://docs.astral.sh/ruff/settings/#output-format",
+        "action": "Available values are `['lint', 'format']`. Can be used multiple times. (default: `['lint']`)",
+        "fix": "Automatically fix selected actions. May not be able to fix all issues found. (default: False)",
+        "output_format": "See https://docs.astral.sh/ruff/settings/#output-format for details. (default: `full`)",
     },
+    iterable=["action"],
 )
-def ruff(context, action="lint", fix=False, output_format="text"):
+def ruff(context, action=None, fix=False, output_format="full"):
     """Run ruff to perform code formatting and/or linting."""
-    if action != "lint":
+    if not action:
+        action = ["lint"]
+
+    if "format" in action:
         command = "ruff format"
         if not fix:
             command += " --check"
         command += " ."
         run_command(context, command)
-    if action != "format":
+
+    if "lint" in action:
         command = "ruff check"
         if fix:
             command += " --fix"
@@ -449,14 +429,8 @@ def tests(context, lint_only=False):
         print("Starting Docker Containers...")
         start(context)
     # Sorted loosely from fastest to slowest
-    print("Running black...")
-    black(context)
     print("Running ruff...")
     ruff(context)
-    print("Running flake8...")
-    flake8(context)
-    print("Running bandit...")
-    bandit(context)
     print("Running yamllint...")
     yamllint(context)
     print("Running poetry check...")

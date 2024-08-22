@@ -1,26 +1,41 @@
 """Tests for use fields all"""
 
+from astroid import Assign
 from pylint.testutils import CheckerTestCase
 
 from pylint_nautobot.use_fields_all import NautobotUseFieldsAllChecker
+from pylint_nautobot.utils import find_meta
 
-from .utils import assert_error_file
-from .utils import assert_good_file
-from .utils import parametrize_error_files
-from .utils import parametrize_good_files
+from .utils import assert_error_file, assert_good_file, parametrize_error_files, parametrize_good_files
 
 
 def _find_fields_node(module_node):
     """Find the fields node in the class definition."""
-    class_node = module_node.body[3]
-    meta = list(class_node.get_children())[3]
-    return list(meta.get_children())[1].value
+    class_node = module_node.body[1]
+    meta = find_meta(class_node)
+    if meta:
+        assign = list(meta.get_children())[0]
+        if isinstance(assign, Assign):
+            return assign.value
 
 
 _EXPECTED_ERRORS = {
-    "table": {
+    "filter_set": {
         "msg_id": "nb-use-fields-all",
-        "line": 14,
+        "line": 10,
+        "col_offset": 17,
+        "node": _find_fields_node,
+    },
+    "form": {
+        "msg_id": "nb-use-fields-all",
+        "line": 10,
+        "col_offset": 17,
+        "node": _find_fields_node,
+    },
+    "serializer": {
+        "versions": ">=2",
+        "msg_id": "nb-use-fields-all",
+        "line": 10,
         "col_offset": 17,
         "node": _find_fields_node,
     },

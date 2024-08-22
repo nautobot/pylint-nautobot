@@ -5,8 +5,7 @@ from typing import NamedTuple
 from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
-from .utils import is_abstract_class
-from .utils import is_version_compatible
+from .utils import is_abstract_class, is_version_compatible
 
 # Sorted from most specific to least specific
 _CLASS_MAPPING = (

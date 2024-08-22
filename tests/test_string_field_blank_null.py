@@ -4,10 +4,7 @@ from pylint.testutils import CheckerTestCase
 
 from pylint_nautobot.string_field_blank_null import NautobotStringFieldBlankNull
 
-from .utils import assert_error_file
-from .utils import assert_good_file
-from .utils import parametrize_error_files
-from .utils import parametrize_good_files
+from .utils import assert_error_file, assert_good_file, parametrize_error_files, parametrize_good_files
 
 _EXPECTED_ERRORS = {
     "field": {

@@ -1,6 +1,7 @@
 """Test version specifier parsing."""
+
 import pytest
-from packaging.specifiers import SpecifierSet, InvalidSpecifier
+from packaging.specifiers import InvalidSpecifier, SpecifierSet
 
 from pylint_nautobot import CHECKERS
 

@@ -1,4 +1,5 @@
 """Check for imports whose paths have changed in 2.0."""
+
 from pylint.checkers import BaseChecker
 
 from pylint_nautobot.utils import MAP_CODE_LOCATION_CHANGES

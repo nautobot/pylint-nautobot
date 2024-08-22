@@ -1,8 +1,8 @@
 """Tests for model label construction checker."""
+
 import astroid
 from pylint.interfaces import HIGH
-from pylint.testutils import CheckerTestCase
-from pylint.testutils import MessageTest
+from pylint.testutils import CheckerTestCase, MessageTest
 from pytest import mark
 
 from pylint_nautobot.model_label import NautobotModelLabelChecker

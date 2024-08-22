@@ -10,7 +10,6 @@ x-nautobot-base: &nautobot-base
   image: "pylint-nautobot/nautobot:${NAUTOBOT_VER}-py${PYTHON_VER}"
   tty: true
 
-version: "3.8"
 services:
   nautobot:
     <<:
