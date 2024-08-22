@@ -10,6 +10,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2024-08-22
+
+### Changed
+
+- Remove `Tables` from fields `__all__` check (nautobot-use-fields-all) and add tests ([#83](https://github.com/nautobot/pylint-nautobot/pull/83))
+
+### Housekeeping
+
+- Removed upper bound on Python version ([#88](https://github.com/nautobot/pylint-nautobot/pull/88))
+- Added upper bound on pylint version (due to #89) ([#88](https://github.com/nautobot/pylint-nautobot/pull/88))
+- Switched tooling to `ruff` as per changes to the Nautobot App Template and removed `flake8`, `pydocstyle`, and `bandit` ([#88](https://github.com/nautobot/pylint-nautobot/pull/88))
+
+
 ## [0.3.0] - 2024-03-05
 
 ### Added
