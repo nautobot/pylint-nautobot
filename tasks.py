@@ -378,7 +378,7 @@ def autoformat(context):
     },
     iterable=["action"],
 )
-def ruff(context, action=["lint"], fix=False, output_format="full"):
+def ruff(context, action=None, fix=False, output_format="full"):
     """Run ruff to perform code formatting and/or linting."""
     if not action:
         action = ["lint"]
