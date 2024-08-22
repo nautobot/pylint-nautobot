@@ -12,20 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2024-03-05
 
-<<<<<<< HEAD
 ### Added
-=======
-### Added 
->>>>>>> main
 
 - Added `nb-use-fields-all` rule (#70)
 - Added `nautobot-sub-class-name` rule (#74)
 
-<<<<<<< HEAD
 ### Changed
-=======
-### Changed 
->>>>>>> main
 
 - Improve incorrect base class checker (#72)
 - Update CODEOWNERS (#68)
