@@ -1,10 +1,11 @@
 """Tests for code location changes checker."""
+
 from pylint.testutils import CheckerTestCase
 from pytest import mark
 
 from pylint_nautobot.code_location_changes import NautobotCodeLocationChangesChecker
 
-from .utils import assert_no_message, assert_import_error
+from .utils import assert_import_error, assert_no_message
 
 
 class TestCodeLocationChangesChecker(CheckerTestCase):

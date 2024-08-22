@@ -1,4 +1,5 @@
 """Check for deprecated StatusModel usage and encourage the usage of StatusField instead."""
+
 from pylint.checkers import BaseChecker
 
 

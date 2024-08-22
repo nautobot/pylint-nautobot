@@ -16,7 +16,7 @@ env:
   APP_NAME: "pylint-nautobot"
 
 jobs:
-  black:
+  ruff-format:
     runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
@@ -25,20 +25,9 @@ jobs:
         uses: "actions/checkout@v4"
       - name: "Setup environment"
         uses: "networktocode/gh-action-setup-poetry-environment@v6"
-      - name: "Linting: black"
-        run: "poetry run invoke black"
-  bandit:
-    runs-on: "ubuntu-latest"
-    env:
-      INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
-    steps:
-      - name: "Check out repository code"
-        uses: "actions/checkout@v4"
-      - name: "Setup environment"
-        uses: "networktocode/gh-action-setup-poetry-environment@v6"
-      - name: "Linting: bandit"
-        run: "poetry run invoke bandit"
-  ruff:
+      - name: "Linting: ruff format"
+        run: "poetry run invoke ruff --action format"
+  ruff-lint:
     runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
@@ -60,17 +49,6 @@ jobs:
         uses: "networktocode/gh-action-setup-poetry-environment@v6"
       - name: "Check Docs Build"
         run: "poetry run invoke build-and-check-docs"
-  flake8:
-    runs-on: "ubuntu-latest"
-    env:
-      INVOKE_PYLINT_NAUTOBOT_LOCAL: "True"
-    steps:
-      - name: "Check out repository code"
-        uses: "actions/checkout@v4"
-      - name: "Setup environment"
-        uses: "networktocode/gh-action-setup-poetry-environment@v6"
-      - name: "Linting: flake8"
-        run: "poetry run invoke flake8"
   poetry:
     runs-on: "ubuntu-latest"
     env:
@@ -95,16 +73,15 @@ jobs:
         run: "poetry run invoke yamllint"
   pylint:
     needs:
-      - "bandit"
-      - "ruff"
-      - "flake8"
       - "poetry"
       - "yamllint"
-      - "black"
+      - "ruff-format"
+      - "ruff-lint"
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: true
       matrix:
+        # TODO: Update to 3.12 once #89 is implemented
         python-version: ["3.11"]
         nautobot-version: ["stable"]
     env:
@@ -141,10 +118,14 @@ jobs:
       fail-fast: true
       matrix:
         python-version: ["3.11"]
-        nautobot-version: ["1.6", "2.0", "2.1"]
+        # Incompatible with 2.2.3-2.3.0 due to https://github.com/nautobot/nautobot/pull/6116
+        nautobot-version: ["1.6", "2.0", "2.1", "2.2.2", "2.3"]
         include:
           - python-version: "3.8"
-            nautobot-version: "2.1"
+            nautobot-version: "stable"
+          # TODO: Enable once #89 is implemented and remove 2.3 from matrix
+          # - python-version: "3.12"
+          #   nautobot-version: "stable"
     runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"

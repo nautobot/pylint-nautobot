@@ -1,13 +1,9 @@
 """Check for CharField's or TextField's on models where null=True and blank=True."""
 
-from astroid import Assign
-from astroid import AssignName
-from astroid import ClassDef
-from astroid import Const
+from astroid import Assign, AssignName, ClassDef, Const
 from pylint.checkers import BaseChecker
 
-from .utils import find_meta
-from .utils import is_version_compatible
+from .utils import find_meta, is_version_compatible
 
 _META_CLASSES = {
     "nautobot.core.api.serializers.NautobotModelSerializer": ">=2",
