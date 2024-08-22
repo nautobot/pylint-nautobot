@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pylint-nautobot"
-version = "0.3.0"
+version = "0.3.2a0"
 description = "Custom Pylint Rules for Nautobot"
 authors = ["Cristian Sirbu <cristian.sirbu@networktocode.com>", "Leo Kirchner <leo.kirchner@networktocode.com>"]
 license = "Apache-2.0"
