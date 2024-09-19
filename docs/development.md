@@ -4,6 +4,19 @@ hide:
 ---
 # Development
 
+## Building Your Development Environment
+
+### Quickstart Guide
+
+If you're already familiar with writing pylint rules, you can get started quickly by following these steps:
+
+```bash
+poetry install
+poetry run invoke build
+```
+
+You can then use `poetry run invoke pytest` to run the test suite.
+
 ## Contributing
 
 The project is packaged with a light development environment using `invoke` tasks to help with the local development of the project and to run tests.
@@ -43,6 +56,34 @@ class NautobotSpecificExampleChecker(BaseChecker):
 !!! note
     For a detailed overview of how you can specify versions take a look at [PEP440](https://peps.python.org/pep-0440/#version-specifiers). However, in general you should strive for as simple as possible version specifiers.
 
+### Writing the Rule
+
+#### Rule Message
+
+Each rule should have a unique message id. From the [Pylint documentation](https://pylint.pycqa.org/en/latest/development_guide/how_tos/custom_checkers.html#defining-a-message):
+
+> The message-id should be a 4-digit number, prefixed with a message category. There are multiple message categories, these being `C`, `W`, `E`, `F`, `R`, standing for `Convention`, `Warning`, `Error`, `Fatal` and `Refactoring`. The 4 digits should not conflict with existing checkers and the first 2 digits should consistent across the checker (except shared messages).
+
+You can run `poetry run pylint --load-plugins=pylint_nautobot --list-msgs-enabled` to see all the enabled messages in your environment and check if your desired message id is already in use. Pylint Nautobot does not have a strict convention for message ids, but it is recommended to use the `42xx` range for new rules.
+
+In addition to the unique message id, you must also provide a unique message symbol. This is an alias of the message id and it can be used wherever the message id can be used. The message symbol must start with "nb-". See the below example of a custom Pylint checker definition:
+
+```python
+class NautobotCodeLocationChangesChecker(BaseChecker):
+    """Visit 'import from' statements to find import locations that have moved in 2.0."""
+
+    version_specifier = ">=2,<3"
+
+    name = "nautobot-code-location-changes"
+    msgs = {
+        "E4251": (  # message id
+            "Import location has changed (%s -> %s).",  # template of displayed message
+            "nb-code-location-changed",  # message symbol
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",  # message description
+        )
+    }
+```
+
 ### Testing Rules in a Specific Nautobot App
 
 To test your new rules on another Nautobot project while developing, you can add your local `pylint-nautobot` environment in editable mode to it.
@@ -59,6 +100,9 @@ Install `pylint-nautobot` in editable mode from your cloned repo:
 > cd nautobot-plugin-golden-config
 > poetry add --editable /path/to/pylint-nautobot/
 ```
+
+!!! warning
+    Pylint Nautobot does not currently support Python 3.12, so you may need to run `poetry env use 3.11` before creating your poetry environment if your operating system defaults to Python 3.12.
 
 Enable and configure the `pylint-nautobot` plugin in the target App's `pyproject.toml`:
 
@@ -81,7 +125,7 @@ supported_nautobot_versions = [
 Test whether the new rules are enabled, replacing the message codes with your own, by running the following in the `nautobot-plugin-golden-config` folder:
 
 ```
-> poetry run pylint --list-msgs-enabled | grep E42
+> poetry run pylint --list-msgs-enabled | grep nb-
   nb-replaced-device-role (E4211)
   nb-replaced-rack-role (E4212)
   nb-replaced-ipam-role (E4213)
