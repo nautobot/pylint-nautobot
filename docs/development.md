@@ -11,12 +11,11 @@ hide:
 If you're already familiar with writing pylint rules, you can get started quickly by following these steps:
 
 ```bash
-poetry shell
 poetry install
-invoke build
+poetry run invoke build
 ```
 
-You can then use `invoke pytest` to run the test suite.
+You can then use `poetry run invoke pytest` to run the test suite.
 
 ## Contributing
 
