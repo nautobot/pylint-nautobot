@@ -8,6 +8,7 @@ from .code_location_changes import NautobotCodeLocationChangesChecker
 from .deprecated_status_model import NautobotDeprecatedStatusModelChecker
 from .incorrect_base_class import NautobotIncorrectBaseClassChecker
 from .model_label import NautobotModelLabelChecker
+from .q_search_filter import NautobotUseSearchFilterChecker
 from .replaced_models import NautobotReplacedModelsImportChecker
 from .string_field_blank_null import NautobotStringFieldBlankNull
 from .sub_class_name import NautobotSubClassNameChecker
@@ -22,6 +23,7 @@ CHECKERS = [
     NautobotIncorrectBaseClassChecker,
     NautobotModelLabelChecker,
     NautobotReplacedModelsImportChecker,
+    NautobotUseSearchFilterChecker,
     NautobotStringFieldBlankNull,
     NautobotSubClassNameChecker,
     NautobotUseFieldsAllChecker,
