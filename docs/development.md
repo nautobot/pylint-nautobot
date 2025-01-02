@@ -39,6 +39,10 @@ Extending the rules is welcome, however it is best to open an issue first, to en
 
 To add new rules, either add them to an existing category/checker (if it makes sense) or create a new one. Each checker is a class (e.g. `class NautobotCodeLocationChangesChecker(BaseChecker)`) which implements one or more `pylint` rules.
 
+Before creating a Pylint-Nautobot checker, we recommend reviewing Pylint's [How to Write a Checker](https://pylint.pycqa.org/en/stable/development_guide/how_tos/custom_checkers.html). Pylint-Nautobot uses the `BaseChecker` class from pylint. Most checkers are AST checkers which use the [astroid](https://pylint.readthedocs.io/projects/astroid/en/latest/index.html) Python library. We recommend reading the Astroid [Inference Introduction](https://pylint.readthedocs.io/projects/astroid/en/latest/inference.html) for a guide on AST.
+
+Pylint also has two other kinds of checkers that can be found in the guide linked above.
+
 ### Version Specifiers
 
 Every check should have a class variable called `version_specifier` which is a string that follows the `packaging.specifiers.SpecifierSet` syntax. It is used as a filter for which versions of Nautobot a check applies to.
@@ -90,13 +94,13 @@ To test your new rules on another Nautobot project while developing, you can add
 
 First, clone a repository containing a specific Nautobot App:
 
-```
+``` bash
 > git clone https://github.com/nautobot/nautobot-plugin-golden-config
 ```
 
 Install `pylint-nautobot` in editable mode from your cloned repo:
 
-```
+``` bash
 > cd nautobot-plugin-golden-config
 > poetry add --editable /path/to/pylint-nautobot/
 ```
@@ -106,7 +110,7 @@ Install `pylint-nautobot` in editable mode from your cloned repo:
 
 Enable and configure the `pylint-nautobot` plugin in the target App's `pyproject.toml`:
 
-```
+``` toml
 [tool.pylint.master]
 load-plugins="pylint_django, pylint_nautobot"
 
@@ -124,7 +128,7 @@ supported_nautobot_versions = [
 
 Test whether the new rules are enabled, replacing the message codes with your own, by running the following in the `nautobot-plugin-golden-config` folder:
 
-```
+``` bash
 > poetry run pylint --list-msgs-enabled | grep nb-
   nb-replaced-device-role (E4211)
   nb-replaced-rack-role (E4212)
@@ -137,7 +141,7 @@ Test whether the new rules are enabled, replacing the message codes with your ow
 
 While developing, you'll want to scope the linting only to your current set of rules - for example, here we're only testing for the `nautobot-code-location-changes` group of rules:
 
-```
+``` bash
 > poetry run pylint nautobot_golden_config --disable=all --enable=nautobot-code-location-changes
 
 ************* Module nautobot_golden_config.navigation
