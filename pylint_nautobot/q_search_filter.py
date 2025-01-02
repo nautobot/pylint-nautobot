@@ -36,14 +36,13 @@ class NautobotUseSearchFilterChecker(BaseChecker):
 
     def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
-        if all(
-            ancestor.qname() not in self.meta_classes
-            for ancestor in node.ancestors()
-        ):
+        if all(ancestor.qname() not in self.meta_classes for ancestor in node.ancestors()):
             return
 
         for child_node in node.get_children():
-            if isinstance(child_node, Assign) and any(isinstance(target, AssignName) and target.name == "q" for target in child_node.targets):
+            if isinstance(child_node, Assign) and any(
+                isinstance(target, AssignName) and target.name == "q" for target in child_node.targets
+            ):
                 child_node_name = child_node.value.func.as_string().split(".")[-1]
                 if child_node_name != "SearchFilter":
                     self.add_message("nb-use-search-filter", node=child_node)
