@@ -64,11 +64,26 @@ Each rule should have a unique message id. From the [Pylint documentation](https
 
 > The message-id should be a 4-digit number, prefixed with a message category. There are multiple message categories, these being `C`, `W`, `E`, `F`, `R`, standing for `Convention`, `Warning`, `Error`, `Fatal` and `Refactoring`. The 4 digits should not conflict with existing checkers and the first 2 digits should consistent across the checker (except shared messages).
 
-You can run `poetry run pylint --load-plugins=pylint_nautobot --list-msgs-enabled` to see all the enabled messages in your environment and check if your desired message id is already in use. Pylint Nautobot does not have a strict convention for message ids, but it is recommended to use the `42xx` range for new rules.
+All messages are stored in constants.py, this allows you to check if your desired message id is already in use. Alternatively, you can run `poetry run pylint --load-plugins=pylint_nautobot --list-msgs-enabled` to see all the enabled messages in your environment. Pylint Nautobot does not have a strict convention for message ids, but it is recommended to use the `42xx` range for new rules.
 
 In addition to the unique message id, you must also provide a unique message symbol. This is an alias of the message id and it can be used wherever the message id can be used. The message symbol must start with "nb-". See the below example of a custom Pylint checker definition:
 
 ```python
+# constants.py
+class MSGS
+    ...
+    E4251: dict[str, MessageDefinitionTuple] = {
+        "E4251": (  # message id
+            "Import location has changed (%s -> %s).",  # template of displayed message
+            "nb-code-location-changed",  # message symbol
+            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",  # message description
+        )
+    }
+```
+
+```python
+from pylint_nautobot.constants import MSGS
+
 class NautobotCodeLocationChangesChecker(BaseChecker):
     """Visit 'import from' statements to find import locations that have moved in 2.0."""
 
@@ -76,11 +91,7 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
 
     name = "nautobot-code-location-changes"
     msgs = {
-        "E4251": (  # message id
-            "Import location has changed (%s -> %s).",  # template of displayed message
-            "nb-code-location-changed",  # message symbol
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",  # message description
-        )
+        **MSGS.E4251
     }
 ```
 
