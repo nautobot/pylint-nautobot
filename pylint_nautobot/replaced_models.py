@@ -2,6 +2,8 @@
 
 from pylint.checkers import BaseChecker
 
+from pylint_nautobot.constants import MSGS
+
 
 class NautobotReplacedModelsImportChecker(BaseChecker):
     """Visit 'import from' statements to find usage of models that have been replaced in 2.0."""
@@ -10,36 +12,12 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
 
     name = "nautobot-replaced-models"
     msgs = {
-        "E4211": (
-            "Imports a model that has been replaced (dcim.DeviceRole -> extras.Role).",
-            "nb-replaced-device-role",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/extras/#replace-role-related-models-with-generic-role-model",
-        ),
-        "E4212": (
-            "Imports a model that has been replaced (dcim.RackRole -> extras.Role).",
-            "nb-replaced-rack-role",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/extras/#replace-role-related-models-with-generic-role-model",
-        ),
-        "E4213": (
-            "Imports a model that has been replaced (ipam.Role -> extras.Role).",
-            "nb-replaced-ipam-role",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/extras/#replace-role-related-models-with-generic-role-model",
-        ),
-        "E4214": (
-            "Imports a model that has been replaced (dcim.Region -> dcim.Location).",
-            "nb-replaced-region",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/dcim/#replace-site-and-region-with-location-model",
-        ),
-        "E4215": (
-            "Imports a model that has been replaced (dcim.Site -> dcim.Location).",
-            "nb-replaced-site",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/dcim/#replace-site-and-region-with-location-model",
-        ),
-        "E4216": (
-            "Imports a model that has been replaced (ipam.Aggregate -> ipam.Prefix).",
-            "nb-replaced-aggregate",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/model-updates/ipam/#replace-aggregate-with-prefix",
-        ),
+        **MSGS.E4211,
+        **MSGS.E4212,
+        **MSGS.E4213,
+        **MSGS.E4214,
+        **MSGS.E4215,
+        **MSGS.E4216,
     }
 
     def visit_importfrom(self, node):

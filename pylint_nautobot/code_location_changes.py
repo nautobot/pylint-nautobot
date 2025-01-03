@@ -2,6 +2,7 @@
 
 from pylint.checkers import BaseChecker
 
+from pylint_nautobot.constants import MSGS
 from pylint_nautobot.utils import MAP_CODE_LOCATION_CHANGES
 
 
@@ -12,16 +13,8 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
 
     name = "nautobot-code-location-changes"
     msgs = {
-        "E4251": (
-            "Import location has changed (%s -> %s).",
-            "nb-code-location-changed",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",
-        ),
-        "E4252": (
-            "Import location has changed for %s (%s -> %s).",
-            "nb-code-location-changed-object",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",
-        ),
+        **MSGS.E4251,
+        **MSGS.E4252,
     }
 
     def visit_import(self, node):

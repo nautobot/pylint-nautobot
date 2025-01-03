@@ -3,6 +3,8 @@
 from astroid import Assign, Call, ClassDef
 from pylint.checkers import BaseChecker
 
+from pylint_nautobot.constants import MSGS
+
 
 class NautobotStringFieldBlankNull(BaseChecker):
     """Visit classes to find class children on models who are CharField's or TextField's and check whether they are configured well."""
@@ -11,13 +13,7 @@ class NautobotStringFieldBlankNull(BaseChecker):
 
     name = "nautobot-string-field-blank-null"
     msgs = {
-        "E4261": (
-            "Uses bad parameter combination for TextField/CharField.",
-            "nb-string-field-blank-null",
-            'Don\'t use blank=true and null=true on TextField or CharField. \
-             It avoids confusion between a value of None and a value of ""\
-             potentially having different meanings.',
-        ),
+        **MSGS.E4261,
     }
 
     def visit_classdef(self, node: ClassDef):

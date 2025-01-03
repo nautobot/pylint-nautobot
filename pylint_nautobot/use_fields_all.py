@@ -3,7 +3,8 @@
 from astroid import Assign, AssignName, ClassDef, Const
 from pylint.checkers import BaseChecker
 
-from .utils import find_meta, is_version_compatible
+from pylint_nautobot.constants import MSGS
+from pylint_nautobot.utils import find_meta, is_version_compatible
 
 _META_CLASSES = {
     "nautobot.core.api.serializers.NautobotModelSerializer": ">=2",
@@ -19,13 +20,7 @@ class NautobotUseFieldsAllChecker(BaseChecker):
 
     name = "nautobot-use-fields-all"
     msgs = {
-        "E4271": (
-            "Use `fields = '__all__'` instead of specifying each field individually.",
-            "nb-use-fields-all",
-            "Defining `fields = '__all__'` in a model serializer's Meta class is a Django convention that automatically "
-            "includes all fields from the associated model. This approach is more maintainable because it avoids having "
-            "to explicitly list each field, reducing the risk of errors and inconsistencies when the model is updated.",
-        ),
+        **MSGS.E4271,
     }
 
     def __init__(self, *args, **kwargs):

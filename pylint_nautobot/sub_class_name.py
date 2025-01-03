@@ -5,7 +5,14 @@ from typing import NamedTuple
 from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
-from .utils import find_ancestor, find_model_name, is_abstract_class, is_version_compatible, trim_first_pascal_word
+from pylint_nautobot.constants import MSGS
+from pylint_nautobot.utils import (
+    find_ancestor,
+    find_model_name,
+    is_abstract_class,
+    is_version_compatible,
+    trim_first_pascal_word,
+)
 
 _ANCESTORS = (
     {
@@ -61,16 +68,8 @@ class NautobotSubClassNameChecker(BaseChecker):
 
     name = "nautobot-sub-class-name"
     msgs = {
-        "E4281": (
-            "Sub-class name should be %s.",
-            "nb-sub-class-name",
-            "All classes should have a sub-class name that is <model class name><ancestor class type>.",
-        ),
-        "I4282": (
-            "Model was not found in the class.",
-            "nb-no-model-found",
-            "Model was not found in the class.",
-        ),
+        **MSGS.E4281,
+        **MSGS.I4282,
     }
 
     def __init__(self, *args, **kwargs):

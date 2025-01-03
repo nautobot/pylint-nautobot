@@ -4,6 +4,8 @@ from astroid import Attribute, Const, FormattedValue, JoinedStr, Name, NodeNG
 from pylint.checkers import BaseChecker
 from pylint.interfaces import HIGH
 
+from pylint_nautobot.constants import MSGS
+
 
 def _get_model_name_for_meta_attr(node: NodeNG, expected_attrname: str) -> str:
     """Return `<model name>` if `node` contains `<model name>._meta.<expected_attrname>`."""
@@ -50,11 +52,7 @@ class NautobotModelLabelChecker(BaseChecker):
 
     name = "nautobot-model-label"
     msgs = {
-        "C4701": (
-            "Model's 'app_label.model_name' should be retrieved with 'model._meta.label_lower'",
-            "nb-used-model-label-construction",
-            "Replace f-string '{model._meta.app_label}.{model._meta.model}' with '{model._meta.label_lower}'.",
-        ),
+        **MSGS.C4701,
     }
 
     def visit_joinedstr(self, node: JoinedStr):

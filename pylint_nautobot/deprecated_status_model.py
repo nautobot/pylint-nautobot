@@ -2,6 +2,8 @@
 
 from pylint.checkers import BaseChecker
 
+from pylint_nautobot.constants import MSGS
+
 
 class NautobotDeprecatedStatusModelChecker(BaseChecker):
     """Discourage the usage of deprecated StatusModel and encourage the usage of StatusField."""
@@ -10,11 +12,7 @@ class NautobotDeprecatedStatusModelChecker(BaseChecker):
 
     name = "nautobot-deprecated-status-model"
     msgs = {
-        "E4292": (
-            "Inherits from the deprecated StatusModel instead of declaring status on the model explicitly with StatusField",
-            "nb-status-field-instead-of-status-model",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/user-guide/platform-functionality/status/#status-internals",
-        ),
+        **MSGS.E4292,
     }
 
     def visit_classdef(self, node):
