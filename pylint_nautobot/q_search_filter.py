@@ -18,10 +18,6 @@ class NautobotUseSearchFilterChecker(BaseChecker):
         **MSGS.C4274,
     }
 
-    def __init__(self, *args, **kwargs):
-        """Initialize the checker."""
-        super().__init__(*args, **kwargs)
-
     def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
         for ancestor in node.ancestors():

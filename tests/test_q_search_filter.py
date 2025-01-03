@@ -21,7 +21,7 @@ _EXPECTED_ERRORS = {
     },
     "filter_set3": {
         "msg_id": "nb-no-search-function",
-        "line": 7,
+        "line": 8,
         "col_offset": 4,
         "node": lambda module_node: module_node.body[2].body[0],
     },

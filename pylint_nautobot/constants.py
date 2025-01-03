@@ -1,9 +1,10 @@
 """Define constants for the pylint-nautobot plugin."""
 
+from pylint.checkers import BaseChecker
 from pylint.typing import MessageDefinitionTuple
 
 
-class MSGS:
+class MSGS(BaseChecker):
     """Message definitions for the pylint-nautobot plugin."""
 
     E4211: dict[str, MessageDefinitionTuple] = {
