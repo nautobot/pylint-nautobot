@@ -1,5 +1,8 @@
 """Define constants for the pylint-nautobot plugin."""
 
+# TODO Remove after dropping support for Python 3.8
+from __future__ import annotations
+
 from pylint.checkers import BaseChecker
 from pylint.typing import MessageDefinitionTuple
 
