@@ -3,7 +3,7 @@
 from astroid import Assign, AssignName, ClassDef, FunctionDef
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 
 
 class NautobotUseSearchFilterChecker(BaseChecker):
@@ -13,9 +13,9 @@ class NautobotUseSearchFilterChecker(BaseChecker):
 
     name = "nautobot-use-search-filter"
     msgs = {
-        **MSGS.C4272,
-        **MSGS.C4273,
-        **MSGS.C4274,
+        **MESSAGES.C4272,
+        **MESSAGES.C4273,
+        **MESSAGES.C4274,
     }
 
     def visit_classdef(self, node: ClassDef):

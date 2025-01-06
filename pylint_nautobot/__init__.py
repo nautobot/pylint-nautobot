@@ -23,10 +23,10 @@ CHECKERS = [
     NautobotIncorrectBaseClassChecker,
     NautobotModelLabelChecker,
     NautobotReplacedModelsImportChecker,
-    NautobotUseSearchFilterChecker,
     NautobotStringFieldBlankNull,
     NautobotSubClassNameChecker,
     NautobotUseFieldsAllChecker,
+    NautobotUseSearchFilterChecker,
 ]
 
 

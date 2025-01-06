@@ -2,7 +2,7 @@
 
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 
 
 class NautobotReplacedModelsImportChecker(BaseChecker):
@@ -12,12 +12,12 @@ class NautobotReplacedModelsImportChecker(BaseChecker):
 
     name = "nautobot-replaced-models"
     msgs = {
-        **MSGS.E4211,
-        **MSGS.E4212,
-        **MSGS.E4213,
-        **MSGS.E4214,
-        **MSGS.E4215,
-        **MSGS.E4216,
+        **MESSAGES.E4211,
+        **MESSAGES.E4212,
+        **MESSAGES.E4213,
+        **MESSAGES.E4214,
+        **MESSAGES.E4215,
+        **MESSAGES.E4216,
     }
 
     def visit_importfrom(self, node):

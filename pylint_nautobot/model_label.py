@@ -4,7 +4,7 @@ from astroid import Attribute, Const, FormattedValue, JoinedStr, Name, NodeNG
 from pylint.checkers import BaseChecker
 from pylint.interfaces import HIGH
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 
 
 def _get_model_name_for_meta_attr(node: NodeNG, expected_attrname: str) -> str:
@@ -52,7 +52,7 @@ class NautobotModelLabelChecker(BaseChecker):
 
     name = "nautobot-model-label"
     msgs = {
-        **MSGS.C4701,
+        **MESSAGES.C4701,
     }
 
     def visit_joinedstr(self, node: JoinedStr):

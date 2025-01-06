@@ -5,7 +5,7 @@ from typing import NamedTuple
 from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 from pylint_nautobot.utils import is_abstract_class, is_version_compatible
 
 # Sorted from most specific to least specific
@@ -57,7 +57,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
 
     name = "nautobot-incorrect-base-class"
     msgs = {
-        **MSGS.E4242,
+        **MESSAGES.E4242,
     }
 
     def __init__(self, *args, **kwargs):

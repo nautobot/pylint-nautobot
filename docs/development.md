@@ -69,7 +69,7 @@ All messages are stored in constants.py, this allows you to check if your desire
 In addition to the unique message id, you must also provide a unique message symbol. This is an alias of the message id and it can be used wherever the message id can be used. The message symbol must start with "nb-". See the below example of a custom Pylint checker definition:
 
 ```python title="pylint_nautobot/constants.py"
-class MSGS
+class MESSAGES
     ...
     E4251: dict[str, MessageDefinitionTuple] = {
         "E4251": (  # message id
@@ -81,7 +81,7 @@ class MSGS
 ```
 
 ```python title="pylint_nautobot/code_location_changes.py"
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 
 class NautobotCodeLocationChangesChecker(BaseChecker):
     """Visit 'import from' statements to find import locations that have moved in 2.0."""
@@ -90,7 +90,7 @@ class NautobotCodeLocationChangesChecker(BaseChecker):
 
     name = "nautobot-code-location-changes"
     msgs = {
-        **MSGS.E4251
+        **MESSAGES.E4251
     }
 ```
 
@@ -116,7 +116,7 @@ Install `pylint-nautobot` in editable mode from your cloned repo:
 
 Enable and configure the `pylint-nautobot` plugin in the target App's `pyproject.toml`:
 
-```
+```  toml
 [tool.pylint.master]
 load-plugins="pylint_django, pylint_nautobot"
 

@@ -3,7 +3,7 @@
 from astroid import Assign, AssignName, ClassDef, Const
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 from pylint_nautobot.utils import find_meta, is_version_compatible
 
 _META_CLASSES = {
@@ -20,7 +20,7 @@ class NautobotUseFieldsAllChecker(BaseChecker):
 
     name = "nautobot-use-fields-all"
     msgs = {
-        **MSGS.E4271,
+        **MESSAGES.E4271,
     }
 
     def __init__(self, *args, **kwargs):

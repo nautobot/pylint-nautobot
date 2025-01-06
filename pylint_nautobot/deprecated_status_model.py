@@ -2,7 +2,7 @@
 
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 
 
 class NautobotDeprecatedStatusModelChecker(BaseChecker):
@@ -12,7 +12,7 @@ class NautobotDeprecatedStatusModelChecker(BaseChecker):
 
     name = "nautobot-deprecated-status-model"
     msgs = {
-        **MSGS.E4292,
+        **MESSAGES.E4292,
     }
 
     def visit_classdef(self, node):

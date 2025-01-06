@@ -3,7 +3,7 @@
 from astroid import Assign, Call, ClassDef
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 
 
 class NautobotStringFieldBlankNull(BaseChecker):
@@ -13,7 +13,7 @@ class NautobotStringFieldBlankNull(BaseChecker):
 
     name = "nautobot-string-field-blank-null"
     msgs = {
-        **MSGS.E4261,
+        **MESSAGES.E4261,
     }
 
     def visit_classdef(self, node: ClassDef):

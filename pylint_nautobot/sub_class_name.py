@@ -5,7 +5,7 @@ from typing import NamedTuple
 from astroid import ClassDef
 from pylint.checkers import BaseChecker
 
-from pylint_nautobot.constants import MSGS
+from pylint_nautobot.constants import MESSAGES
 from pylint_nautobot.utils import (
     find_ancestor,
     find_model_name,
@@ -68,8 +68,8 @@ class NautobotSubClassNameChecker(BaseChecker):
 
     name = "nautobot-sub-class-name"
     msgs = {
-        **MSGS.E4281,
-        **MSGS.I4282,
+        **MESSAGES.E4281,
+        **MESSAGES.I4282,
     }
 
     def __init__(self, *args, **kwargs):

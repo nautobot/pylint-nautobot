@@ -3,11 +3,10 @@
 # TODO Remove after dropping support for Python 3.8
 from __future__ import annotations
 
-from pylint.checkers import BaseChecker
 from pylint.typing import MessageDefinitionTuple
 
 
-class MSGS(BaseChecker):
+class MESSAGES:  # pylint: disable=too-few-public-methods
     """Message definitions for the pylint-nautobot plugin."""
 
     E4211: dict[str, MessageDefinitionTuple] = {
@@ -115,20 +114,6 @@ class MSGS(BaseChecker):
             "This should be used in place of the custom `search` function.",
         ),
     }
-    E4292: dict[str, MessageDefinitionTuple] = {
-        "E4292": (
-            "Inherits from the deprecated StatusModel instead of declaring status on the model explicitly with StatusField",
-            "nb-status-field-instead-of-status-model",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/user-guide/platform-functionality/status/#status-internals",
-        ),
-    }
-    C4701: dict[str, MessageDefinitionTuple] = {
-        "C4701": (
-            "Model's 'app_label.model_name' should be retrieved with 'model._meta.label_lower'",
-            "nb-used-model-label-construction",
-            "Replace f-string '{model._meta.app_label}.{model._meta.model}' with '{model._meta.label_lower}'.",
-        ),
-    }
     E4281: dict[str, MessageDefinitionTuple] = {
         "E4281": (
             "Sub-class name should be %s.",
@@ -141,5 +126,19 @@ class MSGS(BaseChecker):
             "Model was not found in the class.",
             "nb-no-model-found",
             "Model was not found in the class.",
+        ),
+    }
+    E4292: dict[str, MessageDefinitionTuple] = {
+        "E4292": (
+            "Inherits from the deprecated StatusModel instead of declaring status on the model explicitly with StatusField",
+            "nb-status-field-instead-of-status-model",
+            "Reference: https://docs.nautobot.com/projects/core/en/next/user-guide/platform-functionality/status/#status-internals",
+        ),
+    }
+    C4701: dict[str, MessageDefinitionTuple] = {
+        "C4701": (
+            "Model's 'app_label.model_name' should be retrieved with 'model._meta.label_lower'",
+            "nb-used-model-label-construction",
+            "Replace f-string '{model._meta.app_label}.{model._meta.model}' with '{model._meta.label_lower}'.",
         ),
     }
