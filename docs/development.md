@@ -68,8 +68,7 @@ All messages are stored in constants.py, this allows you to check if your desire
 
 In addition to the unique message id, you must also provide a unique message symbol. This is an alias of the message id and it can be used wherever the message id can be used. The message symbol must start with "nb-". See the below example of a custom Pylint checker definition:
 
-```python
-# constants.py
+```python title="pylint_nautobot/constants.py"
 class MSGS
     ...
     E4251: dict[str, MessageDefinitionTuple] = {
@@ -81,7 +80,7 @@ class MSGS
     }
 ```
 
-```python
+```python title="pylint_nautobot/code_location_changes.py"
 from pylint_nautobot.constants import MSGS
 
 class NautobotCodeLocationChangesChecker(BaseChecker):
