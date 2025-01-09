@@ -1,7 +1,7 @@
 from nautobot.apps.filters import NautobotFilterSet, SearchFilter
 
 
-class MyAddressObjectFilterSet(NautobotFilterSet):
+class ValidQFilterWithCustomFilterPredicatesFilterSet(NautobotFilterSet):
     """Filter for AddressObject."""
 
     q = SearchFilter(

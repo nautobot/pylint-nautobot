@@ -2,7 +2,7 @@ from django.db.models import Q
 from nautobot.apps.filters import NautobotFilterSet
 
 
-class MyAddressObjectFilterSet(NautobotFilterSet):
+class MissingQFilterFilterSet(NautobotFilterSet):
     """Filter for AddressObject."""
 
     def search(self, queryset, name, value):
