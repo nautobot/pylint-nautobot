@@ -11,6 +11,8 @@ _EXPECTED_ERRORS = {
         "msg_id": "nb-status-field-instead-of-status-model",
         "line": 4,
         "col_offset": 0,
+        "end_line":4,
+        "end_col_offset":51,
         "node": lambda module_node: module_node.body[1],
     },
 }

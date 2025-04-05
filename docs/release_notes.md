@@ -1,6 +1,8 @@
 ---
 hide:
-  - navigation
+
+    - navigation
+
 ---
 
 # Release Notes
@@ -9,6 +11,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.4.0] - 2025-04
+
+### Added
+
+- Added support for Pylint 3.x (#108)
+- Added support for Python 3.12 (#108)
+- Implement a checker to validate that q uses SearchFIlter (#107)
+- Add information on writing Custom Pylint Checkers (#105)
+
+## Changed
+
+- Update developer docs (#96)
+
+
+### Fixed
+
+- Updated tests to support pylint updates (#108)
+
+### Housekeeping
+
+- Dropped support for Python 3.8 (#108)
+- Pinned CI poetry version to use 1.8.5 (#107)
 
 ## [0.3.1] - 2024-08-22
 
