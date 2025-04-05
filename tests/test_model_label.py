@@ -16,10 +16,10 @@ class TestModelLabelChecker(CheckerTestCase):
     CHECKER_CLASS = NautobotModelLabelChecker
 
     @mark.parametrize(
-        ("test_string","end_col_offset"),
+        ("test_string", "end_col_offset"),
         (
-            ('f"{model._meta.app_label}.{model._meta.model}"',53),
-            ('f"Prepended {another_model._meta.app_label}.{another_model._meta.model}, appended"',89),
+            ('f"{model._meta.app_label}.{model._meta.model}"', 53),
+            ('f"Prepended {another_model._meta.app_label}.{another_model._meta.model}, appended"', 89),
         ),
     )
     def test_finds_model_label_construction(self, test_string, end_col_offset):
@@ -27,7 +27,15 @@ class TestModelLabelChecker(CheckerTestCase):
         # Find the f-string node in the parsed module AST to be passed to the expected message.
         fnode = module_node.body[0].value  # type: ignore
         with self.assertAddsMessages(
-            MessageTest(msg_id="nb-used-model-label-construction", confidence=HIGH, node=fnode, line=1, col_offset=7, end_line=1, end_col_offset=end_col_offset),
+            MessageTest(
+                msg_id="nb-used-model-label-construction",
+                confidence=HIGH,
+                node=fnode,
+                line=1,
+                col_offset=7,
+                end_line=1,
+                end_col_offset=end_col_offset,
+            ),
         ):
             self.walk(module_node)
 
