@@ -33,6 +33,8 @@ coverage = "*"
 invoke = "*"
 ipython = "*"
 pytest = "*"
+ruff = "*"
+yamllint = "*"
 Markdown = "*"
 # Render custom markdown for version added/changed/remove notes
 markdown-version-annotations = "1.0.1"
@@ -89,7 +91,7 @@ filterwarnings = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 select = [
