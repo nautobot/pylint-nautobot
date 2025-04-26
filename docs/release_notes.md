@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added support for Pylint 3.x (#108)
 - Added support for Python 3.12 (#108)
-- Implement a checker to validate that q uses SearchFIlter (#107)
+- Implement a checker to validate that q uses SearchFilter (#107)
 - Add information on writing Custom Pylint Checkers (#105)
 
 ## Changed
