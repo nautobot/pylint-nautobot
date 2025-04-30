@@ -10,19 +10,25 @@ _EXPECTED_ERRORS = {
     "filter_set": {
         "msg_id": "nb-no-char-filter-q",
         "line": 8,
+        "end_line": 11,
         "col_offset": 4,
+        "end_col_offset": 5,
         "node": lambda module_node: module_node.body[2].body[0],
     },
     "filter_set2": {
         "msg_id": "nb-use-search-filter",
         "line": 16,
+        "end_line": 16,
         "col_offset": 4,
+        "end_col_offset": 28,
         "node": lambda module_node: module_node.body[2].body[0],
     },
     "filter_set3": {
         "msg_id": "nb-no-search-function",
         "line": 8,
+        "end_line": 8,
         "col_offset": 4,
+        "end_col_offset": 14,
         "node": lambda module_node: module_node.body[2].body[0],
     },
 }
