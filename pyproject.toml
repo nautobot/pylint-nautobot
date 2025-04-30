@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pylint-nautobot"
-version = "0.4.0"
+version = "0.4.0a1"
 description = "Custom Pylint Rules for Nautobot"
 authors = ["Cristian Sirbu <cristian.sirbu@networktocode.com>", "Leo Kirchner <leo.kirchner@networktocode.com>"]
 license = "Apache-2.0"
@@ -23,7 +23,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9.2,<3.13"
-pylint = "^3.3.6"
+pylint = ">=3.3.0,<4.0"
 importlib-resources = ">=5.12.0"
 pyyaml = ">=6.0.1"
 toml = ">=0.10.2"
@@ -42,11 +42,6 @@ markdown-version-annotations = "1.0.1"
 mkdocs = "1.6.0"
 # Material for MkDocs theme
 mkdocs-material = "9.5.32"
-# Automatic documentation from sources, for MkDocs
-mkdocstrings = "0.25.2"
-mkdocstrings-python = "1.10.8"
-mkdocs-autorefs = "1.2.0"
-griffe = "1.1.1"
 
 [tool.poetry.extras]
 all = [
