@@ -129,9 +129,18 @@ jobs:
       fail-fast: true
       matrix:
         python-version: ["3.12"]
-        # Incompatible with 2.2.3-2.3.0 due to https://github.com/nautobot/nautobot/pull/6116
-        nautobot-version: ["1.6", "2.0", "2.1", "2.2.2", "2.3", "2.4"]
+        nautobot-version: ["2.3", "2.4"]
         include:
+          - python-version: "3.11"
+            nautobot-version: "1.6"
+          - python-version: "3.11"
+            nautobot-version: "2.0"
+          - python-version: "3.11"
+            nautobot-version: "2.1"
+          # Incompatible with 2.2.3-2.3.0
+          # due to https://github.com/nautobot/nautobot/pull/6116
+          - python-version: "3.11"
+            nautobot-version: "2.2.2"
           - python-version: "3.9"
             nautobot-version: "stable"
           - python-version: "3.12"
