@@ -6,7 +6,6 @@ on: # yamllint disable-line rule:truthy rule:comments
       - "v*"
 
 jobs:
-
   build:
     name: "Build package with poetry"
     runs-on: "ubuntu-24.04"
@@ -31,7 +30,6 @@ jobs:
           path: "dist/"
           if-no-files-found: "error"
 
-
   publish-github:
     name: "Publish to GitHub"
     runs-on: "ubuntu-24.04"
@@ -51,8 +49,6 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-
-
   publish_pypi:
     name: "Push Package to PyPI"
     runs-on: "ubuntu-24.04"
@@ -62,7 +58,7 @@ jobs:
     environment:
       name: "pypi"
       url: "https://pypi.org/project/pylint-nautobot/"
-
+    needs: "build"
     steps:
       - name: "Retrieve built package from cache"
         uses: "actions/download-artifact@v4"
@@ -71,8 +67,7 @@ jobs:
           path: "dist/"
 
       - name: "Publish package distributions to PyPI"
-        uses: "pypa/gh-action-pypi-publish@release/v1" # TODO: pin to hash
-
+        uses: "pypa/gh-action-pypi-publish@release/v1"  # TODO: pin to hash
 
   slack-notify:
     needs:
@@ -106,6 +101,6 @@ jobs:
                 }
               ]
             }
-        env: # TODO: duplicated env section?
+        env:  # TODO: duplicated env section?
           SLACK_WEBHOOK_URL: "${{ secrets.SLACK_WEBHOOK_URL }}"
           SLACK_WEBHOOK_TYPE: "INCOMING_WEBHOOK"
