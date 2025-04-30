@@ -1,0 +1,111 @@
+---
+name: "Release"
+on: # yamllint disable-line rule:truthy rule:comments
+  push:
+    tags:
+      - "v*"
+
+jobs:
+
+  build:
+    name: "Build package with poetry"
+    runs-on: "ubuntu-24.04"
+    if: "startsWith(github.ref, 'refs/tags/v')"
+    steps:
+      - uses: "actions/checkout@v4"
+      - name: "Install poetry"
+        # TODO: Pass poetry version as repo var?
+        run: "pipx install poetry==1.8.5"
+      - name: "Run Poetry Build"
+        run: "poetry build"
+
+      # Is this necessary? Maybe it should be a test instead?
+      - name: "Set env"
+        run: "echo RELEASE_VERSION=${GITHUB_REF:10} >> $GITHUB_ENV"
+      - name: "Run Poetry Version"
+        run: "poetry version $RELEASE_VERSION"
+
+      - uses: "actions/upload-artifact@v4"
+        with:
+          name: "distfiles"
+          path: "dist/"
+          if-no-files-found: "error"
+
+
+  publish-github:
+    name: "Publish to GitHub"
+    runs-on: "ubuntu-24.04"
+    if: "startsWith(github.ref, 'refs/tags/v')"
+    permissions:
+      contents: "write"
+    needs: "build"
+    steps:
+      - name: "Retrieve built package from cache"
+        uses: "actions/download-artifact@v4"
+        with:
+          name: "distfiles"
+          path: "dist/"
+
+      - name: "Upload binaries to release"
+        run: "gh release upload ${{ github.ref_name }} dist/*.{tar.gz,whl}"
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+
+
+  publish_pypi:
+    name: "Push Package to PyPI"
+    runs-on: "ubuntu-24.04"
+    if: "startsWith(github.ref, 'refs/tags/v')"
+    permissions:
+      id-token: "write"
+    environment:
+      name: "pypi"
+      url: "https://pypi.org/project/pylint-nautobot/"
+
+    steps:
+      - name: "Retrieve built package from cache"
+        uses: "actions/download-artifact@v4"
+        with:
+          name: "distfiles"
+          path: "dist/"
+
+      - name: "Publish package distributions to PyPI"
+        uses: "pypa/gh-action-pypi-publish@release/v1" # TODO: pin to hash
+
+
+  slack-notify:
+    needs:
+      - "publish-github"
+      - "publish_pypi"
+    runs-on: "ubuntu-24.04"
+    env:
+      SLACK_WEBHOOK_URL: "${{ secrets.SLACK_WEBHOOK_URL }}"
+      SLACK_MESSAGE: >-
+        *NOTIFICATION: NEW-RELEASE-PUBLISHED*\n
+        Repository: <${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}>\n
+        Release: <${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}>\n
+        Published by: <${{ github.server_url }}/${{ github.actor }}|${{ github.actor }}>
+    steps:
+      - name: "Send a notification to Slack"
+        # ENVs cannot be used directly in job.if. This is a workaround to check
+        # if SLACK_WEBHOOK_URL is present.
+        if: "env.SLACK_WEBHOOK_URL != ''"
+        uses: "slackapi/slack-github-action@fcfb566f8b0aab22203f066d80ca1d7e4b5d05b3"  # v1.27.1
+        with:
+          payload: |
+            {
+              "text": "${{ env.SLACK_MESSAGE }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ env.SLACK_MESSAGE }}"
+                  }
+                }
+              ]
+            }
+        env: # TODO: duplicated env section?
+          SLACK_WEBHOOK_URL: "${{ secrets.SLACK_WEBHOOK_URL }}"
+          SLACK_WEBHOOK_TYPE: "INCOMING_WEBHOOK"
