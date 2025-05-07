@@ -7,7 +7,7 @@ from pylint.checkers import BaseChecker
 class NautobotUseSearchFilterChecker(BaseChecker):
     """Visit NautobotFilterSet subclasses and check for use of `q = SearchFilter`, instead of `q = django_filters.CharField`."""
 
-    version_specifier = ">=2,<3"
+    version_specifier = ">=2,<4"
 
     name = "nautobot-use-search-filter"
     msgs = {

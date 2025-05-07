@@ -21,6 +21,7 @@ def _find_fields_node(module_node):
 
 _EXPECTED_ERRORS = {
     "filter_set": {
+        "versions": ">1",
         "msg_id": "nb-use-fields-all",
         "line": 10,
         "end_line": 10,
@@ -29,6 +30,7 @@ _EXPECTED_ERRORS = {
         "node": _find_fields_node,
     },
     "form": {
+        "versions": ">1",
         "msg_id": "nb-use-fields-all",
         "line": 10,
         "end_line": 10,

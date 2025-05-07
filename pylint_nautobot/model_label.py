@@ -46,7 +46,7 @@ _EXPECTATIONS = (
 class NautobotModelLabelChecker(BaseChecker):
     """Model label construction checker."""
 
-    version_specifier = ">=1,<3"
+    version_specifier = ">=1,<4"
 
     name = "nautobot-model-label"
     msgs = {

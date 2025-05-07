@@ -15,7 +15,7 @@ _META_CLASSES = {
 class NautobotUseFieldsAllChecker(BaseChecker):
     """Visit Meta subclasses and check for use of `fields = "__all__"`, instead of `fields = ["field1", ...]`."""
 
-    version_specifier = ">=1,<3"
+    version_specifier = ">=1,<4"
 
     name = "nautobot-use-fields-all"
     msgs = {

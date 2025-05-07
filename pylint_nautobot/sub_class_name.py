@@ -57,7 +57,7 @@ class NautobotSubClassNameChecker(BaseChecker):
     This can typically be done via <ancestor class name>.replace("Nautobot", <model class name>)
     """
 
-    version_specifier = ">=2,<3"
+    version_specifier = ">=2,<4"
 
     name = "nautobot-sub-class-name"
     msgs = {

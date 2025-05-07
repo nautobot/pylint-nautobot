@@ -8,19 +8,19 @@ from pylint_nautobot.utils import MAP_CODE_LOCATION_CHANGES
 class NautobotCodeLocationChangesChecker(BaseChecker):
     """Visit 'import from' statements to find import locations that have moved in 2.0."""
 
-    version_specifier = ">=2,<3"
+    version_specifier = ">=2,<4"
 
     name = "nautobot-code-location-changes"
     msgs = {
         "E4251": (
             "Import location has changed (%s -> %s).",
             "nb-code-location-changed",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",
+            "Reference: https://docs.nautobot.com/projects/core/en/stable/development/apps/migration/code-updates/",
         ),
         "E4252": (
             "Import location has changed for %s (%s -> %s).",
             "nb-code-location-changed-object",
-            "Reference: https://docs.nautobot.com/projects/core/en/next/development/apps/migration/code-updates/",
+            "Reference: https://docs.nautobot.com/projects/core/en/stable/development/apps/migration/code-updates/",
         ),
     }
 

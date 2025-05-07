@@ -145,6 +145,8 @@ jobs:
             nautobot-version: "stable"
           - python-version: "3.12"
             nautobot-version: "stable"
+          - python-version: "3.13"
+            nautobot-version: "next"
     runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"

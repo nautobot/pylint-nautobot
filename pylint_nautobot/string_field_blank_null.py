@@ -7,7 +7,7 @@ from pylint.checkers import BaseChecker
 class NautobotStringFieldBlankNull(BaseChecker):
     """Visit classes to find class children on models who are CharField's or TextField's and check whether they are configured well."""
 
-    version_specifier = ">=1,<3"
+    version_specifier = ">=1,<4"
 
     name = "nautobot-string-field-blank-null"
     msgs = {
