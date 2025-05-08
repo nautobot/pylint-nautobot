@@ -7,15 +7,15 @@ from .utils import find_meta, is_version_compatible
 
 _META_CLASSES = {
     "nautobot.core.api.serializers.NautobotModelSerializer": ">=2",
-    "nautobot.extras.filters.NautobotFilterSet": ">1",
-    "nautobot.extras.forms.base.NautobotModelForm": ">1",
+    "nautobot.extras.filters.NautobotFilterSet": ">=2",
+    "nautobot.extras.forms.base.NautobotModelForm": ">=2",
 }
 
 
 class NautobotUseFieldsAllChecker(BaseChecker):
     """Visit Meta subclasses and check for use of `fields = "__all__"`, instead of `fields = ["field1", ...]`."""
 
-    version_specifier = ">=1,<4"
+    version_specifier = ">=2,<4"
 
     name = "nautobot-use-fields-all"
     msgs = {
