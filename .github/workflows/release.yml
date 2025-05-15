@@ -86,7 +86,7 @@ jobs:
         Published by: <${{ github.server_url }}/${{ github.actor }}|${{ github.actor }}>
     steps:
       - name: "Send a notification to Slack"
-        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        if: "${{ env.SLACK_WEBHOOK_URL != '' }}"
         uses: "slackapi/slack-github-action@fcfb566f8b0aab22203f066d80ca1d7e4b5d05b3"  # v1.27.1
         with:
           payload: |
