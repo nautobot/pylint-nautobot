@@ -67,7 +67,7 @@ jobs:
           path: "dist/"
 
       - name: "Publish package distributions to PyPI"
-        uses: "pypa/gh-action-pypi-publish@release/v1"  # TODO: pin to hash
+        uses: "pypa/gh-action-pypi-publish@release@76f52bc884231f62b9a034ebfe128415bbaabdfc"  # v1.12.4
 
   slack-notify:
     needs:
