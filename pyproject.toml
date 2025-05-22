@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pylint-nautobot"
-version = "0.3.1"
+version = "0.4.0"
 description = "Custom Pylint Rules for Nautobot"
 authors = ["Cristian Sirbu <cristian.sirbu@networktocode.com>", "Leo Kirchner <leo.kirchner@networktocode.com>"]
 license = "Apache-2.0"
@@ -12,36 +12,37 @@ classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 packages = [
     { include = "pylint_nautobot" },
 ]
 
 [tool.poetry.dependencies]
+python = ">=3.9.2,<3.14"
+pylint = ">=3.3.0,<4.0"
 importlib-resources = ">=5.12.0"
-pylint = "^2.17"
-python = "^3.8"
 pyyaml = ">=6.0.1"
 toml = ">=0.10.2"
 
 [tool.poetry.group.dev.dependencies]
-Markdown = "*"
 coverage = "*"
 invoke = "*"
 ipython = "*"
-mkdocs = "1.5.2"
-mkdocs-material = "9.1.15"
-mkdocs-version-annotations = "1.0.0"
-mkdocstrings = "0.22.0"
-mkdocstrings-python = "1.5.2"
-pytest = "^7.3.0"
+pytest = "*"
 ruff = "*"
 yamllint = "*"
+Markdown = "*"
+# Render custom markdown for version added/changed/remove notes
+markdown-version-annotations = "1.0.1"
+# Rendering docs to HTML
+mkdocs = "1.6.0"
+# Material for MkDocs theme
+mkdocs-material = "9.5.32"
 
 [tool.poetry.extras]
 all = [
@@ -86,7 +87,7 @@ filterwarnings = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 select = [

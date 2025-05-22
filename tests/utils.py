@@ -75,7 +75,7 @@ def assert_error_file(test_case, filename, expected_error):
         test_case.walk(module_node)
 
 
-def assert_import_error(test_case, msg_id, test_code, expected_error=None):
+def assert_import_error(test_case, msg_id, test_code, expected_error=None, ignore_position=False):
     """Assert that the given message is emitted for the given code."""
     module_node = astroid.parse(test_code)
     import_node = module_node.body[0]  # type: ignore
@@ -87,5 +87,6 @@ def assert_import_error(test_case, msg_id, test_code, expected_error=None):
             col_offset=0,
             args=expected_error,
         ),
+        ignore_position=ignore_position,
     ):
         test_case.walk(module_node)

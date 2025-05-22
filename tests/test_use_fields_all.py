@@ -21,22 +21,30 @@ def _find_fields_node(module_node):
 
 _EXPECTED_ERRORS = {
     "filter_set": {
+        "versions": ">=2",
         "msg_id": "nb-use-fields-all",
         "line": 10,
+        "end_line": 10,
         "col_offset": 17,
+        "end_col_offset": 40,
         "node": _find_fields_node,
     },
     "form": {
+        "versions": ">=2",
         "msg_id": "nb-use-fields-all",
         "line": 10,
+        "end_line": 10,
         "col_offset": 17,
+        "end_col_offset": 40,
         "node": _find_fields_node,
     },
     "serializer": {
         "versions": ">=2",
         "msg_id": "nb-use-fields-all",
         "line": 10,
+        "end_line": 10,
         "col_offset": 17,
+        "end_col_offset": 40,
         "node": _find_fields_node,
     },
 }

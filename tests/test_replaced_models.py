@@ -25,7 +25,7 @@ class TestReplacedModelsImportChecker(CheckerTestCase):
         ),
     )
     def test_code_location_changed(self, msg_id, test_code):
-        assert_import_error(self, msg_id, test_code)
+        assert_import_error(self, msg_id, test_code, ignore_position=True)
 
     @mark.parametrize(
         "test_code",

@@ -52,7 +52,7 @@ class NautobotIncorrectBaseClassChecker(BaseChecker):
     Example: Every model that you define in the Nautobot ecosystem should inherit from 'nautobot.core.models.BaseModel'.
     """
 
-    version_specifier = ">=1,<3"
+    version_specifier = ">=1,<4"
 
     name = "nautobot-incorrect-base-class"
     msgs = {

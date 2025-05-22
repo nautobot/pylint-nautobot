@@ -21,7 +21,7 @@ class TestCodeLocationChangesChecker(CheckerTestCase):
         ),
     )
     def test_code_location_changed(self, test_code, expected_args):
-        assert_import_error(self, "nb-code-location-changed", test_code, expected_args)
+        assert_import_error(self, "nb-code-location-changed", test_code, expected_args, ignore_position=True)
 
     @mark.parametrize(
         ("test_code", "expected_args"),
@@ -37,7 +37,7 @@ class TestCodeLocationChangesChecker(CheckerTestCase):
         ),
     )
     def test_code_location_changed_object(self, test_code, expected_args):
-        assert_import_error(self, "nb-code-location-changed-object", test_code, expected_args)
+        assert_import_error(self, "nb-code-location-changed-object", test_code, expected_args, ignore_position=True)
 
     @mark.parametrize(
         "test_code",
