@@ -173,7 +173,7 @@ def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
     if not specifier_set:
         return True
     if isinstance(specifier_set, str):
-        specifier_set = SpecifierSet(specifier_set)
+        specifier_set = SpecifierSet(specifier_set, prereleases=True)
     return specifier_set.contains(MINIMUM_NAUTOBOT_VERSION)
 
 
