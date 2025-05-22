@@ -14,26 +14,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added support for Pylint 3.x (#108)
-- Added support for Python 3.12 (#108)
-- Added support for Python 3.13 (#111)
-- Added support for Nautobot 3.x (#111)
-- Implement a checker to validate that q uses SearchFilter (#107)
-- Add information on writing Custom Pylint Checkers (#105)
+- Added support for Pylint 3.x [#108](https://github.com/nautobot/pylint-nautobot/pull/108)
+- Added support for Python 3.12 [#108](https://github.com/nautobot/pylint-nautobot/pull/108)
+- Added support for Python 3.13 [#111](https://github.com/nautobot/pylint-nautobot/pull/111)
+- Added support for Nautobot 3.x [#111](https://github.com/nautobot/pylint-nautobot/pull/111)
+- Implement a checker to validate that q uses SearchFilter [#107](https://github.com/nautobot/pylint-nautobot/pull/107)
+- Add information on writing Custom Pylint Checkers [#105](https://github.com/nautobot/pylint-nautobot/pull/105)
 
 ## Changed
 
-- Update developer docs (#96)
+- Update developer docs [#96](https://github.com/nautobot/pylint-nautobot/pull/96)
 
 ### Fixed
 
-- Updated tests to support pylint updates (#108)
+- Updated tests to support pylint updates [#108](https://github.com/nautobot/pylint-nautobot/pull/108)
 
 ### Housekeeping
 
-- Dropped support for Python 3.8 (#108)
-- Removed mkdocstrings (#108)
-- Pinned CI poetry version to use 1.8.5 (#107)
+- Dropped support for Python 3.8 [#108](https://github.com/nautobot/pylint-nautobot/pull/108)
+- Removed mkdocstrings [#108](https://github.com/nautobot/pylint-nautobot/pull/108)
+- Pinned CI poetry version to use 1.8.5 [#107](https://github.com/nautobot/pylint-nautobot/pull/107)
 
 ## [0.3.1] - 2024-08-22
 
@@ -51,45 +51,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `nb-use-fields-all` rule (#70)
-- Added `nautobot-sub-class-name` rule (#74)
+- Added `nb-use-fields-all` rule [#70](https://github.com/nautobot/pylint-nautobot/pull/70)
+- Added `nautobot-sub-class-name` rule [#74](https://github.com/nautobot/pylint-nautobot/pull/74)
 
 ### Changed
 
-- Improve incorrect base class checker (#72)
-- Update CODEOWNERS (#68)
+- Improve incorrect base class checker [#72](https://github.com/nautobot/pylint-nautobot/pull/72)
+- Update CODEOWNERS [#68](https://github.com/nautobot/pylint-nautobot/pull/68)
 
 ### Fixed
 
-- Fix RTD docs build (#58)
-- Fix `UIViewSet` sub class name (#76)
-- Fix failing check when class doesNt# have a `Meta` class member (#77)
+- Fix RTD docs build [#58](https://github.com/nautobot/pylint-nautobot/pull/58)
+- Fix `UIViewSet` sub class name [#76](https://github.com/nautobot/pylint-nautobot/pull/76)
+- Fix failing check when class doesNt# have a `Meta` class member [#77](https://github.com/nautobot/pylint-nautobot/pull/77)
 
 ### Housekeeping
 
-- Allow wider range of `importlib-resources` library (#78)
+- Allow wider range of `importlib-resources` library [#78](https://github.com/nautobot/pylint-nautobot/pull/78)
 
 ## [0.2.1] - 2023-09-01
 
 ### Changed
 
-- Updates CODEOWNERS (#41)
-- Improves rule help messages (#49)
-- Fix scoping on string field blank/null checker (#49)
-- Parametrize the base class checker by the Nautobot version (#44)
+- Updates CODEOWNERS [#41](https://github.com/nautobot/pylint-nautobot/pull/41)
+- Improves rule help messages [#49](https://github.com/nautobot/pylint-nautobot/pull/49)
+- Fix scoping on string field blank/null checker [#49](https://github.com/nautobot/pylint-nautobot/pull/49)
+- Parametrize the base class checker by the Nautobot version [#44](https://github.com/nautobot/pylint-nautobot/pull/44)
 
 ## [0.2.0] - 2023-06-28
 
 ### Added
 
-- Model label construction checker (#28)
-- Added `StatusModel` usage checker (#26)
-- String field blank/null checker (#18)
-- Incorrect base class checker (#9)
+- Model label construction checker [#28](https://github.com/nautobot/pylint-nautobot/pull/28)
+- Added `StatusModel` usage checker [#26](https://github.com/nautobot/pylint-nautobot/pull/26)
+- String field blank/null checker [#18](https://github.com/nautobot/pylint-nautobot/pull/18)
+- Incorrect base class checker [#9](https://github.com/nautobot/pylint-nautobot/pull/9)
 
 ### Tests
 
-- Changed test structure to better align with established pylint patterns (#28)
+- Changed test structure to better align with established pylint patterns [#28](https://github.com/nautobot/pylint-nautobot/pull/28)
 
 ## [0.1.0] - 2023-05-31
 
