@@ -10,7 +10,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 2025-04
+## [0.4.1] - 2025-06-03
+
+### Changed
+
+- Allow Nautobot prerelease versions in `is_version_compatible` [#114](https://github.com/nautobot/pylint-nautobot/pull/114)
+
+## [0.4.0] - 2025-05-22
 
 ### Added
 
@@ -21,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement a checker to validate that q uses SearchFilter [#107](https://github.com/nautobot/pylint-nautobot/pull/107)
 - Add information on writing Custom Pylint Checkers [#105](https://github.com/nautobot/pylint-nautobot/pull/105)
 
-## Changed
+### Changed
 
 - Update developer docs [#96](https://github.com/nautobot/pylint-nautobot/pull/96)
 
