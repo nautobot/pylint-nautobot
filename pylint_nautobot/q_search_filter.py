@@ -3,6 +3,8 @@
 from astroid import Assign, AssignName, ClassDef, FunctionDef
 from pylint.checkers import BaseChecker
 
+from .utils import find_ancestor
+
 
 class NautobotUseSearchFilterChecker(BaseChecker):
     """Visit NautobotFilterSet subclasses and check for use of `q = SearchFilter`, instead of `q = django_filters.CharField`."""
@@ -33,8 +35,7 @@ class NautobotUseSearchFilterChecker(BaseChecker):
 
     def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
-        ancestors = [ancestor.qname() for ancestor in node.ancestors()]
-        if "nautobot.extras.filters.NautobotFilterSet" not in ancestors:
+        if not find_ancestor(node, ["nautobot.extras.filters.NautobotFilterSet"], lambda item: item):
             return
 
         for child_node in node.get_children():
