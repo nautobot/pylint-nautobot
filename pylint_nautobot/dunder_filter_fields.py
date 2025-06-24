@@ -7,7 +7,16 @@ from .utils import find_ancestor
 
 
 class NautobotDunderFilterFieldChecker(BaseChecker):
-    """Visit NautobotFilterSet subclasses and check for use of __ in the field name."""
+    """Visit NautobotFilterSet subclasses and check for use of __ in the field name.
+
+    For example, `field__example` is reserved for nested lookups and should not be used as a filter field name.
+    Instead, use `field_example` or similar.
+
+    Example:
+        class MyFilterSet(NautobotFilterSet):
+            name__or = django_filters.CharFilter()
+            # This will raise a warning
+    """
 
     version_specifier = ">=2,<4"
 

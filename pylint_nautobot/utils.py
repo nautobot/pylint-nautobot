@@ -158,6 +158,7 @@ def get_model_name_from_attr(model_attr: Assign) -> str:
     return model_attr_chain[-1]
 
 
+# TODO: Remove the get_value callable and just accept a list directly.
 def find_ancestor(node: ClassDef, ancestors: Iterable[T], get_value: Callable[[T], str]) -> Optional[T]:
     """Find the class ancestor from the list of ancestors."""
     ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
