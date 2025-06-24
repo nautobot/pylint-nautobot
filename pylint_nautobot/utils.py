@@ -108,14 +108,12 @@ def find_model_name(node: ClassDef) -> str:
     if queryset:
         return get_model_name_from_queryset(queryset.value)
 
-    model_attr = find_attr(node, "model")
-    if not model_attr:
-        meta = find_meta(node)
-        if not meta:
-            return ""
+    if meta := find_meta(node):
         model_attr = find_attr(meta, "model")
         if not model_attr:
             return ""
+    elif not (model_attr := find_attr(node, "model")):
+        return ""
 
     return get_model_name_from_attr(model_attr)
 
