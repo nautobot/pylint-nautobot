@@ -1,12 +1,11 @@
-from nautobot.apps.filters import NautobotFilterSet, SearchFilter
+from nautobot.apps.filters import MultiValueCharFilter, NautobotFilterSet
 
 
 class ValidNameFilterFilterSet(NautobotFilterSet):
     """Filter for AddressObject."""
 
-    q__name = SearchFilter(
-        filter_predicates={
-            "name": ["name__icontains"],
-            "description": ["description__icontains"],
-        }
+    serial__number = MultiValueCharFilter(
+        lookup_expr="icontains",
+        label="Serial Number",
     )
+

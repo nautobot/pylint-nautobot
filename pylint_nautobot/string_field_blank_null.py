@@ -25,7 +25,7 @@ class NautobotStringFieldBlankNull(BaseChecker):
     def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
         # We only care about models
-        if not find_ancestor(node, ["django.db.models.base.Model"], lambda item: item):
+        if not find_ancestor(node, ["django.db.models.base.Model"]):
             return
 
         for child_node in node.get_children():

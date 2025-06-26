@@ -35,7 +35,7 @@ class NautobotUseSearchFilterChecker(BaseChecker):
 
     def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
-        if not find_ancestor(node, ["nautobot.extras.filters.NautobotFilterSet"], lambda item: item):
+        if not find_ancestor(node, ["nautobot.extras.filters.NautobotFilterSet"]):
             return
 
         for child_node in node.get_children():

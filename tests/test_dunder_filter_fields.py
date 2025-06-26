@@ -10,7 +10,7 @@ _EXPECTED_ERRORS = {
     "filter_set": {
         "msg_id": "nb-warn-dunder-filter-field",
         "line": 7,
-        "end_line": 12,
+        "end_line": 10,
         "col_offset": 4,
         "end_col_offset": 5,
         "node": lambda module_node: module_node.body[1].body[0],

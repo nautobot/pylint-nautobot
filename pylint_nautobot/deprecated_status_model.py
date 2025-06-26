@@ -21,5 +21,5 @@ class NautobotDeprecatedStatusModelChecker(BaseChecker):
 
     def visit_classdef(self, node):
         """Visit class definitions."""
-        if find_ancestor(node, ["nautobot.extras.models.statuses.StatusModel"], lambda item: item):
+        if find_ancestor(node, ["nautobot.extras.models.statuses.StatusModel"]):
             self.add_message("nb-status-field-instead-of-status-model", node=node)
