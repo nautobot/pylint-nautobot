@@ -159,9 +159,7 @@ def get_model_name_from_attr(model_attr: Assign) -> str:
 
 
 def find_ancestor(
-    node: ClassDef,
-    ancestors: Iterable[T],
-    get_value: Optional[Callable[[T], str]] = None
+    node: ClassDef, ancestors: Iterable[T], get_value: Optional[Callable[[T], str]] = None
 ) -> Optional[T]:
     """Find the class ancestor from the list of ancestors."""
     ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]

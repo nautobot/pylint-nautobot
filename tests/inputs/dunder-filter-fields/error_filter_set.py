@@ -8,4 +8,3 @@ class ValidNameFilterFilterSet(NautobotFilterSet):
         lookup_expr="icontains",
         label="Serial Number",
     )
-
