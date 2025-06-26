@@ -3,6 +3,8 @@
 from astroid import Assign, Call, ClassDef
 from pylint.checkers import BaseChecker
 
+from .utils import find_ancestor
+
 
 class NautobotStringFieldBlankNull(BaseChecker):
     """Visit classes to find class children on models who are CharField's or TextField's and check whether they are configured well."""
@@ -23,8 +25,7 @@ class NautobotStringFieldBlankNull(BaseChecker):
     def visit_classdef(self, node: ClassDef):
         """Visit class definitions."""
         # We only care about models
-        ancestors = [ancestor.qname() for ancestor in node.ancestors()]
-        if "django.db.models.base.Model" not in ancestors:
+        if not find_ancestor(node, ["django.db.models.base.Model"]):
             return
 
         for child_node in node.get_children():

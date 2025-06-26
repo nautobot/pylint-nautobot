@@ -2,6 +2,8 @@
 
 from pylint.checkers import BaseChecker
 
+from .utils import find_ancestor
+
 
 class NautobotDeprecatedStatusModelChecker(BaseChecker):
     """Discourage the usage of deprecated StatusModel and encourage the usage of StatusField."""
@@ -19,6 +21,5 @@ class NautobotDeprecatedStatusModelChecker(BaseChecker):
 
     def visit_classdef(self, node):
         """Visit class definitions."""
-        ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
-        if "nautobot.extras.models.statuses.StatusModel" in ancestor_class_types:
+        if find_ancestor(node, ["nautobot.extras.models.statuses.StatusModel"]):
             self.add_message("nb-status-field-instead-of-status-model", node=node)
