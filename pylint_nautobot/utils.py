@@ -108,14 +108,12 @@ def find_model_name(node: ClassDef) -> str:
     if queryset:
         return get_model_name_from_queryset(queryset.value)
 
-    model_attr = find_attr(node, "model")
-    if not model_attr:
-        meta = find_meta(node)
-        if not meta:
-            return ""
+    if meta := find_meta(node):
         model_attr = find_attr(meta, "model")
         if not model_attr:
             return ""
+    elif not (model_attr := find_attr(node, "model")):
+        return ""
 
     return get_model_name_from_attr(model_attr)
 
@@ -158,11 +156,15 @@ def get_model_name_from_attr(model_attr: Assign) -> str:
     return model_attr_chain[-1]
 
 
-def find_ancestor(node: ClassDef, ancestors: Iterable[T], get_value: Callable[[T], str]) -> Optional[T]:
+def find_ancestor(
+    node: ClassDef, ancestors: Iterable[T], get_value: Optional[Callable[[T], str]] = None
+) -> Optional[T]:
     """Find the class ancestor from the list of ancestors."""
     ancestor_class_types = [ancestor.qname() for ancestor in node.ancestors()]
     for checked_ancestor in ancestors:
-        if get_value(checked_ancestor) in ancestor_class_types:
+        if get_value and get_value(checked_ancestor) in ancestor_class_types:
+            return checked_ancestor
+        if not get_value and checked_ancestor in ancestor_class_types:
             return checked_ancestor
 
     return None
