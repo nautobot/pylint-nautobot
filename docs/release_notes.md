@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Ensure Filter field name does not have a double underscore [#120](https://github.com/nautobot/pylint-nautobot/pull/120)
+- Added check to ensure filter field name does not have a double underscore [#120](https://github.com/nautobot/pylint-nautobot/pull/120)
 
 ### Fixed
 
