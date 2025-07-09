@@ -10,6 +10,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2025-07-09
+
+### Added
+
+- Ensure Filter field name does not have a double underscore [#120](https://github.com/nautobot/pylint-nautobot/pull/120)
+
+### Fixed
+
+- Fixed find_model_name to check for the model attribute first in the Meta class [#122](https://github.com/nautobot/pylint-nautobot/pull/122)
+
 ## [0.4.1] - 2025-06-03
 
 ### Changed
