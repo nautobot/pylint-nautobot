@@ -36,6 +36,4 @@ class NautobotDeprecatedClassChecker(BaseChecker):
         v3_removals = load_v3_code_removals()
         for removed, replacement in v3_removals.items():
             if find_ancestor(node, [removed]):
-                self.add_message(
-                    "nb-deprecated-class", node=node, args=(removed, replacement)
-                )
+                self.add_message("nb-deprecated-class", node=node, args=(removed, replacement))
