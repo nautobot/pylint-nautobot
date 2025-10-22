@@ -12,7 +12,7 @@ from .utils import (
 )
 
 _BASE_ERROR = {
-    "versions": ">=2",
+    "versions": ">=2,<3",
     "msg_id": "nb-deprecated-class",
     "line": 4,
     "end_line": 4,
