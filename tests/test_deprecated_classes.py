@@ -224,7 +224,6 @@ _EXPECTED_ERRORS = {
     "plugin_custom_validator": {
         **_BASE_ERROR,
         "end_col_offset": 17,
-        "node": lambda module_node: module_node.body[1],
         "args": (
             "nautobot.extras.plugins.PluginCustomValidator",
             "nautobot.extras.plugins.CustomValidator",
