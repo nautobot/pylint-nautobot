@@ -5,6 +5,7 @@ from importlib import metadata
 from pylint.lint import PyLinter
 
 from .code_location_changes import NautobotCodeLocationChangesChecker
+from .deprecated_classes import NautobotDeprecatedClassChecker
 from .deprecated_status_model import NautobotDeprecatedStatusModelChecker
 from .dunder_filter_fields import NautobotDunderFilterFieldChecker
 from .incorrect_base_class import NautobotIncorrectBaseClassChecker
@@ -20,6 +21,7 @@ __version__ = metadata.version(__name__)
 
 CHECKERS = [
     NautobotCodeLocationChangesChecker,
+    NautobotDeprecatedClassChecker,
     NautobotDeprecatedStatusModelChecker,
     NautobotDunderFilterFieldChecker,
     NautobotIncorrectBaseClassChecker,
