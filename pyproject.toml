@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pylint-nautobot"
-version = "0.4.3a0"
+version = "0.4.4a0"
 description = "Custom Pylint Rules for Nautobot"
 authors = ["Cristian Sirbu <cristian.sirbu@networktocode.com>", "Leo Kirchner <leo.kirchner@networktocode.com>"]
 license = "Apache-2.0"
@@ -37,12 +37,14 @@ pytest = "*"
 ruff = "*"
 yamllint = "*"
 Markdown = "*"
+towncrier = ">=23.6.0,<=24.8.0"
 # Render custom markdown for version added/changed/remove notes
 markdown-version-annotations = "1.0.1"
 # Rendering docs to HTML
 mkdocs = "1.6.0"
 # Material for MkDocs theme
 mkdocs-material = "9.5.32"
+tomli = { version = "*", markers = "python_version < '3.11'" }  # tomli is included in the stdlib as of Python 3.11
 
 [tool.poetry.extras]
 all = [
@@ -128,3 +130,62 @@ convention = "google"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.towncrier]
+name = "Pylint Nautobot"
+package = "pylint_nautobot"
+directory = "changes"
+filename = "docs/release_notes.md"
+template = "development/towncrier_template.j2"
+start_string = "<!-- towncrier release notes start -->"
+issue_format = "[#{issue}](https://github.com/nautobot/pylint-nautobot/issues/{issue})"
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name = "Breaking Changes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "dependencies"
+name = "Dependencies"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "documentation"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "housekeeping"
+name = "Housekeeping"
+showcontent = true

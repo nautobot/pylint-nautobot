@@ -338,13 +338,39 @@ def build_and_check_docs(context):
 @task(name="help")
 def help_task(context):
     """Print the help of available tasks."""
-    import tasks  # pylint: disable=all
+    import tasks  # pylint: disable=all  # noqa: PLC0415
 
     root = Collection.from_module(tasks)
     for task_name in sorted(root.task_names):
         print(50 * "-")
         print(f"invoke {task_name} --help")
         context.run(f"invoke {task_name} --help")
+
+
+@task(
+    help={
+        "version": "Version of Nautobot Dev Example App to generate the release notes for.",
+        "date": "Date of the release (default: today).",
+        "keep": "Keep existing release notes files. Useful for testing. (default: False).",
+    }
+)
+def generate_release_notes(context, version="", date="", keep=False):
+    """Generate Release Notes using Towncrier."""
+    command = "poetry run towncrier build"
+    if not version:
+        version = context.run("poetry version --short", hide=True).stdout.strip()
+    command += f" --version {version}"
+    if date:
+        command += f" --date {date}"
+    command += " --keep" if keep else " --yes"
+
+    # TODO: Commented out until this project moves to multiple release notes files
+    # version_major_minor = ".".join(version.split(".")[:2])
+    # context.run(f"poetry run python development/bin/ensure_release_notes.py --version {version_major_minor}")
+
+    # Due to issues with git repo ownership in the containers, this must always run locally.
+    print(f"Running command {command}")
+    context.run(command)
 
 
 # ------------------------------------------------------------------------------
@@ -396,13 +422,6 @@ def ruff(context, action=None, fix=False, output_format="full"):
             command += " --fix"
         command += f" --output-format {output_format} ."
         run_command(context, command)
-
-
-@task
-def bandit(context):
-    """Run bandit to validate basic static code security analysis."""
-    command = "bandit --recursive ."
-    run_command(context, command)
 
 
 @task
