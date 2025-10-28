@@ -338,7 +338,7 @@ def build_and_check_docs(context):
 @task(name="help")
 def help_task(context):
     """Print the help of available tasks."""
-    import tasks  # pylint: disable=all
+    import tasks  # pylint: disable=all  # noqa: PLC0415
 
     root = Collection.from_module(tasks)
     for task_name in sorted(root.task_names):
