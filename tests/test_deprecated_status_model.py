@@ -4,10 +4,16 @@ from pylint.testutils import CheckerTestCase
 
 from pylint_nautobot.deprecated_status_model import NautobotDeprecatedStatusModelChecker
 
-from .utils import assert_error_file, assert_good_file, parametrize_error_files, parametrize_good_files
+from .utils import (
+    assert_error_file,
+    assert_good_file,
+    parametrize_error_files,
+    parametrize_good_files,
+)
 
 _EXPECTED_ERRORS = {
     "status_model": {
+        "versions": ">=2,<3",
         "msg_id": "nb-status-field-instead-of-status-model",
         "line": 4,
         "col_offset": 0,
