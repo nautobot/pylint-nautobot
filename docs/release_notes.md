@@ -10,6 +10,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+<!-- towncrier release notes start -->
+
+## [v0.4.3 (2025-10-28)](https://github.com/nautobot/pylint-nautobot/releases/tag/v0.4.3)
+
+### Added
+
+- [#126](https://github.com/nautobot/pylint-nautobot/issues/126) - Added rule E4293 (nb-deprecated-class) to identify Python classes that are using base classes removed in Nautobot v3.0.
+
 ## [0.4.2] - 2025-07-09
 
 ### Added
