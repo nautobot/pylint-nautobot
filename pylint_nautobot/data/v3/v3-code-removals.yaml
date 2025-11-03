@@ -36,7 +36,7 @@
 - Removed: "nautobot.extras.forms.mixins.StatusFilterFormMixin"
   Replacement: "nautobot.apps.forms.StatusModelFilterFormMixin"
 - Removed: "nautobot.tenancy.filters.TenancyFilterSet"
-  Replacement: "nautobot.apps.testing.TenancyModelFilterSetMixin"
+  Replacement: "nautobot.apps.filters.TenancyModelFilterSetMixin"
 - Removed: "nautobot.core.testing.filters.FilterTestCases.NameOnlyFilterTestCase"
   Replacement: "nautobot.apps.testing.FilterTestCases.FilterTestCase"
 - Removed: "nautobot.core.testing.filters.FilterTestCases.NameSlugFilterTestCase"
