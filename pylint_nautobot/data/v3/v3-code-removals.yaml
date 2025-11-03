@@ -22,7 +22,7 @@
 - Removed: "nautobot.extras.filters.LocalContextFilterSet"
   Replacement: "nautobot.apps.filters.LocalContextModelFilterSetMixin"
 - Removed: "nautobot.extras.forms.forms.CustomFieldBulkCreateForm"
-  Replacement: "nautobot.extras.forms.mixins.CustomFieldBulkCreateForm" ####
+  Replacement: "nautobot.apps.forms.CustomFieldModelBulkEditFormMixin"
 - Removed: "nautobot.extras.forms.mixins.AddRemoveTagsForm"
   Replacement: "nautobot.apps.forms.TagsBulkEditFormMixin"
 - Removed: "nautobot.extras.forms.mixins.CustomFieldBulkEditForm"
