@@ -82,7 +82,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.extras.filters.CreatedUpdatedFilterSet",
-            "nautobot.extras.filters.mixins.CreatedUpdatedModelFilterSetMixin",
+            "nautobot.apps.filters.CreatedUpdatedModelFilterSetMixin",
         ),
     },
     "relationship_model_filter_set": {
@@ -90,7 +90,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.extras.filters.RelationshipModelFilterSet",
-            "nautobot.extras.filters.mixins.RelationshipModelFilterSetMixin",
+            "nautobot.apps.filters.RelationshipModelFilterSetMixin",
         ),
     },
     "custom_field_model_filter_set": {
@@ -98,7 +98,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.extras.filters.CustomFieldModelFilterSet",
-            "nautobot.extras.filters.mixins.CustomFieldModelFilterSetMixin",
+            "nautobot.apps.filters.CustomFieldModelFilterSetMixin",
         ),
     },
     "local_context_filter_set": {
@@ -106,7 +106,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.extras.filters.LocalContextFilterSet",
-            "nautobot.extras.filters.mixins.LocalContextModelFilterSetMixin",
+            "nautobot.apps.filters.LocalContextModelFilterSetMixin",
         ),
     },
     "custom_field_bulk_create_form": {
@@ -114,7 +114,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 12,
         "args": (
             "nautobot.extras.forms.forms.CustomFieldBulkCreateForm",
-            "nautobot.extras.forms.mixins.CustomFieldBulkCreateForm",
+            "nautobot.apps.forms.CustomFieldModelBulkEditFormMixin",
         ),
     },
     "add_remove_tags_form": {
@@ -122,7 +122,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 12,
         "args": (
             "nautobot.extras.forms.mixins.AddRemoveTagsForm",
-            "nautobot.extras.forms.mixins.TagsBulkEditFormMixin",
+            "nautobot.apps.forms.TagsBulkEditFormMixin",
         ),
     },
     "custom_field_bulk_edit_form": {
@@ -130,7 +130,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 12,
         "args": (
             "nautobot.extras.forms.mixins.CustomFieldBulkEditForm",
-            "nautobot.extras.forms.mixins.CustomFieldModelBulkEditFormMixin",
+            "nautobot.apps.forms.CustomFieldModelBulkEditFormMixin",
         ),
     },
     "custom_field_model_form": {
@@ -138,7 +138,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 12,
         "args": (
             "nautobot.extras.forms.mixins.CustomFieldModelForm",
-            "nautobot.extras.forms.mixins.CustomFieldModelFormMixin",
+            "nautobot.apps.forms.CustomFieldModelFormMixin",
         ),
     },
     "relationship_model_form": {
@@ -146,7 +146,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 12,
         "args": (
             "nautobot.extras.forms.mixins.RelationshipModelForm",
-            "nautobot.extras.forms.mixins.RelationshipModelFormMixin",
+            "nautobot.apps.forms.RelationshipModelFormMixin",
         ),
     },
     "status_bulk_edit_form_mixin": {
@@ -154,7 +154,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 12,
         "args": (
             "nautobot.extras.forms.mixins.StatusBulkEditFormMixin",
-            "nautobot.extras.forms.mixins.StatusModelBulkEditFormMixin",
+            "nautobot.apps.forms.StatusModelBulkEditFormMixin",
         ),
     },
     "status_filter_form_mixin": {
@@ -162,7 +162,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 12,
         "args": (
             "nautobot.extras.forms.mixins.StatusFilterFormMixin",
-            "nautobot.extras.forms.mixins.StatusModelFilterFormMixin",
+            "nautobot.apps.forms.StatusModelFilterFormMixin",
         ),
     },
     "tenancy_filter_set": {
@@ -170,7 +170,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.tenancy.filters.TenancyFilterSet",
-            "nautobot.tenancy.filters.mixins.TenancyModelFilterSetMixin",
+            "nautobot.apps.filters.TenancyModelFilterSetMixin",
         ),
     },
     "name_only_filter_test_case": {
@@ -178,7 +178,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 16,
         "args": (
             "nautobot.core.testing.filters.FilterTestCases.NameOnlyFilterTestCase",
-            "nautobot.core.testing.filters.FilterTestCases.FilterTestCase",
+            "nautobot.apps.testing.FilterTestCases.FilterTestCase",
         ),
     },
     "custom_link_button_class_choices": {
@@ -186,7 +186,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 15,
         "args": (
             "nautobot.extras.choices.CustomLinkButtonClassChoices",
-            "nautobot.extras.choices.ButtonClassChoices",
+            "nautobot.apps.choices.ButtonClassChoices",
         ),
     },
     "plugin_config": {
@@ -194,7 +194,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 14,
         "args": (
             "nautobot.extras.plugins.PluginConfig",
-            "nautobot.extras.plugins.NautobotAppConfig",
+            "nautobot.apps.NautobotAppConfig",
         ),
     },
     "plugin_template_extension": {
@@ -202,7 +202,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.extras.plugins.PluginTemplateExtension",
-            "nautobot.extras.plugins.TemplateExtension",
+            "nautobot.apps.ui.TemplateExtension",
         ),
     },
     "plugin_banner": {
@@ -210,7 +210,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 14,
         "args": (
             "nautobot.extras.plugins.PluginBanner",
-            "nautobot.extras.plugins.Banner",
+            "nautobot.apps.ui.Banner",
         ),
     },
     "plugin_filter_extension": {
@@ -218,7 +218,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.extras.plugins.PluginFilterExtension",
-            "nautobot.extras.plugins.FilterExtension",
+            "nautobot.apps.filters.FilterExtension",
         ),
     },
     "plugin_custom_validator": {
@@ -226,7 +226,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 17,
         "args": (
             "nautobot.extras.plugins.PluginCustomValidator",
-            "nautobot.extras.plugins.CustomValidator",
+            "nautobot.apps.models.CustomValidator",
         ),
     },
 }
