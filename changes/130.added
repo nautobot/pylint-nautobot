@@ -1,0 +1,1 @@
+Added the `nb-jobresult-on-delete-protect` checker to check for ForeignKey and OneToOneField fields to JobResult to ensure that PROTECT is not used for on_delete.

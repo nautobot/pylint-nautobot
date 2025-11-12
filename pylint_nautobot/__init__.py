@@ -9,6 +9,7 @@ from .deprecated_classes import NautobotDeprecatedClassChecker
 from .deprecated_status_model import NautobotDeprecatedStatusModelChecker
 from .dunder_filter_fields import NautobotDunderFilterFieldChecker
 from .incorrect_base_class import NautobotIncorrectBaseClassChecker
+from .jobresult_on_delete_protect import NautobotJobResultOnDeleteProtectChecker
 from .model_label import NautobotModelLabelChecker
 from .q_search_filter import NautobotUseSearchFilterChecker
 from .replaced_models import NautobotReplacedModelsImportChecker
@@ -25,6 +26,7 @@ CHECKERS = [
     NautobotDeprecatedStatusModelChecker,
     NautobotDunderFilterFieldChecker,
     NautobotIncorrectBaseClassChecker,
+    NautobotJobResultOnDeleteProtectChecker,
     NautobotModelLabelChecker,
     NautobotReplacedModelsImportChecker,
     NautobotStringFieldBlankNull,
