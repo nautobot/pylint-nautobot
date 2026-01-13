@@ -1,6 +1,6 @@
 """Tests for use fields all"""
 
-from astroid import Assign
+from astroid.nodes import Assign
 from pylint.testutils import CheckerTestCase
 
 from pylint_nautobot.use_fields_all import NautobotUseFieldsAllChecker
