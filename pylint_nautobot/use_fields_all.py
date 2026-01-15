@@ -1,6 +1,6 @@
 """Check for CharField's or TextField's on models where null=True and blank=True."""
 
-from astroid import Assign, AssignName, ClassDef, Const
+from astroid.nodes import Assign, AssignName, ClassDef, Const
 from pylint.checkers import BaseChecker
 
 from .utils import find_meta, is_version_compatible

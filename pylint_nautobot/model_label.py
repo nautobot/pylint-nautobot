@@ -1,6 +1,6 @@
 """Check model label construction in f-strings."""
 
-from astroid import Attribute, Const, FormattedValue, JoinedStr, Name, NodeNG
+from astroid.nodes import Attribute, Const, FormattedValue, JoinedStr, Name, NodeNG
 from pylint.checkers import BaseChecker
 from pylint.interfaces import HIGH
 
