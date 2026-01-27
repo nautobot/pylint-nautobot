@@ -64,6 +64,7 @@ no-docstring-rgx="^(_|test_|Meta$)"
 # Pylint and Black disagree about how to format multi-line arrays; Black wins.
 disable = [
     "line-too-long",
+    "duplicate-code",
 ]
 
 [tool.pylint.miscellaneous]
