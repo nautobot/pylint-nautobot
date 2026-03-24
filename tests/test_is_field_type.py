@@ -4,7 +4,6 @@ import astroid
 
 from pylint_nautobot.utils import is_field_type
 
-
 FOREIGN_KEY_QNAMES = (
     "django.db.models.fields.related.ForeignKey",
     "django.db.models.fields.related.OneToOneField",
