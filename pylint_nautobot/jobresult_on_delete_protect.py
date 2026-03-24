@@ -1,6 +1,6 @@
 """Check for ForeignKey and OneToOneField fields to JobResult that should not use PROTECT for on_delete."""
 
-from astroid import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
+from astroid.nodes import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
 from pylint.checkers import BaseChecker
 
 from .utils import find_ancestor, is_field_type
