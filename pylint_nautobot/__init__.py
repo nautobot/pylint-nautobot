@@ -14,6 +14,7 @@ from .q_search_filter import NautobotUseSearchFilterChecker
 from .replaced_models import NautobotReplacedModelsImportChecker
 from .string_field_blank_null import NautobotStringFieldBlankNull
 from .sub_class_name import NautobotSubClassNameChecker
+from .teardown_super import NautobotTearDownSuperChecker
 from .use_fields_all import NautobotUseFieldsAllChecker
 from .utils import is_version_compatible
 
@@ -29,6 +30,7 @@ CHECKERS = [
     NautobotReplacedModelsImportChecker,
     NautobotStringFieldBlankNull,
     NautobotSubClassNameChecker,
+    NautobotTearDownSuperChecker,
     NautobotUseFieldsAllChecker,
     NautobotUseSearchFilterChecker,
 ]
