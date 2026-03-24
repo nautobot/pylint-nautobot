@@ -3,7 +3,12 @@
 from astroid import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
 from pylint.checkers import BaseChecker
 
-from .utils import find_ancestor
+from .utils import find_ancestor, is_field_type
+
+_RELATED_FIELD_QNAMES = (
+    "django.db.models.fields.related.ForeignKey",
+    "django.db.models.fields.related.OneToOneField",
+)
 
 
 def _is_jobresult_reference(node: NodeNG) -> bool:
@@ -58,11 +63,8 @@ class NautobotJobResultOnDeleteProtectChecker(BaseChecker):
             # We are only interested in assignments to a call
             if not isinstance(child_node.value, Call):
                 continue
-            # Encountered values: "ForeignKey", "OneToOneField" or "models.ForeignKey", "models.OneToOneField"
-            # because they can be ast Name or Attribute nodes
-            child_node_name = child_node.value.func.as_string().split(".")[-1]
-            # We are only interested in ForeignKey and OneToOneField fields
-            if child_node_name not in ("ForeignKey", "OneToOneField"):
+            # We are only interested in ForeignKey and OneToOneField fields (or subclasses)
+            if not is_field_type(child_node.value.func, _RELATED_FIELD_QNAMES):
                 continue
 
             # Check if this field references JobResult

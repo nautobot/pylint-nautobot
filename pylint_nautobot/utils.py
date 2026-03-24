@@ -6,6 +6,7 @@ from typing import Callable, Iterable, Optional, TypeVar, Union
 
 import toml
 from astroid.nodes import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
+from astroid.util import safe_infer
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
@@ -154,6 +155,30 @@ def get_model_name_from_attr(model_attr: Assign) -> str:
         model_attr_chain.insert(0, model_attr.value.name)
 
     return model_attr_chain[-1]
+
+
+def is_field_type(func_node: NodeNG, field_names: Iterable[str]) -> bool:
+    """Check if func_node refers to one of the given field types or a subclass.
+
+    Uses astroid's safe_infer to resolve the node to a ClassDef when possible,
+    checking both the class itself and its ancestors. Falls back to string-based
+    name matching when inference is not available.
+
+    Args:
+        func_node: The AST node representing the function/class being called.
+        field_names: Fully qualified class names to match against
+            (e.g. "django.db.models.fields.related.ForeignKey").
+    """
+    field_qnames = list(field_names)
+    inferred = safe_infer(func_node)
+    if isinstance(inferred, ClassDef):
+        if inferred.qname() in field_qnames:
+            return True
+        return find_ancestor(inferred, field_qnames) is not None
+    # Fallback to string-based check when inference is not available
+    short_names = {qname.rsplit(".", 1)[-1] for qname in field_qnames}
+    name = func_node.as_string().split(".")[-1]
+    return name in short_names
 
 
 def find_ancestor(
