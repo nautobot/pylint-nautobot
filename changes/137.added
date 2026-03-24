@@ -1,0 +1,1 @@
+Added a new checker to ensure test class `tearDown` methods call `super().tearDown()`.
