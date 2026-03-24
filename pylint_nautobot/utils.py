@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Callable, Iterable, Optional, TypeVar, Union
 
 import toml
-from astroid import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
+from astroid.nodes import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
 from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version

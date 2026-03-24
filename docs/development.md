@@ -105,9 +105,6 @@ Install `pylint-nautobot` in editable mode from your cloned repo:
 > poetry add --editable /path/to/pylint-nautobot/
 ```
 
-!!! warning
-    Pylint Nautobot does not currently support Python 3.12, so you may need to run `poetry env use 3.11` before creating your poetry environment if your operating system defaults to Python 3.12.
-
 Enable and configure the `pylint-nautobot` plugin in the target App's `pyproject.toml`:
 
 ``` toml

@@ -2,7 +2,7 @@
 
 from typing import NamedTuple
 
-from astroid import ClassDef
+from astroid.nodes import ClassDef
 from pylint.checkers import BaseChecker
 
 from .utils import find_ancestor, find_model_name, is_abstract_class, is_version_compatible, trim_first_pascal_word

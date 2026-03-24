@@ -1,6 +1,6 @@
 """Check for use of SearchFilter on NautobotFilterSets instead of custom `q` search functions."""
 
-from astroid import Assign, AssignName, ClassDef, FunctionDef
+from astroid.nodes import Assign, AssignName, ClassDef, FunctionDef
 from pylint.checkers import BaseChecker
 
 from .utils import find_ancestor

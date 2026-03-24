@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- towncrier release notes start -->
 
+## [v1.0.0 (2026-01-14)](https://github.com/nautobot/pylint-nautobot/releases/tag/v1.0.0)
+
+### Breaking Changes
+
+- [#133](https://github.com/nautobot/pylint-nautobot/issues/133) - Updated pylint from 3.x to 4.x.
+
 ## [v0.4.3 (2025-10-28)](https://github.com/nautobot/pylint-nautobot/releases/tag/v0.4.3)
 
 ### Added

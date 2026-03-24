@@ -1,6 +1,6 @@
 """Warn about double underscore filter fields in NautobotFilterSet subclasses."""
 
-from astroid import Assign, AssignName, ClassDef
+from astroid.nodes import Assign, AssignName, ClassDef
 from pylint.checkers import BaseChecker
 
 from .utils import find_ancestor

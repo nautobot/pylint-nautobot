@@ -1,6 +1,6 @@
 """Check for CharField's or TextField's on models where null=True and blank=True."""
 
-from astroid import Assign, Call, ClassDef
+from astroid.nodes import Assign, Call, ClassDef
 from pylint.checkers import BaseChecker
 
 from .utils import find_ancestor
