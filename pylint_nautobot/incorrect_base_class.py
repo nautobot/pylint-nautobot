@@ -37,6 +37,12 @@ _CLASS_MAPPING = (
         "correct": "nautobot.core.forms.forms.BootstrapMixin",
         "display": "nautobot.apps.forms.BootstrapMixin",
     },
+    {
+        "versions": ">=2.0",
+        "incorrect": "django.test.testcases.TransactionTestCase",
+        "correct": "nautobot.core.testing.TransactionTestCase",
+        "display": "nautobot.apps.testing.TransactionTestCase",
+    },
 )
 
 
