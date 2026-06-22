@@ -1,9 +1,11 @@
 """Tests for job run unpacking checker."""
 
 import astroid
+import pytest
 from pylint.testutils import CheckerTestCase, MessageTest
 
 from pylint_nautobot.job_run_unpacking import NautobotJobRunUnpackingChecker
+from pylint_nautobot.utils import is_version_compatible
 
 from .utils import (
     _INPUTS_PATH as INPUTS_PATH,
@@ -69,6 +71,7 @@ class TestJobRunUnpackingChecker(CheckerTestCase):
     def test_good(self, filename):
         assert_good_file(self, filename)
 
+    @pytest.mark.skipif(is_version_compatible("<2"), reason="Only applicable to Nautobot v2+")
     def test_args_and_kwargs(self):
         """A `run` method with both `*args` and `**kwargs` emits a message for each operator."""
         test_code = (INPUTS_PATH / _CHECKER_DIR / "both_args_and_kwargs.py").read_text(encoding="utf-8")
