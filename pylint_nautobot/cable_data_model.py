@@ -33,12 +33,14 @@ KEYWORD_LOOKUP_CALLABLES = (
     TRANSLATED_LOOKUP_METHODS | CABLE_TRANSLATED_LOOKUP_METHODS | CREATE_METHODS | UNTRANSLATED_LOOKUP_CALLABLES
 )
 
-# Queryset methods whose positional string arguments are field names or lookup paths.
+# Methods whose positional string arguments are field names or lookup paths. Mostly queryset methods, plus
+# `Options.get_field()`, which raises FieldDoesNotExist for anything that is now only a property.
 FIELD_NAME_ARGUMENT_METHODS = frozenset(
     {
         "dates",
         "datetimes",
         "defer",
+        "get_field",
         "only",
         "order_by",
         "prefetch_related",
@@ -363,11 +365,14 @@ class NautobotCableDataModelChecker(BaseChecker):
                         args=(path, translate_path_cable_to_cable_termination__cable(path)),
                     )
                 else:
-                    self.add_message(
-                        "nb-removed-cable-field",
-                        node=argument,
-                        args=(path, translate_path_cable_to_cable_termination__cable(path)),
+                    # `get_field()` resolves a single field rather than a lookup path, so the equivalent is the
+                    # `cable_termination` relation itself, not a path through it.
+                    replacement = (
+                        "cable_termination"
+                        if name == "get_field"
+                        else translate_path_cable_to_cable_termination__cable(path)
                     )
+                    self.add_message("nb-removed-cable-field", node=argument, args=(path, replacement))
             elif root in LEGACY_TERMINATION_ROOTS:
                 self.add_message("nb-removed-termination-a-b-field", node=argument, args=(path,))
             elif root == PATH_FIELD:

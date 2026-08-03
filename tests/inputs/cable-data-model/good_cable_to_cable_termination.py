@@ -16,3 +16,8 @@ def add_termination(cable, interface):
 
 def get_connectors(cable):
     return cable.terminations.values("cable_id", "connector")
+
+
+def get_cable_field():
+    """`cable` is a real field on the join model, so `get_field` still resolves it."""
+    return CableToCableTermination._meta.get_field("cable")

@@ -12,3 +12,7 @@ def get_cabled_interfaces(cable):
 
 def get_uncabled_interfaces():
     return Interface.objects.filter(cable_termination__isnull=True)
+
+
+def get_cable_termination_field():
+    return Interface._meta.get_field("cable_termination")

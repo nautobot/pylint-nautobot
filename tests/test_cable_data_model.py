@@ -34,6 +34,25 @@ _EXPECTED_ERRORS = {
         "args": ("cable", "cable_termination__cable"),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
+    "get_field_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 37,
+        "end_col_offset": 44,
+        # `get_field()` resolves one field, so the suggestion is the relation itself rather than a lookup path.
+        "args": ("cable", "cable_termination"),
+        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
+    },
+    "get_field_termination_a": {
+        "msg_id": "nb-removed-termination-a-b-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 33,
+        "end_col_offset": 48,
+        "args": ("termination_a",),
+        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
+    },
     "filter_cable": {
         "msg_id": "nb-deprecated-cable-lookup",
         "line": 5,
