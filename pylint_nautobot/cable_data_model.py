@@ -196,7 +196,9 @@ class NautobotCableDataModelChecker(BaseChecker):
             "nb-deprecated-cable-lookup",
             "The `cable` foreign key was removed from CableTermination subclasses in Nautobot 3.2. This lookup "
             "still works, but is rewritten onto the `cable_termination` relation by a compatibility shim that "
-            f"raises a DeprecationWarning. {_REFERENCE}",
+            "raises a DeprecationWarning. The replacement does not exist before Nautobot 3.2, so an App that "
+            "still supports earlier versions has no alternative spelling available and should disable this "
+            f"check explicitly until support for Nautobot < 3.2 is dropped. {_REFERENCE}",
         ),
         "E4303": (
             "Assigning a Cable to `%s` is not supported in Nautobot 3.2.",
@@ -221,7 +223,10 @@ class NautobotCableDataModelChecker(BaseChecker):
             "The `termination_a`/`termination_b` generic foreign keys are no longer database fields on Cable in "
             "Nautobot 3.2. This lookup still works, but is rewritten onto the `terminations` relation by a "
             "compatibility shim that raises a DeprecationWarning. Note that such lookups only ever match the "
-            f"first connector on each side of a Cable, so they cannot describe a breakout cable. {_REFERENCE}",
+            "first connector on each side of a Cable, so they cannot describe a breakout cable. The replacement "
+            "does not exist before Nautobot 3.2, so an App that still supports earlier versions has no "
+            "alternative spelling available and should disable this check explicitly until support for "
+            f"Nautobot < 3.2 is dropped. {_REFERENCE}",
         ),
         "W4306": (
             "Excluding on both Cable termination ends at once is not equivalent in Nautobot 3.2.",

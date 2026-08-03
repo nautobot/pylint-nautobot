@@ -1,5 +1,6 @@
 """Tests for the Nautobot 3.2 Cable data model checks."""
 
+from pylint.lint import PyLinter
 from pylint.testutils import CheckerTestCase
 
 from pylint_nautobot.cable_data_model import NautobotCableDataModelChecker
@@ -180,6 +181,19 @@ _EXPECTED_ERRORS = {
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
 }
+
+
+def test_all_messages_enabled_by_default():
+    """Every check is on by default.
+
+    Apps still supporting Nautobot < 3.2 cannot act on the two `nb-deprecated-*-lookup` checks, but they are
+    expected to disable those explicitly rather than have them silently absent, so that the suppression is a
+    record of intent that can be removed once support for Nautobot < 3.2 is dropped.
+    """
+    linter = PyLinter()
+    linter.register_checker(NautobotCableDataModelChecker(linter))
+    symbols = [msg_tuple[1] for msg_tuple in NautobotCableDataModelChecker.msgs.values()]
+    assert [symbol for symbol in symbols if not linter.is_message_enabled(symbol)] == []
 
 
 class TestNautobotCableDataModelChecker(CheckerTestCase):

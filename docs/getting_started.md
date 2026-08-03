@@ -80,6 +80,34 @@ All rules also have additional information that can be viewed with the `--help-m
   null checker.
 ```
 
+### Supporting more than one Nautobot version
+
+Rules are enabled based on the Nautobot version your project resolves to, so a rule can fire on code that is
+deliberately written to work across several Nautobot versions. This happens when a newer Nautobot release
+deprecates a pattern but the replacement does not exist in the older releases you still support — the deprecated
+spelling is then the only one available to you, and the rule has no better suggestion to offer.
+
+The Nautobot 3.2 Cable data model rules are the current example. `nb-deprecated-cable-lookup` and
+`nb-deprecated-termination-a-b-lookup` flag lookups that Nautobot 3.2 still honours but reports a
+`DeprecationWarning` for; their replacements (`cable_termination__...` and `terminations__...`) were introduced in
+3.2, so an App that also supports 3.1 cannot use them.
+
+These rules are still enabled by default. If they do not apply to your project yet, disable them explicitly and
+record why, so the suppression can be removed once you raise your minimum Nautobot version:
+
+```toml
+[tool.pylint.messages_control]
+disable = [
+    # Re-enable once we drop support for Nautobot < 3.2, then migrate the reported call sites.
+    "nb-deprecated-cable-lookup",
+    "nb-deprecated-termination-a-b-lookup",
+]
+```
+
+Note that this applies only to the `nb-deprecated-*` rules. The rules reporting code that fails outright on
+Nautobot 3.2 (`nb-removed-cable-field`, `nb-removed-termination-a-b-field`, `nb-readonly-cable-attribute`, and
+friends) are actionable on every supported version and should not be disabled.
+
 ## Authors and Maintainers
 
 - [Cristian Sirbu](https://github.com/cmsirbu)
