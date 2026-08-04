@@ -252,7 +252,7 @@ class NautobotCableDataModelChecker(BaseChecker):
 
     name = "nautobot-cable-data-model"
     msgs = {
-        "E4301": (
+        "E4231": (
             "Reference to `%s` is not translated by the Nautobot 3.2 compatibility shim; use `%s` instead.",
             "nb-removed-cable-field",
             "The `cable` foreign key was removed from CableTermination subclasses in Nautobot 3.2. Only "
@@ -260,7 +260,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             "compatibility shim; every other reference must be rewritten against the `cable_termination` "
             f"relation. {_REFERENCE}",
         ),
-        "W4302": (
+        "W4232": (
             "Querying by `%s` is deprecated in Nautobot 3.2; use `%s` instead.",
             "nb-deprecated-cable-lookup",
             "The `cable` foreign key was removed from CableTermination subclasses in Nautobot 3.2. This lookup "
@@ -269,7 +269,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             "still supports earlier versions has no alternative spelling available and should disable this "
             f"check explicitly until support for Nautobot < 3.2 is dropped. {_REFERENCE}",
         ),
-        "E4303": (
+        "E4233": (
             "Assigning a Cable to `%s` is not supported in Nautobot 3.2.",
             "nb-readonly-cable-attribute",
             "In Nautobot 3.2 a termination's `cable` attribute is a read-only property, and assigning anything "
@@ -277,7 +277,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             "`Cable.objects.create(termination_a=..., termination_b=...)`, `Cable.add_termination()`, or create a "
             f"`CableToCableTermination` record directly. {_REFERENCE}",
         ),
-        "E4304": (
+        "E4234": (
             "Reference to `%s` is not translated by the Nautobot 3.2 compatibility shim; "
             "use the `terminations` relation instead.",
             "nb-removed-termination-a-b-field",
@@ -286,7 +286,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             "compatibility shim; every other reference must be rewritten against the `terminations` "
             f"(CableToCableTermination) relation. {_REFERENCE}",
         ),
-        "W4305": (
+        "W4235": (
             "Querying Cable by `%s` is deprecated in Nautobot 3.2; use the `terminations` relation instead.",
             "nb-deprecated-termination-a-b-lookup",
             "The `termination_a`/`termination_b` generic foreign keys are no longer database fields on Cable in "
@@ -297,7 +297,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             "alternative spelling available and should disable this check explicitly until support for "
             f"Nautobot < 3.2 is dropped. {_REFERENCE}",
         ),
-        "W4306": (
+        "W4236": (
             "Excluding on both Cable termination ends at once is not equivalent in Nautobot 3.2.",
             "nb-termination-a-b-exclude-both-ends",
             "The Nautobot 3.2 compatibility shim applies each end of the exclusion independently "
@@ -305,14 +305,14 @@ class NautobotCableDataModelChecker(BaseChecker):
             "the A-side and B-side match different CableToCableTermination records. Use separate `exclude()` "
             f"calls or an explicit `terminations__...` Q object. {_REFERENCE}",
         ),
-        "E4307": (
+        "E4237": (
             "The `_path` field was replaced by the `cable_paths` relation in Nautobot 3.2; use `%s` instead.",
             "nb-removed-cable-path-field",
             "The private `_path` foreign key on PathEndpoint was replaced by a `cable_paths` GenericRelation in "
             "Nautobot 3.2. Because this is now a multi-row reverse relation (one CablePath per breakout lane), "
             f"`distinct()` is typically required on `filter()`/`count()`/`exclude()`. {_REFERENCE}",
         ),
-        "E4308": (
+        "E4238": (
             "The `%s` field was removed in Nautobot 3.2.",
             "nb-removed-cable-peer-field",
             "The private `_cable_peer`, `_cable_peer_type`, and `_cable_peer_id` cache fields were removed from "

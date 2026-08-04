@@ -10,7 +10,7 @@ from .utils import assert_error_file, assert_good_file, parametrize_error_files,
 # Grouped by the message they exercise, in the same order as `NautobotCableDataModelChecker.msgs`, then
 # alphabetically within each group, so that the coverage each rule has is visible at a glance.
 _EXPECTED_ERRORS = {
-    # E4301 nb-removed-cable-field
+    # E4231 nb-removed-cable-field
     "annotate_count_cable": {
         "msg_id": "nb-removed-cable-field",
         "line": 7,
@@ -122,7 +122,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable", "cable_termination__cable"),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
-    # W4302 nb-deprecated-cable-lookup
+    # W4232 nb-deprecated-cable-lookup
     "filter_cable": {
         "msg_id": "nb-deprecated-cable-lookup",
         "line": 5,
@@ -141,7 +141,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable__status", "cable_termination__cable__status"),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
-    # E4303 nb-readonly-cable-attribute
+    # E4233 nb-readonly-cable-attribute
     "cable_assignment": {
         "msg_id": "nb-readonly-cable-attribute",
         "line": 2,
@@ -160,7 +160,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
-    # E4304 nb-removed-termination-a-b-field
+    # E4234 nb-removed-termination-a-b-field
     "earliest_termination_a_id": {
         "msg_id": "nb-removed-termination-a-b-field",
         "line": 5,
@@ -206,7 +206,7 @@ _EXPECTED_ERRORS = {
         "args": ("termination_a_id",),
         "node": lambda module_node: module_node.body[2].body[0].value.args[0],
     },
-    # W4305 nb-deprecated-termination-a-b-lookup
+    # W4235 nb-deprecated-termination-a-b-lookup
     "filter_termination_a_id": {
         "msg_id": "nb-deprecated-termination-a-b-lookup",
         "line": 5,
@@ -235,7 +235,7 @@ _EXPECTED_ERRORS = {
         "args": ("termination_a_type, termination_a_id",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
-    # W4306 nb-termination-a-b-exclude-both-ends
+    # W4236 nb-termination-a-b-exclude-both-ends
     "exclude_both_terminations": {
         "msg_id": "nb-termination-a-b-exclude-both-ends",
         "line": 5,
@@ -244,7 +244,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 95,
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
-    # E4307 nb-removed-cable-path-field
+    # E4237 nb-removed-cable-path-field
     "path_lookup": {
         "msg_id": "nb-removed-cable-path-field",
         "line": 5,
@@ -254,7 +254,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable_paths__is_active",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
-    # E4308 nb-removed-cable-peer-field
+    # E4238 nb-removed-cable-peer-field
     "cable_peer_attribute": {
         "msg_id": "nb-removed-cable-peer-field",
         "line": 2,
