@@ -88,7 +88,7 @@ deprecates a pattern but the replacement does not exist in the older releases yo
 spelling is then the only one available to you, and the rule has no better suggestion to offer.
 
 The Nautobot 3.2 Cable data model rules are the current example. `nb-deprecated-cable-lookup` and
-`nb-deprecated-termination-a-b-lookup` flag lookups that Nautobot 3.2 still honours but reports a
+`nb-deprecated-termination-a-b-lookup` flag lookups that Nautobot 3.2 still honors but reports a
 `DeprecationWarning` for; their replacements (`cable_termination__...` and `terminations__...`) were introduced in
 3.2, so an App that also supports 3.1 cannot use them.
 
