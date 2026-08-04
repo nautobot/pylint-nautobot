@@ -253,7 +253,7 @@ class NautobotCableDataModelChecker(BaseChecker):
     name = "nautobot-cable-data-model"
     msgs = {
         "E4231": (
-            "Reference to `%s` is not translated by the Nautobot 3.2 compatibility shim; use `%s` instead.",
+            "`%s` no longer resolves to a field in Nautobot 3.2; use `%s` instead.",
             "nb-removed-cable-field",
             "The `cable` foreign key was removed from CableTermination subclasses in Nautobot 3.2. Only "
             "`filter()`/`exclude()`/`get()` keyword lookups and `select_related()` are rewritten by the "
@@ -278,8 +278,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             f"`CableToCableTermination` record directly. {_REFERENCE}",
         ),
         "E4234": (
-            "Reference to `%s` is not translated by the Nautobot 3.2 compatibility shim; "
-            "use the `terminations` relation instead.",
+            "`%s` no longer resolves to a field in Nautobot 3.2; use the `terminations` relation instead.",
             "nb-removed-termination-a-b-field",
             "The `termination_a`/`termination_b` generic foreign keys are no longer database fields on Cable in "
             "Nautobot 3.2. Only exact `termination_[ab]_[type|type_id|id]` keyword lookups are rewritten by the "
@@ -306,14 +305,14 @@ class NautobotCableDataModelChecker(BaseChecker):
             f"calls or an explicit `terminations__...` Q object. {_REFERENCE}",
         ),
         "E4237": (
-            "The `_path` field was replaced by the `cable_paths` relation in Nautobot 3.2; use `%s` instead.",
+            "`%s` no longer resolves to a field in Nautobot 3.2; use `%s` instead.",
             "nb-removed-cable-path-field",
             "The private `_path` foreign key on PathEndpoint was replaced by a `cable_paths` GenericRelation in "
             "Nautobot 3.2. Because this is now a multi-row reverse relation (one CablePath per breakout lane), "
             f"`distinct()` is typically required on `filter()`/`count()`/`exclude()`. {_REFERENCE}",
         ),
         "E4238": (
-            "The `%s` field was removed in Nautobot 3.2.",
+            "`%s` no longer resolves to a field in Nautobot 3.2; use `get_cable_peer()` instead.",
             "nb-removed-cable-peer-field",
             "The private `_cable_peer`, `_cable_peer_type`, and `_cable_peer_id` cache fields were removed from "
             "CableTermination in Nautobot 3.2 without a compatibility shim. Use `get_cable_peer()` (or "
@@ -383,7 +382,7 @@ class NautobotCableDataModelChecker(BaseChecker):
                     self.add_message("nb-removed-termination-a-b-field", node=node, args=(path,))
             elif root == PATH_FIELD:
                 self.add_message(
-                    "nb-removed-cable-path-field", node=node, args=(translate_path__path_to_cable_paths(path),)
+                    "nb-removed-cable-path-field", node=node, args=(path, translate_path__path_to_cable_paths(path))
                 )
             elif root in REMOVED_CABLE_PEER_FIELDS:
                 self.add_message("nb-removed-cable-peer-field", node=node, args=(root,))
@@ -463,7 +462,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             self.add_message("nb-removed-termination-a-b-field", node=argument, args=(path,))
         elif root == PATH_FIELD:
             self.add_message(
-                "nb-removed-cable-path-field", node=argument, args=(translate_path__path_to_cable_paths(path),)
+                "nb-removed-cable-path-field", node=argument, args=(path, translate_path__path_to_cable_paths(path))
             )
         elif root in REMOVED_CABLE_PEER_FIELDS:
             self.add_message("nb-removed-cable-peer-field", node=argument, args=(root,))

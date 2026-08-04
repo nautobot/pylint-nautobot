@@ -251,7 +251,7 @@ _EXPECTED_ERRORS = {
         "end_line": 5,
         "col_offset": 11,
         "end_col_offset": 58,
-        "args": ("cable_paths__is_active",),
+        "args": ("_path__is_active", "cable_paths__is_active"),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
     # E4238 nb-removed-cable-peer-field
