@@ -13,6 +13,7 @@ https://docs.nautobot.com/projects/core/en/stable/release-notes/version-3.2/#mig
 
 from astroid.nodes import Assign, AssignAttr, Attribute, Call, Const, List, Name, NodeNG, Set, Tuple
 from pylint.checkers import BaseChecker
+from pylint.checkers.utils import NoSuchArgumentError, get_argument_from_call, is_none
 
 # Django's async ORM variants delegate to their sync counterparts, so they reach the same shims and are
 # classified identically. Only the methods Django actually provides an `a`-prefixed form for are listed.
@@ -104,13 +105,22 @@ FIELD_NAME_EXPRESSIONS = frozenset(
     {"Avg", "Count", "F", "FilteredRelation", "Max", "Min", "OuterRef", "Prefetch", "Sum"}
 )
 
+# Everything `visit_call` knows how to inspect. Calls to anything else - the overwhelming majority in any
+# codebase - are discarded up front rather than walked.
+INSPECTED_CALLABLES = (
+    KEYWORD_LOOKUP_CALLABLES
+    | FIELD_NAME_ARGUMENT_METHODS
+    | FIELD_NAME_EXPRESSIONS
+    | frozenset(FIELD_NAME_LIST_ARGUMENTS)
+)
+
 # Roots of a lookup path that referenced the removed `CableTermination.cable` foreign key.
 CABLE_ROOTS = frozenset({"cable", "cable_id"})
 
 # Models and relation accessors on which `cable`/`cable_id` is a real field in Nautobot 3.2, rather than the
 # removed CableTermination foreign key. `CableToCableTermination` *is* the new join model, and the
 # `cable_termination` / `terminations` accessors reach it, so queries against those are already correct.
-CABLE_JOIN_RECEIVERS = frozenset({"CableToCableTermination", "cable_termination", "cable_terminations", "terminations"})
+CABLE_JOIN_RECEIVERS = frozenset({"CableToCableTermination", "cable_termination", "terminations"})
 
 # Roots of a lookup path that referenced the removed `Cable.termination_[ab]` generic foreign keys.
 LEGACY_TERMINATION_ROOTS = frozenset(
@@ -211,11 +221,6 @@ def called_name(node: Call) -> str:
     if isinstance(func, Name):
         return func.name
     return ""
-
-
-def is_none(node: NodeNG) -> bool:
-    """Return whether the given node is the literal `None`."""
-    return isinstance(node, Const) and node.value is None
 
 
 def targets_cable_join_model(node: Call) -> bool:
@@ -350,7 +355,7 @@ class NautobotCableDataModelChecker(BaseChecker):
     def visit_call(self, node: Call):
         """Check the keyword lookups and field-name arguments of a query call."""
         name = called_name(node)
-        if not name:
+        if name not in INSPECTED_CALLABLES:
             return
 
         joins_cable_terminations = targets_cable_join_model(node)
@@ -358,9 +363,9 @@ class NautobotCableDataModelChecker(BaseChecker):
         self._check_field_name_arguments(node, name, joins_cable_terminations)
         self._check_field_name_list_arguments(node, name, joins_cable_terminations)
 
-    def _check_keyword_lookups(self, node: Call, name: str, joins_cable_terminations: bool):  # noqa:PLR0912 pylint: disable=too-many-branches
+    def _check_keyword_lookups(self, node: Call, name: str, joins_cable_terminations: bool):
         """Check `field__lookup=value` style keyword arguments of a query call."""
-        if name not in KEYWORD_LOOKUP_CALLABLES:
+        if name not in KEYWORD_LOOKUP_CALLABLES or not node.keywords:
             return
 
         # Legacy `Cable.termination_[ab]*` lookups are reported once per cable end rather than once per keyword,
@@ -380,12 +385,8 @@ class NautobotCableDataModelChecker(BaseChecker):
                     translated_by_end[root.split("_")[1]].append(path)
                 elif name not in PURE_CREATE_METHODS:
                     self.add_message("nb-removed-termination-a-b-field", node=node, args=(path,))
-            elif root == PATH_FIELD:
-                self.add_message(
-                    "nb-removed-cable-path-field", node=node, args=(path, translate_path__path_to_cable_paths(path))
-                )
-            elif root in REMOVED_CABLE_PEER_FIELDS:
-                self.add_message("nb-removed-cable-peer-field", node=node, args=(root,))
+            else:
+                self._check_removed_private_field(node, path, root)
 
         if name == "exclude" and all(translated_by_end.values()):
             # Each end is excluded independently, which does not negate the combined condition.
@@ -431,9 +432,10 @@ class NautobotCableDataModelChecker(BaseChecker):
             return
 
         keyword_name, position = spec
-        collection = next((keyword.value for keyword in node.keywords if keyword.arg == keyword_name), None)
-        if collection is None and position is not None and len(node.args) > position:
-            collection = node.args[position]
+        try:
+            collection = get_argument_from_call(node, position=position, keyword=keyword_name)
+        except NoSuchArgumentError:
+            return
         if not isinstance(collection, (List, Set, Tuple)):
             return
 
@@ -460,9 +462,14 @@ class NautobotCableDataModelChecker(BaseChecker):
                 self.add_message("nb-removed-cable-field", node=argument, args=(path, cable_replacement(name, path)))
         elif root in LEGACY_TERMINATION_ROOTS:
             self.add_message("nb-removed-termination-a-b-field", node=argument, args=(path,))
-        elif root == PATH_FIELD:
+        else:
+            self._check_removed_private_field(argument, path, root)
+
+    def _check_removed_private_field(self, node: NodeNG, path: str, root: str):
+        """Report the private `_path` and `_cable_peer*` fields, which no shim covers in any syntactic position."""
+        if root == PATH_FIELD:
             self.add_message(
-                "nb-removed-cable-path-field", node=argument, args=(path, translate_path__path_to_cable_paths(path))
+                "nb-removed-cable-path-field", node=node, args=(path, translate_path__path_to_cable_paths(path))
             )
         elif root in REMOVED_CABLE_PEER_FIELDS:
-            self.add_message("nb-removed-cable-peer-field", node=argument, args=(root,))
+            self.add_message("nb-removed-cable-peer-field", node=node, args=(root,))
