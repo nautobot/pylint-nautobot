@@ -11,9 +11,12 @@ Reference:
 https://docs.nautobot.com/projects/core/en/stable/release-notes/version-3.2/#migrate-cable-termination-queries
 """
 
-from astroid.nodes import Assign, AssignAttr, Attribute, Call, Const, List, Name, NodeNG, Set, Tuple
+from astroid import Uninferable
+from astroid.nodes import Assign, AssignAttr, Attribute, Call, ClassDef, Const, List, Name, NodeNG, Set, Tuple
 from pylint.checkers import BaseChecker
-from pylint.checkers.utils import NoSuchArgumentError, get_argument_from_call, is_none
+from pylint.checkers.utils import NoSuchArgumentError, get_argument_from_call, is_none, safe_infer
+
+from .utils import find_ancestor
 
 # Django's async ORM variants delegate to their sync counterparts, so they reach the same shims and are
 # classified identically. Only the methods Django actually provides an `a`-prefixed form for are listed.
@@ -145,6 +148,10 @@ REMOVED_CABLE_PEER_FIELDS = frozenset({"_cable_peer", "_cable_peer_id", "_cable_
 # The private `PathEndpoint._path` foreign key, replaced by the `cable_paths` generic relation.
 PATH_FIELD = "_path"
 
+# Resolved against inferred receivers and values to tell a real termination from an unrelated `cable` attribute.
+CABLE_TERMINATION_QNAME = "nautobot.dcim.models.device_components.CableTermination"
+CABLE_QNAME = "nautobot.dcim.models.cables.Cable"
+
 _REFERENCE = (
     "Reference: https://docs.nautobot.com/projects/core/en/stable/release-notes/version-3.2/"
     "#migrate-cable-termination-queries"
@@ -230,8 +237,12 @@ def targets_cable_join_model(node: Call) -> bool:
     `CableToCableTermination.objects.filter(cable=cable)` or `cable.terminations.values("cable_id")`) are the
     already-migrated form (and therefore shouldn't be flagged) rather than a use of the removed CableTermination FK.
     """
+    return bool(receiver_names(node.func) & CABLE_JOIN_RECEIVERS)
+
+
+def receiver_names(expression: NodeNG) -> set:
+    """Return every name in an attribute/call chain, e.g. `{"Interface", "objects", "filter"}`."""
     names = set()
-    expression = node.func
     while True:
         if isinstance(expression, Attribute):
             names.add(expression.attrname)
@@ -242,8 +253,40 @@ def targets_cable_join_model(node: Call) -> bool:
         else:
             if isinstance(expression, Name):
                 names.add(expression.name)
-            break
-    return bool(names & CABLE_JOIN_RECEIVERS)
+            return names
+
+
+def infers_to(node: NodeNG, qname: str) -> bool | None:
+    """Whether `node` infers to an instance of `qname` or a subclass, or None when inference is inconclusive.
+
+    Inference only resolves a minority of real receivers - a directly constructed instance resolves, while a bare
+    function parameter or a queryset result does not - so callers must handle None rather than treat it as False.
+    """
+    inferred = safe_infer(node)
+    if inferred is None or inferred is Uninferable:
+        return None
+    # An instance carries its class on `_proxied`; a class object (`cls`, or a direct class reference) is already
+    # the ClassDef, and would otherwise be misread as inconclusive.
+    inferred_class = inferred if isinstance(inferred, ClassDef) else getattr(inferred, "_proxied", None)
+    if not isinstance(inferred_class, ClassDef):
+        return None
+    return inferred_class.qname() == qname or find_ancestor(inferred_class, [qname]) is not None
+
+
+def assign_pairs(node: Assign):
+    """Yield each `(target, assigned value)` pair, pairing elementwise through tuple or list unpacking.
+
+    The value is None when it cannot be matched to its target, e.g. unpacking the result of a call, which is
+    distinct from the value being the literal `None`.
+    """
+    value = node.value
+    for target in node.targets:
+        if not isinstance(target, (List, Tuple)):
+            yield target, value
+            continue
+        unpacked = value.elts if isinstance(value, (List, Tuple)) and len(value.elts) == len(target.elts) else None
+        for index, element in enumerate(target.elts):
+            yield element, (unpacked[index] if unpacked else None)
 
 
 class NautobotCableDataModelChecker(BaseChecker):
@@ -280,7 +323,9 @@ class NautobotCableDataModelChecker(BaseChecker):
             "In Nautobot 3.2 a termination's `cable` attribute is a read-only property, and assigning anything "
             "other than `None` to it raises NotImplementedError. Use "
             "`Cable.objects.create(termination_a=..., termination_b=...)`, `Cable.add_termination()`, or create a "
-            f"`CableToCableTermination` record directly. {_REFERENCE}",
+            "`CableToCableTermination` record directly. Reported when the target is known to be a "
+            f"CableTermination; see `nb-possible-readonly-cable-attribute` when it cannot be determined. "
+            f"{_REFERENCE}",
         ),
         "E4234": (
             "`%s` no longer resolves to a field in Nautobot 3.2; use the `terminations` relation instead.",
@@ -323,21 +368,38 @@ class NautobotCableDataModelChecker(BaseChecker):
             "CableTermination in Nautobot 3.2 without a compatibility shim. Use `get_cable_peer()` (or "
             f"`get_cable_peers()` for breakout cables) instead. {_REFERENCE}",
         ),
+        "W4239": (
+            "Assigning a Cable to `%s` is not supported in Nautobot 3.2, if it is a CableTermination.",
+            "nb-possible-readonly-cable-attribute",
+            "A termination's `cable` attribute is a read-only property in Nautobot 3.2, and assigning anything "
+            "other than `None` to it raises NotImplementedError. The type of the assignment target could not be "
+            "determined here, so this may instead be an unrelated attribute that happens to be named `cable`; "
+            "disable this check where that is the case. See `nb-readonly-cable-attribute` for the cases that "
+            f"could be confirmed. {_REFERENCE}",
+        ),
     }
 
     def visit_assign(self, node: Assign):
         """Check for assignment to a termination's now read-only `cable` property."""
-        if is_none(node.value):
-            # `termination.cable = None` is still supported and disconnects the termination on save().
-            return
-
-        for target in node.targets:
+        for target, value in assign_pairs(node):
             if not isinstance(target, AssignAttr) or target.attrname != "cable":
                 continue
-            if isinstance(target.expr, Name) and target.expr.name in ("cls", "self"):
-                # Too likely to be an unrelated attribute of the enclosing class to be worth flagging.
+            if value is not None and is_none(value):
+                # `termination.cable = None` is still supported and disconnects the termination on save().
                 continue
-            self.add_message("nb-readonly-cable-attribute", node=node, args=(target.as_string(),))
+            if receiver_names(target.expr) & CABLE_JOIN_RECEIVERS:
+                # `CableToCableTermination.cable` is a real, writable foreign key.
+                continue
+
+            receiver_is_termination = infers_to(target.expr, CABLE_TERMINATION_QNAME)
+            if receiver_is_termination is False:
+                continue
+            if receiver_is_termination:
+                self.add_message("nb-readonly-cable-attribute", node=node, args=(target.as_string(),))
+            elif value is None or infers_to(value, CABLE_QNAME) is not False:
+                # The receiver is unknown. Assigning something that is provably not a Cable is near-certainly an
+                # unrelated attribute, so only the remaining, genuinely ambiguous cases are reported.
+                self.add_message("nb-possible-readonly-cable-attribute", node=node, args=(target.as_string(),))
 
     def visit_attribute(self, node: Attribute):
         """Check for access to the removed private cable peer cache fields."""

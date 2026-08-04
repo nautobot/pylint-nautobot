@@ -21,3 +21,11 @@ def get_connectors(cable):
 def get_cable_field():
     """`cable` is a real field on the join model, so `get_field` still resolves it."""
     return CableToCableTermination._meta.get_field("cable")
+
+
+def reassign(cable, interface):
+    """`cable` is also writable on the join model, whether reached by construction or through a relation."""
+    row = CableToCableTermination()
+    row.cable = cable
+    interface.cable_termination.cable = cable
+    return row

@@ -8,14 +8,18 @@ from pylint_nautobot.cable_data_model import NautobotCableDataModelChecker
 from .utils import assert_error_file, assert_good_file, parametrize_error_files, parametrize_good_files
 
 
-def _statement(module_node):
-    """The offending statement, found by locating the fixture's function rather than by index.
+def _function(module_node):
+    """The fixture's function, found by type rather than by index.
 
-    Every `error_*.py` fixture holds a single function wrapping a single statement, but the number of imports
-    preceding it varies, so indexing into `module_node.body` directly would break whenever one is added.
+    The number of imports preceding it varies between fixtures, so indexing into `module_node.body` directly
+    would break whenever one is added.
     """
-    function = next(node for node in module_node.body if isinstance(node, FunctionDef))
-    return function.body[0]
+    return next(node for node in module_node.body if isinstance(node, FunctionDef))
+
+
+def _statement(module_node):
+    """The offending statement, which in most fixtures is the only one in the function."""
+    return _function(module_node).body[0]
 
 
 def _call(module_node):
@@ -168,14 +172,15 @@ _EXPECTED_ERRORS = {
         "node": _call_arg,
     },
     # E4233 nb-readonly-cable-attribute
-    "cable_assignment": {
+    "inferred_cable_assignment": {
         "msg_id": "nb-readonly-cable-attribute",
-        "line": 2,
-        "end_line": 2,
+        "line": 7,
+        "end_line": 7,
         "col_offset": 4,
         "end_col_offset": 27,
+        # The target infers to `Interface`, so the failure is confirmed rather than suspected.
         "args": ("interface.cable",),
-        "node": _statement,
+        "node": lambda module_node: _function(module_node).body[1],
     },
     "create_cable": {
         "msg_id": "nb-readonly-cable-attribute",
@@ -298,6 +303,17 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 66,
         "args": ("_cable_peer_type",),
         "node": _call,
+    },
+    # W4239 nb-possible-readonly-cable-attribute
+    "possible_cable_assignment": {
+        "msg_id": "nb-possible-readonly-cable-attribute",
+        "line": 2,
+        "end_line": 2,
+        "col_offset": 4,
+        "end_col_offset": 27,
+        # A bare parameter cannot be inferred, so the failure is suspected rather than confirmed.
+        "args": ("interface.cable",),
+        "node": _statement,
     },
 }
 
