@@ -35,6 +35,26 @@ _EXPECTED_ERRORS = {
         "args": ("cable", "cable_termination__cable"),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
+    "annotate_count_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 7,
+        "end_line": 7,
+        "col_offset": 48,
+        "end_col_offset": 55,
+        # The `annotate()` keyword is an output alias; only the value is a field reference.
+        "args": ("cable", "cable_termination__cable"),
+        "node": lambda module_node: module_node.body[2].body[0].value.keywords[0].value.args[0],
+    },
+    "update_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 11,
+        "end_col_offset": 69,
+        # `update()` resolves against real fields, so even `cable=None` fails here.
+        "args": ("cable", "cable_termination"),
+        "node": lambda module_node: module_node.body[1].body[0].value,
+    },
     "get_field_cable": {
         "msg_id": "nb-removed-cable-field",
         "line": 6,

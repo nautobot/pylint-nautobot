@@ -25,12 +25,17 @@ CABLE_TRANSLATED_LOOKUP_METHODS = TRANSLATED_LOOKUP_METHODS | {"get_or_create", 
 # Methods that assign to the named fields rather than (only) querying them.
 CREATE_METHODS = frozenset({"create", "get_or_create", "update_or_create"})
 
-# Callables whose keyword arguments are field lookups that the 3.2 shims do *not* rewrite.
-UNTRANSLATED_LOOKUP_CALLABLES = frozenset({"Q", "aggregate", "alias", "annotate"})
+# Keywords here name fields directly, with no shim: `Q()` bypasses the queryset, and `update()` resolves against
+# real fields (so even `update(cable=None)` fails, unlike `create(cable=None)`). `annotate()`/`aggregate()`/
+# `alias()` are excluded on purpose - their keywords are caller-invented output aliases, not field paths.
+DIRECT_FIELD_KWARG_CALLABLES = frozenset({"Q", "update"})
+
+# Callables naming a single field rather than a lookup path, so the suggested replacement is the relation itself.
+SINGLE_FIELD_CALLABLES = frozenset({"get_field", "update"})
 
 # All callables whose keyword arguments should be inspected as field lookups.
 KEYWORD_LOOKUP_CALLABLES = (
-    TRANSLATED_LOOKUP_METHODS | CABLE_TRANSLATED_LOOKUP_METHODS | CREATE_METHODS | UNTRANSLATED_LOOKUP_CALLABLES
+    TRANSLATED_LOOKUP_METHODS | CABLE_TRANSLATED_LOOKUP_METHODS | CREATE_METHODS | DIRECT_FIELD_KWARG_CALLABLES
 )
 
 # Methods whose positional string arguments are field names or lookup paths. Mostly queryset methods, plus
@@ -128,6 +133,23 @@ def translate_path__path_to_cable_paths(path: str) -> str:
     """
     prefix, _, rest = split_lookup_path(path)
     return f"{prefix}cable_paths{rest}"
+
+
+def cable_replacement(name: str, path: str) -> str:
+    """Suggest the replacement for a `cable`-rooted reference made by the callable `name`.
+
+    `get_field()` and `update()` name a single field, so the equivalent is the relation itself; everywhere else a
+    lookup path is expected.
+
+    Examples:
+    >>> cable_replacement("get_field", "cable")
+    'cable_termination'
+    >>> cable_replacement("order_by", "-cable__status")
+    '-cable_termination__cable__status'
+    """
+    if name in SINGLE_FIELD_CALLABLES:
+        return "cable_termination"
+    return translate_path_cable_to_cable_termination__cable(path)
 
 
 def called_name(node: Call) -> str:
@@ -346,9 +368,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             self.add_message("nb-deprecated-cable-lookup", node=node, args=(path, replacement))
 
         else:
-            self.add_message(
-                "nb-removed-cable-field", node=node, args=(path, translate_path_cable_to_cable_termination__cable(path))
-            )
+            self.add_message("nb-removed-cable-field", node=node, args=(path, cable_replacement(name, path)))
 
     def _check_field_name_arguments(self, node: Call, name: str, joins_cable_terminations: bool):
         """Check positional string arguments that Django interprets as field names or lookup paths."""
@@ -370,14 +390,9 @@ class NautobotCableDataModelChecker(BaseChecker):
                         args=(path, translate_path_cable_to_cable_termination__cable(path)),
                     )
                 else:
-                    # `get_field()` resolves a single field rather than a lookup path, so the equivalent is the
-                    # `cable_termination` relation itself, not a path through it.
-                    replacement = (
-                        "cable_termination"
-                        if name == "get_field"
-                        else translate_path_cable_to_cable_termination__cable(path)
+                    self.add_message(
+                        "nb-removed-cable-field", node=argument, args=(path, cable_replacement(name, path))
                     )
-                    self.add_message("nb-removed-cable-field", node=argument, args=(path, replacement))
             elif root in LEGACY_TERMINATION_ROOTS:
                 self.add_message("nb-removed-termination-a-b-field", node=argument, args=(path,))
             elif root == PATH_FIELD:
