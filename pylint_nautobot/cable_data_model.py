@@ -16,22 +16,36 @@ from typing import Tuple
 from astroid.nodes import Assign, AssignAttr, Attribute, Call, Const, Name, NodeNG
 from pylint.checkers import BaseChecker
 
+# Django's async ORM variants delegate to their sync counterparts, so they reach the same shims and are
+# classified identically. Only the methods Django actually provides an `a`-prefixed form for are listed.
+
 # Queryset methods whose keyword arguments are field lookups that the 3.2 shims rewrite.
-TRANSLATED_LOOKUP_METHODS = frozenset({"exclude", "filter", "get"})
+TRANSLATED_LOOKUP_METHODS = frozenset({"aget", "exclude", "filter", "get"})
 
 # `Cable.objects` also routes the lookup half of these through `filter()`/`get()`.
-CABLE_TRANSLATED_LOOKUP_METHODS = TRANSLATED_LOOKUP_METHODS | {"get_or_create", "update_or_create"}
+CABLE_TRANSLATED_LOOKUP_METHODS = TRANSLATED_LOOKUP_METHODS | {
+    "aget_or_create",
+    "aupdate_or_create",
+    "get_or_create",
+    "update_or_create",
+}
 
 # Methods that assign to the named fields rather than (only) querying them.
-CREATE_METHODS = frozenset({"create", "get_or_create", "update_or_create"})
+CREATE_METHODS = frozenset(
+    {"acreate", "aget_or_create", "aupdate_or_create", "create", "get_or_create", "update_or_create"}
+)
+
+# `Cable.objects.create(termination_a=..., termination_b=...)` is the documented replacement pattern, so unlike
+# the `*_or_create` methods it has no lookup half to deprecate.
+PURE_CREATE_METHODS = frozenset({"acreate", "create"})
 
 # Keywords here name fields directly, with no shim: `Q()` bypasses the queryset, and `update()` resolves against
 # real fields (so even `update(cable=None)` fails, unlike `create(cable=None)`). `annotate()`/`aggregate()`/
 # `alias()` are excluded on purpose - their keywords are caller-invented output aliases, not field paths.
-DIRECT_FIELD_KWARG_CALLABLES = frozenset({"Q", "update"})
+DIRECT_FIELD_KWARG_CALLABLES = frozenset({"Q", "aupdate", "update"})
 
 # Callables naming a single field rather than a lookup path, so the suggested replacement is the relation itself.
-SINGLE_FIELD_CALLABLES = frozenset({"get_field", "update"})
+SINGLE_FIELD_CALLABLES = frozenset({"aupdate", "get_field", "update"})
 
 # All callables whose keyword arguments should be inspected as field lookups.
 KEYWORD_LOOKUP_CALLABLES = (
@@ -42,10 +56,15 @@ KEYWORD_LOOKUP_CALLABLES = (
 # `Options.get_field()`, which raises FieldDoesNotExist for anything that is now only a property.
 FIELD_NAME_ARGUMENT_METHODS = frozenset(
     {
+        "aearliest",
+        "alatest",
         "dates",
         "datetimes",
         "defer",
+        "distinct",
+        "earliest",
         "get_field",
+        "latest",
         "only",
         "order_by",
         "prefetch_related",
@@ -56,7 +75,9 @@ FIELD_NAME_ARGUMENT_METHODS = frozenset(
 )
 
 # Query expressions whose positional string arguments are field names or lookup paths.
-FIELD_NAME_EXPRESSIONS = frozenset({"Avg", "Count", "F", "Max", "Min", "OuterRef", "Prefetch", "Sum"})
+FIELD_NAME_EXPRESSIONS = frozenset(
+    {"Avg", "Count", "F", "FilteredRelation", "Max", "Min", "OuterRef", "Prefetch", "Sum"}
+)
 
 # Roots of a lookup path that referenced the removed `CableTermination.cable` foreign key.
 CABLE_ROOTS = frozenset({"cable", "cable_id"})
@@ -331,8 +352,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             elif root in LEGACY_TERMINATION_ROOTS:
                 if not rest and root in TRANSLATED_TERMINATION_LOOKUPS and name in CABLE_TRANSLATED_LOOKUP_METHODS:
                     translated_by_end[root.split("_")[1]].append(path)
-                elif name != "create":
-                    # `Cable.objects.create(termination_a=..., termination_b=...)` is the documented replacement.
+                elif name not in PURE_CREATE_METHODS:
                     self.add_message("nb-removed-termination-a-b-field", node=node, args=(path,))
             elif root == PATH_FIELD:
                 self.add_message(

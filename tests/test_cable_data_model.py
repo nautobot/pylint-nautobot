@@ -7,15 +7,54 @@ from pylint_nautobot.cable_data_model import NautobotCableDataModelChecker
 
 from .utils import assert_error_file, assert_good_file, parametrize_error_files, parametrize_good_files
 
+# Grouped by the message they exercise, in the same order as `NautobotCableDataModelChecker.msgs`, then
+# alphabetically within each group, so that the coverage each rule has is visible at a glance.
 _EXPECTED_ERRORS = {
-    "q_cable": {
+    # E4301 nb-removed-cable-field
+    "annotate_count_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 7,
+        "end_line": 7,
+        "col_offset": 48,
+        "end_col_offset": 55,
+        "args": ("cable", "cable_termination__cable"),
+        "node": lambda module_node: module_node.body[2].body[0].value.keywords[0].value.args[0],
+    },
+    "distinct_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 75,
+        "end_col_offset": 82,
+        "args": ("cable", "cable_termination__cable"),
+        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
+    },
+    "filtered_relation_cable": {
         "msg_id": "nb-removed-cable-field",
         "line": 6,
         "end_line": 6,
-        "col_offset": 36,
-        "end_col_offset": 50,
+        "col_offset": 65,
+        "end_col_offset": 72,
         "args": ("cable", "cable_termination__cable"),
-        "node": lambda module_node: module_node.body[2].body[0].value.args[0],
+        "node": lambda module_node: module_node.body[2].body[0].value.keywords[0].value.args[0],
+    },
+    "get_field_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 37,
+        "end_col_offset": 44,
+        "args": ("cable", "cable_termination"),
+        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
+    },
+    "latest_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 36,
+        "end_col_offset": 43,
+        "args": ("cable", "cable_termination__cable"),
+        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
     "order_by_cable": {
         "msg_id": "nb-removed-cable-field",
@@ -26,6 +65,24 @@ _EXPECTED_ERRORS = {
         "args": ("-cable", "-cable_termination__cable"),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
+    "q_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 36,
+        "end_col_offset": 50,
+        "args": ("cable", "cable_termination__cable"),
+        "node": lambda module_node: module_node.body[2].body[0].value.args[0],
+    },
+    "update_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 11,
+        "end_col_offset": 69,
+        "args": ("cable", "cable_termination"),
+        "node": lambda module_node: module_node.body[1].body[0].value,
+    },
     "values_list_cable": {
         "msg_id": "nb-removed-cable-field",
         "line": 5,
@@ -35,45 +92,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable", "cable_termination__cable"),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
-    "annotate_count_cable": {
-        "msg_id": "nb-removed-cable-field",
-        "line": 7,
-        "end_line": 7,
-        "col_offset": 48,
-        "end_col_offset": 55,
-        # The `annotate()` keyword is an output alias; only the value is a field reference.
-        "args": ("cable", "cable_termination__cable"),
-        "node": lambda module_node: module_node.body[2].body[0].value.keywords[0].value.args[0],
-    },
-    "update_cable": {
-        "msg_id": "nb-removed-cable-field",
-        "line": 6,
-        "end_line": 6,
-        "col_offset": 11,
-        "end_col_offset": 69,
-        # `update()` resolves against real fields, so even `cable=None` fails here.
-        "args": ("cable", "cable_termination"),
-        "node": lambda module_node: module_node.body[1].body[0].value,
-    },
-    "get_field_cable": {
-        "msg_id": "nb-removed-cable-field",
-        "line": 6,
-        "end_line": 6,
-        "col_offset": 37,
-        "end_col_offset": 44,
-        # `get_field()` resolves one field, so the suggestion is the relation itself rather than a lookup path.
-        "args": ("cable", "cable_termination"),
-        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
-    },
-    "get_field_termination_a": {
-        "msg_id": "nb-removed-termination-a-b-field",
-        "line": 6,
-        "end_line": 6,
-        "col_offset": 33,
-        "end_col_offset": 48,
-        "args": ("termination_a",),
-        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
-    },
+    # W4302 nb-deprecated-cable-lookup
     "filter_cable": {
         "msg_id": "nb-deprecated-cable-lookup",
         "line": 5,
@@ -92,6 +111,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable__status", "cable_termination__cable__status"),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
+    # E4303 nb-readonly-cable-attribute
     "cable_assignment": {
         "msg_id": "nb-readonly-cable-attribute",
         "line": 2,
@@ -110,14 +130,15 @@ _EXPECTED_ERRORS = {
         "args": ("cable",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
-    "q_termination_a_id": {
+    # E4304 nb-removed-termination-a-b-field
+    "earliest_termination_a_id": {
         "msg_id": "nb-removed-termination-a-b-field",
-        "line": 6,
-        "end_line": 6,
-        "col_offset": 32,
-        "end_col_offset": 64,
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 34,
+        "end_col_offset": 52,
         "args": ("termination_a_id",),
-        "node": lambda module_node: module_node.body[2].body[0].value.args[0],
+        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
     "filter_termination_id_in": {
         "msg_id": "nb-removed-termination-a-b-field",
@@ -128,6 +149,15 @@ _EXPECTED_ERRORS = {
         "args": ("termination_a_id__in",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
+    "get_field_termination_a": {
+        "msg_id": "nb-removed-termination-a-b-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 33,
+        "end_col_offset": 48,
+        "args": ("termination_a",),
+        "node": lambda module_node: module_node.body[1].body[0].value.args[0],
+    },
     "order_by_termination_a_type": {
         "msg_id": "nb-removed-termination-a-b-field",
         "line": 5,
@@ -137,12 +167,31 @@ _EXPECTED_ERRORS = {
         "args": ("termination_a_type",),
         "node": lambda module_node: module_node.body[1].body[0].value.args[0],
     },
+    "q_termination_a_id": {
+        "msg_id": "nb-removed-termination-a-b-field",
+        "line": 6,
+        "end_line": 6,
+        "col_offset": 32,
+        "end_col_offset": 64,
+        "args": ("termination_a_id",),
+        "node": lambda module_node: module_node.body[2].body[0].value.args[0],
+    },
+    # W4305 nb-deprecated-termination-a-b-lookup
     "filter_termination_a_id": {
         "msg_id": "nb-deprecated-termination-a-b-lookup",
         "line": 5,
         "end_line": 5,
         "col_offset": 11,
         "end_col_offset": 62,
+        "args": ("termination_a_id",),
+        "node": lambda module_node: module_node.body[1].body[0].value,
+    },
+    "get_or_create_termination": {
+        "msg_id": "nb-deprecated-termination-a-b-lookup",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 11,
+        "end_col_offset": 98,
         "args": ("termination_a_id",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
@@ -156,15 +205,7 @@ _EXPECTED_ERRORS = {
         "args": ("termination_a_type, termination_a_id",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
-    "get_or_create_termination": {
-        "msg_id": "nb-deprecated-termination-a-b-lookup",
-        "line": 5,
-        "end_line": 5,
-        "col_offset": 11,
-        "end_col_offset": 98,
-        "args": ("termination_a_id",),
-        "node": lambda module_node: module_node.body[1].body[0].value,
-    },
+    # W4306 nb-termination-a-b-exclude-both-ends
     "exclude_both_terminations": {
         "msg_id": "nb-termination-a-b-exclude-both-ends",
         "line": 5,
@@ -173,6 +214,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 95,
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
+    # E4307 nb-removed-cable-path-field
     "path_lookup": {
         "msg_id": "nb-removed-cable-path-field",
         "line": 5,
@@ -182,6 +224,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable_paths__is_active",),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
+    # E4308 nb-removed-cable-peer-field
     "cable_peer_attribute": {
         "msg_id": "nb-removed-cable-peer-field",
         "line": 2,
@@ -214,6 +257,13 @@ def test_all_messages_enabled_by_default():
     linter.register_checker(NautobotCableDataModelChecker(linter))
     symbols = [msg_tuple[1] for msg_tuple in NautobotCableDataModelChecker.msgs.values()]
     assert [symbol for symbol in symbols if not linter.is_message_enabled(symbol)] == []
+
+
+def test_every_message_has_an_error_fixture():
+    """Each message should be exercised by at least one `error_*.py` fixture."""
+    covered = {expected["msg_id"] for expected in _EXPECTED_ERRORS.values()}
+    symbols = {msg_tuple[1] for msg_tuple in NautobotCableDataModelChecker.msgs.values()}
+    assert symbols - covered == set()
 
 
 class TestNautobotCableDataModelChecker(CheckerTestCase):
