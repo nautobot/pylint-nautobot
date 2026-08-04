@@ -20,6 +20,16 @@ _EXPECTED_ERRORS = {
         "args": ("cable", "cable_termination__cable"),
         "node": lambda module_node: module_node.body[2].body[0].value.keywords[0].value.args[0],
     },
+    "bulk_update_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 54,
+        "end_col_offset": 61,
+        # A field-name list, and `cable_termination` is a reverse relation rather than a concrete field.
+        "args": ("cable", "CableToCableTermination"),
+        "node": lambda module_node: module_node.body[1].body[0].value.args[1].elts[0],
+    },
     "distinct_cable": {
         "msg_id": "nb-removed-cable-field",
         "line": 5,
@@ -74,13 +84,33 @@ _EXPECTED_ERRORS = {
         "args": ("cable", "cable_termination__cable"),
         "node": lambda module_node: module_node.body[2].body[0].value.args[0],
     },
+    "refresh_from_db_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 2,
+        "end_line": 2,
+        "col_offset": 38,
+        "end_col_offset": 45,
+        "args": ("cable", "CableToCableTermination"),
+        "node": lambda module_node: module_node.body[0].body[0].value.keywords[0].value.elts[0],
+    },
+    "save_update_fields_cable": {
+        "msg_id": "nb-removed-cable-field",
+        "line": 2,
+        "end_line": 2,
+        "col_offset": 42,
+        "end_col_offset": 49,
+        # Only the offending element of the list is reported, not the whole call.
+        "args": ("cable", "CableToCableTermination"),
+        "node": lambda module_node: module_node.body[0].body[0].value.keywords[0].value.elts[1],
+    },
     "update_cable": {
         "msg_id": "nb-removed-cable-field",
         "line": 6,
         "end_line": 6,
         "col_offset": 11,
         "end_col_offset": 69,
-        "args": ("cable", "cable_termination"),
+        # `update()` resolves against real fields, so even `cable=None` fails here.
+        "args": ("cable", "CableToCableTermination"),
         "node": lambda module_node: module_node.body[1].body[0].value,
     },
     "values_list_cable": {

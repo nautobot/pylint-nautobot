@@ -11,9 +11,7 @@ Reference:
 https://docs.nautobot.com/projects/core/en/stable/release-notes/version-3.2/#migrate-cable-termination-queries
 """
 
-from typing import Tuple
-
-from astroid.nodes import Assign, AssignAttr, Attribute, Call, Const, Name, NodeNG
+from astroid.nodes import Assign, AssignAttr, Attribute, Call, Const, List, Name, NodeNG, Set, Tuple
 from pylint.checkers import BaseChecker
 
 # Django's async ORM variants delegate to their sync counterparts, so they reach the same shims and are
@@ -44,8 +42,35 @@ PURE_CREATE_METHODS = frozenset({"acreate", "create"})
 # `alias()` are excluded on purpose - their keywords are caller-invented output aliases, not field paths.
 DIRECT_FIELD_KWARG_CALLABLES = frozenset({"Q", "aupdate", "update"})
 
-# Callables naming a single field rather than a lookup path, so the suggested replacement is the relation itself.
-SINGLE_FIELD_CALLABLES = frozenset({"aupdate", "get_field", "update"})
+# Callables naming a single field rather than a lookup path. `get_field()` resolves the reverse relation happily,
+# so it can be pointed at `cable_termination`.
+RELATION_NAME_CALLABLES = frozenset({"get_field"})
+
+# Callables naming *concrete* fields to read or write. The cable link is no longer a field on the termination at
+# all, and `cable_termination` is a reverse relation rather than a concrete field, so these reject it too - the
+# join record has to be handled directly instead.
+JOIN_MODEL_CALLABLES = frozenset(
+    {
+        "abulk_update",
+        "arefresh_from_db",
+        "asave",
+        "aupdate",
+        "bulk_update",
+        "refresh_from_db",
+        "save",
+        "update",
+    }
+)
+
+# Callables taking a collection of field names, as `{callable: (keyword name, positional index or None)}`.
+FIELD_NAME_LIST_ARGUMENTS = {
+    "abulk_update": ("fields", 1),
+    "arefresh_from_db": ("fields", 1),
+    "asave": ("update_fields", None),
+    "bulk_update": ("fields", 1),
+    "refresh_from_db": ("fields", 1),
+    "save": ("update_fields", None),
+}
 
 # All callables whose keyword arguments should be inspected as field lookups.
 KEYWORD_LOOKUP_CALLABLES = (
@@ -116,7 +141,7 @@ _REFERENCE = (
 )
 
 
-def split_lookup_path(path: str) -> Tuple[str, str, str]:
+def split_lookup_path(path: str) -> tuple[str, str, str]:
     """Split a lookup path into its `order_by` direction prefix, root field name, and remaining lookups.
 
     Examples:
@@ -159,17 +184,18 @@ def translate_path__path_to_cable_paths(path: str) -> str:
 def cable_replacement(name: str, path: str) -> str:
     """Suggest the replacement for a `cable`-rooted reference made by the callable `name`.
 
-    `get_field()` and `update()` name a single field, so the equivalent is the relation itself; everywhere else a
-    lookup path is expected.
-
     Examples:
-    >>> cable_replacement("get_field", "cable")
-    'cable_termination'
     >>> cable_replacement("order_by", "-cable__status")
     '-cable_termination__cable__status'
+    >>> cable_replacement("get_field", "cable")
+    'cable_termination'
+    >>> cable_replacement("save", "cable")
+    'CableToCableTermination'
     """
-    if name in SINGLE_FIELD_CALLABLES:
+    if name in RELATION_NAME_CALLABLES:
         return "cable_termination"
+    if name in JOIN_MODEL_CALLABLES:
+        return "CableToCableTermination"
     return translate_path_cable_to_cable_termination__cable(path)
 
 
@@ -331,6 +357,7 @@ class NautobotCableDataModelChecker(BaseChecker):
         joins_cable_terminations = targets_cable_join_model(node)
         self._check_keyword_lookups(node, name, joins_cable_terminations)
         self._check_field_name_arguments(node, name, joins_cable_terminations)
+        self._check_field_name_list_arguments(node, name, joins_cable_terminations)
 
     def _check_keyword_lookups(self, node: Call, name: str, joins_cable_terminations: bool):  # noqa:PLR0912 pylint: disable=too-many-branches
         """Check `field__lookup=value` style keyword arguments of a query call."""
@@ -396,28 +423,47 @@ class NautobotCableDataModelChecker(BaseChecker):
             return
 
         for argument in node.args:
-            if not isinstance(argument, Const) or not isinstance(argument.value, str):
-                continue
-            path = argument.value
-            _, root, _ = split_lookup_path(path)
-            if root in CABLE_ROOTS:
-                if joins_cable_terminations:
-                    continue
-                if name == "select_related" and root == "cable":
-                    self.add_message(
-                        "nb-deprecated-cable-lookup",
-                        node=argument,
-                        args=(path, translate_path_cable_to_cable_termination__cable(path)),
-                    )
-                else:
-                    self.add_message(
-                        "nb-removed-cable-field", node=argument, args=(path, cable_replacement(name, path))
-                    )
-            elif root in LEGACY_TERMINATION_ROOTS:
-                self.add_message("nb-removed-termination-a-b-field", node=argument, args=(path,))
-            elif root == PATH_FIELD:
+            self._check_field_name(argument, name, joins_cable_terminations)
+
+    def _check_field_name_list_arguments(self, node: Call, name: str, joins_cable_terminations: bool):
+        """Check arguments holding a collection of field names, e.g. `save(update_fields=["cable"])`."""
+        spec = FIELD_NAME_LIST_ARGUMENTS.get(name)
+        if spec is None:
+            return
+
+        keyword_name, position = spec
+        collection = next((keyword.value for keyword in node.keywords if keyword.arg == keyword_name), None)
+        if collection is None and position is not None and len(node.args) > position:
+            collection = node.args[position]
+        if not isinstance(collection, (List, Set, Tuple)):
+            return
+
+        for element in collection.elts:
+            self._check_field_name(element, name, joins_cable_terminations)
+
+    def _check_field_name(self, argument: NodeNG, name: str, joins_cable_terminations: bool):
+        """Report a single string node that Django interprets as a field name or lookup path."""
+        if not isinstance(argument, Const) or not isinstance(argument.value, str):
+            return
+
+        path = argument.value
+        _, root, _ = split_lookup_path(path)
+        if root in CABLE_ROOTS:
+            if joins_cable_terminations:
+                return
+            if name == "select_related" and root == "cable":
                 self.add_message(
-                    "nb-removed-cable-path-field", node=argument, args=(translate_path__path_to_cable_paths(path),)
+                    "nb-deprecated-cable-lookup",
+                    node=argument,
+                    args=(path, translate_path_cable_to_cable_termination__cable(path)),
                 )
-            elif root in REMOVED_CABLE_PEER_FIELDS:
-                self.add_message("nb-removed-cable-peer-field", node=argument, args=(root,))
+            else:
+                self.add_message("nb-removed-cable-field", node=argument, args=(path, cable_replacement(name, path)))
+        elif root in LEGACY_TERMINATION_ROOTS:
+            self.add_message("nb-removed-termination-a-b-field", node=argument, args=(path,))
+        elif root == PATH_FIELD:
+            self.add_message(
+                "nb-removed-cable-path-field", node=argument, args=(translate_path__path_to_cable_paths(path),)
+            )
+        elif root in REMOVED_CABLE_PEER_FIELDS:
+            self.add_message("nb-removed-cable-peer-field", node=argument, args=(root,))
