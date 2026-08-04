@@ -23,9 +23,6 @@ def get_cable_field():
     return CableToCableTermination._meta.get_field("cable")
 
 
-def reassign(cable, interface):
-    """`cable` is also writable on the join model, whether reached by construction or through a relation."""
-    row = CableToCableTermination()
-    row.cable = cable
+def reassign_through_relation(cable, interface):
+    """`cable` is writable on the join model, which the `cable_termination` reverse accessor reaches."""
     interface.cable_termination.cable = cable
-    return row

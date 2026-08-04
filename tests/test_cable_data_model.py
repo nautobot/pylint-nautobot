@@ -318,6 +318,13 @@ _EXPECTED_ERRORS = {
 }
 
 
+# Recognising a join model record by inferring a local's type only works where astroid can resolve the class, so
+# fixtures relying on that are gated. Recognising it by name works on every version and stays ungated.
+_GOOD_FILE_VERSIONS = {
+    "inferred_cable_to_cable_termination": ">=3.2",
+}
+
+
 def test_every_message_has_an_error_fixture():
     """Each message should be exercised by at least one `error_*.py` fixture."""
     covered = {expected["msg_id"] for expected in _EXPECTED_ERRORS.values()}
@@ -334,6 +341,6 @@ class TestNautobotCableDataModelChecker(CheckerTestCase):
     def test_error(self, filename, expected_error):
         assert_error_file(self, filename, expected_error)
 
-    @parametrize_good_files(__file__)
+    @parametrize_good_files(__file__, _GOOD_FILE_VERSIONS)
     def test_good(self, filename):
         assert_good_file(self, filename)
