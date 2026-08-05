@@ -33,23 +33,10 @@ To add `pylint-nautobot` to an existing project, first add it as a "dev" depende
 load-plugins="pylint_nautobot"
 ```
 
-Then, add a configuration section for `pylint-nautobot` itself, which dynamically enables or disables rules based on the target supported Nautobot version(s) for your code:
-
-```
-[tool.pylint-nautobot]
-supported_nautobot_versions = [
-    "1",
-    "2"
-]
-```
-
-!!! note
-    Here, you are telling `pylint` that you want all rules for Nautobot versions 1.x.y and 2.x.y to be checked.
-
 Test whether the new rules are enabled by running the following (this is just a subset of the available rules):
 
 ```
-> poetry run pylint --list-msgs-enabled | grep E42
+> poetry run pylint --list-msgs-enabled | grep nb-
   nb-replaced-device-role (E4211)
   nb-replaced-rack-role (E4212)
   nb-replaced-ipam-role (E4213)
@@ -61,7 +48,7 @@ Test whether the new rules are enabled by running the following (this is just a 
 
 You can now run `pylint` within your project as you normally would and the additional rules will be automatically checked.
 
-### Viewing a rule's extended description
+## Viewing a Rule's Extended Description
 
 Sometimes the short name of the rule displayed in the output of `pylint` will not be enough to understand the problem:
 
@@ -80,20 +67,19 @@ All rules also have additional information that can be viewed with the `--help-m
   null checker.
 ```
 
-### Supporting more than one Nautobot version
+## Uncertainty in Rules
 
-Rules are enabled based on the Nautobot version your project resolves to, so a rule can fire on code that is
-deliberately written to work across several Nautobot versions. This happens when a newer Nautobot release
-deprecates a pattern but the replacement does not exist in the older releases you still support — the deprecated
-spelling is then the only one available to you, and the rule has no better suggestion to offer.
+Because Python is a dynamically-typed language, sometimes `pylint` can't infer with 100% certainty whether a given rule applies to a given line of code. In `pylint-nautobot` the convention is to name such rules as `nb-possible-*` to indicate that uncertainty, for example `nb-possible-readonly-cable-attribute` flags lines where there's assignment to a `cable` attribute that may be (but is not definitively) read-only in its implementation - contrast to `nb-readonly-cable-attribute`, which flags lines where `pylint` is _confident_ that the assignment is incorrect. When encountering a `nb-possible-` message from `pylint`, you'll have to evaluate whether the message is relevant (and should be fixed) or a false positive (in which case an inline `# pylint: disable=...` comment should be added).
 
-The Nautobot 3.2 Cable data model rules are the current example. `nb-deprecated-cable-lookup` and
-`nb-deprecated-termination-a-b-lookup` flag lookups that Nautobot 3.2 still honors but reports a
-`DeprecationWarning` for; their replacements (`cable_termination__...` and `terminations__...`) were introduced in
-3.2, so an App that also supports 3.1 cannot use them.
+## Supporting More Than One Nautobot Version
 
-These rules are still enabled by default. If they do not apply to your project yet, disable them explicitly and
-record why, so the suppression can be removed once you raise your minimum Nautobot version:
+Rules are enabled based on the Nautobot version your project depends on (either explicitly in a `poetry.lock` file, or if not present, the version of Nautobot installed in the current Python environment), so if your project supports multiple versions, the rules may flag code that is valid for one version but invalid for another, even if you have written appropriate branching logic (with checks like `if nautobot.__version__.startswith("3."):`) to correctly handle these variants. In this case, once you have tested and verified that logic against the relevant Nautobot versions, you will likely need to write appropriate inline `# pylint: disable=...` comments to mark the different code paths as intentional.
+
+### Code Deprecation Rules
+
+In some cases, rules may issue a warning about code that is valid for all supported Nautobot version(s), but uses a deprecated pattern or API. For example, Nautobot 3.2 deprecated (but did not remove) certain patterns for interacting with Cable and cable-termination models that were the standard pattern in Nautobot 3.1 and earlier. The rules `nb-deprecated-cable-lookup` and `nb-deprecated-termination-a-b-lookup` issue a warning message if you are using these patterns in your code.
+
+If your code needs to support Nautobot versions that differ in their preferred/deprecated approach (for example, cable logic targeting both versions 3.1 and 3.2) then using the deprecated pattern may be your best and simplest approach for now, rather than writing branching logic in your code to use different patterns for different Nautobot versions. In this case, unlike the previous section, your intent is likely to _replace_ the deprecated patterns in the future, just not yet, and so our recommendation is to disable such rules project-wide through your project configuration file, rather than inline with `# pylint: disable=...` comments:
 
 ```toml
 [tool.pylint.messages_control]
@@ -104,9 +90,7 @@ disable = [
 ]
 ```
 
-Note that this applies only to the `nb-deprecated-*` rules. The rules reporting code that fails outright on
-Nautobot 3.2 (`nb-removed-cable-field`, `nb-removed-termination-a-b-field`, `nb-readonly-cable-attribute`, and
-friends) are actionable on every supported version and should not be disabled.
+This way, when your app is updated to drop support for the older Nautobot version(s), you can just remove the relevant lines from the project configuration and immediately make it possible for `pylint` to flag all instances in your code that are still using the deprecated pattern(s) and can now be updated to use the new, preferred patterns.
 
 ## Authors and Maintainers
 
