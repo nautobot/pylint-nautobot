@@ -304,6 +304,17 @@ _EXPECTED_ERRORS = {
         "args": ("_cable_peer_type",),
         "node": _call,
     },
+    # W4240 nb-possible-removed-field
+    "possible_update_cable": {
+        "msg_id": "nb-possible-removed-field",
+        "line": 3,
+        "end_line": 3,
+        "col_offset": 4,
+        "end_col_offset": 32,
+        # No replacement is offered, since a dict receiver would have nothing to migrate.
+        "args": ("cable",),
+        "node": _call,
+    },
     # W4239 nb-possible-readonly-cable-attribute
     "possible_cable_assignment": {
         "msg_id": "nb-possible-readonly-cable-attribute",

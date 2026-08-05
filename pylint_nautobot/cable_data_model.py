@@ -66,6 +66,28 @@ JOIN_MODEL_CALLABLES = frozenset(
     }
 )
 
+# `dict.update()` also takes arbitrary keywords, so unlike every other name here `update` says nothing about
+# whether the receiver is a queryset, and has to be identified before reporting.
+AMBIGUOUS_RECEIVER_METHODS = frozenset({"update"})
+
+# Names that identify a receiver chain as a Django manager or queryset. Django's managers are too dynamic for
+# astroid to infer, so confidence has to come from the chain rather than from the inferred type.
+QUERYSET_RECEIVER_MARKERS = frozenset(
+    {
+        "all",
+        "annotate",
+        "distinct",
+        "exclude",
+        "filter",
+        "get_queryset",
+        "none",
+        "objects",
+        "order_by",
+        "prefetch_related",
+        "select_related",
+    }
+)
+
 # Callables taking a collection of field names, as `{callable: (keyword name, positional index or None)}`.
 FIELD_NAME_LIST_ARGUMENTS = {
     "abulk_update": ("fields", 1),
@@ -256,6 +278,30 @@ def receiver_names(expression: NodeNG) -> set:
             return names
 
 
+def has_queryset_receiver(node: Call) -> bool:
+    """Whether the call's receiver chain identifies it as a Django manager or queryset."""
+    return bool(receiver_names(node.func) & QUERYSET_RECEIVER_MARKERS)
+
+
+def has_unidentified_receiver(node: Call, name: str) -> bool:
+    """Whether an ambiguously named call could not be identified as running against a queryset."""
+    return name in AMBIGUOUS_RECEIVER_METHODS and not has_queryset_receiver(node)
+
+
+def has_builtin_receiver(node: Call) -> bool:
+    """Whether the call is made on a builtin, e.g. `{}.update(cable=...)` on a dict rather than on a queryset.
+
+    No Nautobot model, manager or queryset lives in `builtins`, so this only ever suppresses false alarms.
+    """
+    if not isinstance(node.func, Attribute):
+        return False
+    inferred = safe_infer(node.func.expr)
+    if inferred is None or inferred is Uninferable:
+        return False
+    inferred_class = inferred if isinstance(inferred, ClassDef) else getattr(inferred, "_proxied", None)
+    return isinstance(inferred_class, ClassDef) and inferred_class.root().name == "builtins"
+
+
 def infers_to(node: NodeNG, qname: str) -> bool | None:
     """Whether `node` infers to an instance of `qname` or a subclass, or None when inference is inconclusive.
 
@@ -368,6 +414,14 @@ class NautobotCableDataModelChecker(BaseChecker):
             "CableTermination in Nautobot 3.2 without a compatibility shim. Use `get_cable_peer()` (or "
             f"`get_cable_peers()` for breakout cables) instead. {_REFERENCE}",
         ),
+        "W4240": (
+            "`%s` no longer resolves to a field in Nautobot 3.2, if this is a Django queryset.",
+            "nb-possible-removed-field",
+            "`update()` is a queryset method, but it is also a builtin container method that accepts arbitrary "
+            "keywords, and the receiver here could not be identified as either. On a queryset this names a field "
+            "removed in Nautobot 3.2; on a dict it is an ordinary key. See `nb-removed-cable-field` and "
+            f"`nb-removed-termination-a-b-field` for the cases that could be confirmed. {_REFERENCE}",
+        ),
         "W4239": (
             "Assigning a Cable to `%s` is not supported in Nautobot 3.2, if it is a CableTermination.",
             "nb-possible-readonly-cable-attribute",
@@ -419,6 +473,9 @@ class NautobotCableDataModelChecker(BaseChecker):
         name = called_name(node)
         if name not in INSPECTED_CALLABLES:
             return
+        if name in AMBIGUOUS_RECEIVER_METHODS and has_builtin_receiver(node):
+            # `{}.update(cable=...)` is a dict keyword, not a field lookup.
+            return
 
         joins_cable_terminations = targets_cable_join_model(node)
         self._check_keyword_lookups(node, name, joins_cable_terminations)
@@ -443,10 +500,7 @@ class NautobotCableDataModelChecker(BaseChecker):
                 if not joins_cable_terminations:
                     self._check_cable_lookup(node, name, path, rest, keyword.value)
             elif root in LEGACY_TERMINATION_ROOTS:
-                if not rest and root in TRANSLATED_TERMINATION_LOOKUPS and name in CABLE_TRANSLATED_LOOKUP_METHODS:
-                    translated_by_end[root.split("_")[1]].append(path)
-                elif name not in PURE_CREATE_METHODS:
-                    self.add_message("nb-removed-termination-a-b-field", node=node, args=(path,))
+                self._check_legacy_termination_keyword(node, name, path, translated_by_end)
             else:
                 self._check_removed_private_field(node, path, root)
 
@@ -458,6 +512,20 @@ class NautobotCableDataModelChecker(BaseChecker):
         for paths in translated_by_end.values():
             if paths:
                 self.add_message("nb-deprecated-termination-a-b-lookup", node=node, args=(", ".join(paths),))
+
+    def _check_legacy_termination_keyword(self, node: Call, name: str, path: str, translated_by_end: dict):
+        """Classify one keyword lookup rooted at a removed `Cable.termination_[ab]*` field.
+
+        Shim-translated lookups are accumulated into `translated_by_end` for the caller to report per cable end,
+        rather than being reported here per keyword.
+        """
+        _, root, rest = split_lookup_path(path)
+        if not rest and root in TRANSLATED_TERMINATION_LOOKUPS and name in CABLE_TRANSLATED_LOOKUP_METHODS:
+            translated_by_end[root.split("_")[1]].append(path)
+        elif has_unidentified_receiver(node, name):
+            self.add_message("nb-possible-removed-field", node=node, args=(path,))
+        elif name not in PURE_CREATE_METHODS:
+            self.add_message("nb-removed-termination-a-b-field", node=node, args=(path,))
 
     def _check_cable_lookup(self, node: Call, name: str, path: str, rest: str, value: NodeNG):
         """Check a single keyword lookup rooted at the removed `CableTermination.cable` field."""
@@ -475,6 +543,10 @@ class NautobotCableDataModelChecker(BaseChecker):
             else:
                 replacement = translate_path_cable_to_cable_termination__cable(path)
             self.add_message("nb-deprecated-cable-lookup", node=node, args=(path, replacement))
+
+        elif has_unidentified_receiver(node, name):
+            # No replacement is suggested: if the receiver turns out to be a dict, there is nothing to migrate.
+            self.add_message("nb-possible-removed-field", node=node, args=(path,))
 
         else:
             self.add_message("nb-removed-cable-field", node=node, args=(path, cable_replacement(name, path)))
