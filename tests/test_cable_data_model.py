@@ -40,7 +40,7 @@ def _nested_call_arg(module_node):
 # Grouped by the message they exercise, in the same order as `NautobotCableDataModelChecker.msgs`, then
 # alphabetically within each group, so that the coverage each rule has is visible at a glance.
 _EXPECTED_ERRORS = {
-    # E4231 nb-removed-cable-field
+    # E4230 nb-removed-cable-field
     "annotate_count_cable": {
         "msg_id": "nb-removed-cable-field",
         "line": 7,
@@ -152,26 +152,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable", "cable_termination__cable"),
         "node": _call_arg,
     },
-    # W4232 nb-deprecated-cable-lookup
-    "filter_cable": {
-        "msg_id": "nb-deprecated-cable-lookup",
-        "line": 5,
-        "end_line": 5,
-        "col_offset": 11,
-        "end_col_offset": 47,
-        "args": ("cable", "cable_termination__isnull=True"),
-        "node": _call,
-    },
-    "select_related_cable": {
-        "msg_id": "nb-deprecated-cable-lookup",
-        "line": 5,
-        "end_line": 5,
-        "col_offset": 50,
-        "end_col_offset": 65,
-        "args": ("cable__status", "cable_termination__cable__status"),
-        "node": _call_arg,
-    },
-    # E4233 nb-readonly-cable-attribute
+    # E4231 nb-readonly-cable-attribute
     "inferred_cable_assignment": {
         "msg_id": "nb-readonly-cable-attribute",
         "line": 7,
@@ -191,7 +172,7 @@ _EXPECTED_ERRORS = {
         "args": ("cable",),
         "node": _call,
     },
-    # E4234 nb-removed-termination-a-b-field
+    # E4232 nb-removed-termination-a-b-field
     "earliest_termination_a_id": {
         "msg_id": "nb-removed-termination-a-b-field",
         "line": 5,
@@ -237,7 +218,66 @@ _EXPECTED_ERRORS = {
         "args": ("termination_a_id",),
         "node": _call_arg,
     },
-    # W4235 nb-deprecated-termination-a-b-lookup
+    # E4233 nb-removed-cable-path-field
+    "path_lookup": {
+        "msg_id": "nb-removed-cable-path-field",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 11,
+        "end_col_offset": 58,
+        "args": ("_path__is_active", "cable_paths__is_active"),
+        "node": _call,
+    },
+    # E4234 nb-removed-cable-peer-field
+    "cable_peer_attribute": {
+        "msg_id": "nb-removed-cable-peer-field",
+        "line": 2,
+        "end_line": 2,
+        "col_offset": 11,
+        "end_col_offset": 32,
+        "args": ("_cable_peer",),
+        "node": _call,
+    },
+    "cable_peer_lookup": {
+        "msg_id": "nb-removed-cable-peer-field",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 11,
+        "end_col_offset": 66,
+        "args": ("_cable_peer_type",),
+        "node": _call,
+    },
+    # W4235 nb-deprecated-cable-lookup
+    "filter_cable": {
+        "msg_id": "nb-deprecated-cable-lookup",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 11,
+        "end_col_offset": 47,
+        "args": ("cable", "cable_termination__isnull=True"),
+        "node": _call,
+    },
+    "select_related_cable": {
+        "msg_id": "nb-deprecated-cable-lookup",
+        "line": 5,
+        "end_line": 5,
+        "col_offset": 50,
+        "end_col_offset": 65,
+        "args": ("cable__status", "cable_termination__cable__status"),
+        "node": _call_arg,
+    },
+    # W4236 nb-possible-readonly-cable-attribute
+    "possible_cable_assignment": {
+        "msg_id": "nb-possible-readonly-cable-attribute",
+        "line": 2,
+        "end_line": 2,
+        "col_offset": 4,
+        "end_col_offset": 27,
+        # A bare parameter cannot be inferred, so the failure is suspected rather than confirmed.
+        "args": ("interface.cable",),
+        "node": _statement,
+    },
+    # W4237 nb-deprecated-termination-a-b-lookup
     "filter_termination_a_id": {
         "msg_id": "nb-deprecated-termination-a-b-lookup",
         "line": 5,
@@ -266,7 +306,7 @@ _EXPECTED_ERRORS = {
         "args": ("termination_a_type, termination_a_id",),
         "node": _call,
     },
-    # W4236 nb-termination-a-b-exclude-both-ends
+    # W4238 nb-termination-a-b-exclude-both-ends
     "exclude_both_terminations": {
         "msg_id": "nb-termination-a-b-exclude-both-ends",
         "line": 5,
@@ -275,36 +315,7 @@ _EXPECTED_ERRORS = {
         "end_col_offset": 95,
         "node": _call,
     },
-    # E4237 nb-removed-cable-path-field
-    "path_lookup": {
-        "msg_id": "nb-removed-cable-path-field",
-        "line": 5,
-        "end_line": 5,
-        "col_offset": 11,
-        "end_col_offset": 58,
-        "args": ("_path__is_active", "cable_paths__is_active"),
-        "node": _call,
-    },
-    # E4238 nb-removed-cable-peer-field
-    "cable_peer_attribute": {
-        "msg_id": "nb-removed-cable-peer-field",
-        "line": 2,
-        "end_line": 2,
-        "col_offset": 11,
-        "end_col_offset": 32,
-        "args": ("_cable_peer",),
-        "node": _call,
-    },
-    "cable_peer_lookup": {
-        "msg_id": "nb-removed-cable-peer-field",
-        "line": 5,
-        "end_line": 5,
-        "col_offset": 11,
-        "end_col_offset": 66,
-        "args": ("_cable_peer_type",),
-        "node": _call,
-    },
-    # W4240 nb-possible-removed-field
+    # W4239 nb-possible-removed-field
     "possible_update_cable": {
         "msg_id": "nb-possible-removed-field",
         "line": 3,
@@ -314,17 +325,6 @@ _EXPECTED_ERRORS = {
         # No replacement is offered, since a dict receiver would have nothing to migrate.
         "args": ("cable",),
         "node": _call,
-    },
-    # W4239 nb-possible-readonly-cable-attribute
-    "possible_cable_assignment": {
-        "msg_id": "nb-possible-readonly-cable-attribute",
-        "line": 2,
-        "end_line": 2,
-        "col_offset": 4,
-        "end_col_offset": 27,
-        # A bare parameter cannot be inferred, so the failure is suspected rather than confirmed.
-        "args": ("interface.cable",),
-        "node": _statement,
     },
 }
 

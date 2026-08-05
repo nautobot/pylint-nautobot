@@ -346,7 +346,8 @@ class NautobotCableDataModelChecker(BaseChecker):
 
     name = "nautobot-cable-data-model"
     msgs = {
-        "E4231": (
+        # E4230-E4234: code that fails outright, ordered by the field family it concerns.
+        "E4230": (
             "`%s` no longer resolves to a field in Nautobot 3.2; use `%s` instead.",
             "nb-removed-cable-field",
             "The `cable` foreign key was removed from CableTermination subclasses in Nautobot 3.2. Only "
@@ -354,16 +355,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             "compatibility shim; every other reference must be rewritten against the `cable_termination` "
             f"relation. {_REFERENCE}",
         ),
-        "W4232": (
-            "Querying by `%s` is deprecated in Nautobot 3.2; use `%s` instead.",
-            "nb-deprecated-cable-lookup",
-            "The `cable` foreign key was removed from CableTermination subclasses in Nautobot 3.2. This lookup "
-            "still works, but is rewritten onto the `cable_termination` relation by a compatibility shim that "
-            "raises a DeprecationWarning. The replacement does not exist before Nautobot 3.2, so an App that "
-            "still supports earlier versions has no alternative spelling available and should disable this "
-            f"check explicitly until support for Nautobot < 3.2 is dropped. {_REFERENCE}",
-        ),
-        "E4233": (
+        "E4231": (
             "Assigning a Cable to `%s` is not supported in Nautobot 3.2.",
             "nb-readonly-cable-attribute",
             "In Nautobot 3.2 a termination's `cable` attribute is a read-only property, and assigning anything "
@@ -373,7 +365,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             f"CableTermination; see `nb-possible-readonly-cable-attribute` when it cannot be determined. "
             f"{_REFERENCE}",
         ),
-        "E4234": (
+        "E4232": (
             "`%s` no longer resolves to a field in Nautobot 3.2; use the `terminations` relation instead.",
             "nb-removed-termination-a-b-field",
             "The `termination_a`/`termination_b` generic foreign keys are no longer database fields on Cable in "
@@ -381,7 +373,41 @@ class NautobotCableDataModelChecker(BaseChecker):
             "compatibility shim; every other reference must be rewritten against the `terminations` "
             f"(CableToCableTermination) relation. {_REFERENCE}",
         ),
+        "E4233": (
+            "`%s` no longer resolves to a field in Nautobot 3.2; use `%s` instead.",
+            "nb-removed-cable-path-field",
+            "The private `_path` foreign key on PathEndpoint was replaced by a `cable_paths` GenericRelation in "
+            "Nautobot 3.2. Because this is now a multi-row reverse relation (one CablePath per breakout lane), "
+            f"`distinct()` is typically required on `filter()`/`count()`/`exclude()`. {_REFERENCE}",
+        ),
+        "E4234": (
+            "`%s` no longer resolves to a field in Nautobot 3.2; use `get_cable_peer()` instead.",
+            "nb-removed-cable-peer-field",
+            "The private `_cable_peer`, `_cable_peer_type`, and `_cable_peer_id` cache fields were removed from "
+            "CableTermination in Nautobot 3.2 without a compatibility shim. Use `get_cable_peer()` (or "
+            f"`get_cable_peers()` for breakout cables) instead. {_REFERENCE}",
+        ),
+        # W4235-W4239: code that still works but is deprecated, or that could not be confirmed. Mirrors the
+        # family order above, so each check sits opposite its stricter counterpart where it has one.
         "W4235": (
+            "Querying by `%s` is deprecated in Nautobot 3.2; use `%s` instead.",
+            "nb-deprecated-cable-lookup",
+            "The `cable` foreign key was removed from CableTermination subclasses in Nautobot 3.2. This lookup "
+            "still works, but is rewritten onto the `cable_termination` relation by a compatibility shim that "
+            "raises a DeprecationWarning. The replacement does not exist before Nautobot 3.2, so an App that "
+            "still supports earlier versions has no alternative spelling available and should disable this "
+            f"check explicitly until support for Nautobot < 3.2 is dropped. {_REFERENCE}",
+        ),
+        "W4236": (
+            "Assigning a Cable to `%s` is not supported in Nautobot 3.2, if it is a CableTermination.",
+            "nb-possible-readonly-cable-attribute",
+            "A termination's `cable` attribute is a read-only property in Nautobot 3.2, and assigning anything "
+            "other than `None` to it raises NotImplementedError. The type of the assignment target could not be "
+            "determined here, so this may instead be an unrelated attribute that happens to be named `cable`; "
+            "disable this check where that is the case. See `nb-readonly-cable-attribute` for the cases that "
+            f"could be confirmed. {_REFERENCE}",
+        ),
+        "W4237": (
             "Querying Cable by `%s` is deprecated in Nautobot 3.2; use the `terminations` relation instead.",
             "nb-deprecated-termination-a-b-lookup",
             "The `termination_a`/`termination_b` generic foreign keys are no longer database fields on Cable in "
@@ -392,7 +418,7 @@ class NautobotCableDataModelChecker(BaseChecker):
             "alternative spelling available and should disable this check explicitly until support for "
             f"Nautobot < 3.2 is dropped. {_REFERENCE}",
         ),
-        "W4236": (
+        "W4238": (
             "Excluding on both Cable termination ends at once is not equivalent in Nautobot 3.2.",
             "nb-termination-a-b-exclude-both-ends",
             "The Nautobot 3.2 compatibility shim applies each end of the exclusion independently "
@@ -400,36 +426,13 @@ class NautobotCableDataModelChecker(BaseChecker):
             "the A-side and B-side match different CableToCableTermination records. Use separate `exclude()` "
             f"calls or an explicit `terminations__...` Q object. {_REFERENCE}",
         ),
-        "E4237": (
-            "`%s` no longer resolves to a field in Nautobot 3.2; use `%s` instead.",
-            "nb-removed-cable-path-field",
-            "The private `_path` foreign key on PathEndpoint was replaced by a `cable_paths` GenericRelation in "
-            "Nautobot 3.2. Because this is now a multi-row reverse relation (one CablePath per breakout lane), "
-            f"`distinct()` is typically required on `filter()`/`count()`/`exclude()`. {_REFERENCE}",
-        ),
-        "E4238": (
-            "`%s` no longer resolves to a field in Nautobot 3.2; use `get_cable_peer()` instead.",
-            "nb-removed-cable-peer-field",
-            "The private `_cable_peer`, `_cable_peer_type`, and `_cable_peer_id` cache fields were removed from "
-            "CableTermination in Nautobot 3.2 without a compatibility shim. Use `get_cable_peer()` (or "
-            f"`get_cable_peers()` for breakout cables) instead. {_REFERENCE}",
-        ),
-        "W4240": (
-            "`%s` no longer resolves to a field in Nautobot 3.2, if this is a Django queryset.",
+        "W4239": (
+            "`%s` no longer resolves to a field in Nautobot 3.2, if this is a queryset of CableTermination records.",
             "nb-possible-removed-field",
             "`update()` is a queryset method, but it is also a builtin container method that accepts arbitrary "
             "keywords, and the receiver here could not be identified as either. On a queryset this names a field "
             "removed in Nautobot 3.2; on a dict it is an ordinary key. See `nb-removed-cable-field` and "
             f"`nb-removed-termination-a-b-field` for the cases that could be confirmed. {_REFERENCE}",
-        ),
-        "W4239": (
-            "Assigning a Cable to `%s` is not supported in Nautobot 3.2, if it is a CableTermination.",
-            "nb-possible-readonly-cable-attribute",
-            "A termination's `cable` attribute is a read-only property in Nautobot 3.2, and assigning anything "
-            "other than `None` to it raises NotImplementedError. The type of the assignment target could not be "
-            "determined here, so this may instead be an unrelated attribute that happens to be named `cable`; "
-            "disable this check where that is the case. See `nb-readonly-cable-attribute` for the cases that "
-            f"could be confirmed. {_REFERENCE}",
         ),
     }
 
