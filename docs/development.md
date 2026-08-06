@@ -105,23 +105,12 @@ Install `pylint-nautobot` in editable mode from your cloned repo:
 > poetry add --editable /path/to/pylint-nautobot/
 ```
 
-Enable and configure the `pylint-nautobot` plugin in the target App's `pyproject.toml`:
+Enable the `pylint-nautobot` plugin in the target App's `pyproject.toml`:
 
 ``` toml
 [tool.pylint.master]
 load-plugins="pylint_django, pylint_nautobot"
-
-...
-
-[tool.pylint-nautobot]
-supported_nautobot_versions = [
-    "1",
-    "2"
-]
 ```
-
-!!! note
-    Here, you are telling `pylint` that you want all rules for Nautobot versions 1.x.y and 2.x.y to be checked.
 
 Test whether the new rules are enabled, replacing the message codes with your own, by running the following in the `nautobot-plugin-golden-config` folder:
 
