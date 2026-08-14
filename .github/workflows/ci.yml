@@ -94,6 +94,7 @@ jobs:
         python-version: ["3.10", "3.13"]
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"
+      INVOKE_PYLINT_NAUTOBOT_NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
     steps:
       - name: "Check out repository code"
         uses: "actions/checkout@v4"
@@ -113,10 +114,10 @@ jobs:
           context: "./"
           push: false
           load: true
-          tags: "${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_NAME }}:${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_VER }}"
-          file: "./Dockerfile"
-          cache-from: "type=gha,scope=${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_NAME }}-${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_VER }}-py${{ matrix.python-version }}"
-          cache-to: "type=gha,scope=${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_NAME }}-${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_VER }}-py${{ matrix.python-version }}"
+          tags: "${{ env.APP_NAME }}/nautobot:${{ matrix.nautobot-version }}-py${{ matrix.python-version }}"
+          file: "./development/Dockerfile"
+          cache-from: "type=gha,scope=${{ matrix.nautobot-version }}-py${{ matrix.python-version }}"
+          cache-to: "type=gha,scope=${{ matrix.nautobot-version }}-py${{ matrix.python-version }}"
           build-args: |
             PYTHON_VER=${{ matrix.python-version }}
       - name: "Linting: Pylint"
@@ -127,10 +128,25 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.12"]
+        nautobot-version: ["2.4", "3.0"]
+        include:
+          - python-version: "3.11"
+            nautobot-version: "1.6"
+          - python-version: "3.11"
+            nautobot-version: "2.4"
+          - python-version: "3.10"
+            nautobot-version: "stable"
+          - python-version: "3.14"
+            nautobot-version: "stable"
+          - python-version: "3.10"
+            nautobot-version: "next"
+          - python-version: "3.14"
+            nautobot-version: "next"
     runs-on: "ubuntu-latest"
     env:
       INVOKE_PYLINT_NAUTOBOT_PYTHON_VER: "${{ matrix.python-version }}"
+      INVOKE_PYLINT_NAUTOBOT_NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
     steps:
       - name: "Check out repository code"
         uses: "actions/checkout@v4"
@@ -150,10 +166,10 @@ jobs:
           context: "./"
           push: false
           load: true
-          tags: "${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_NAME }}:${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_VER }}"
-          file: "./Dockerfile"
-          cache-from: "type=gha,scope=${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_NAME }}-${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_VER }}-py${{ matrix.python-version }}"
-          cache-to: "type=gha,scope=${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_NAME }}-${{ env.INVOKE_PYLINT-NAUTOBOT_IMAGE_VER }}-py${{ matrix.python-version }}"
+          tags: "${{ env.APP_NAME }}/nautobot:${{ matrix.nautobot-version }}-py${{ matrix.python-version }}"
+          file: "./development/Dockerfile"
+          cache-from: "type=gha,scope=${{ matrix.nautobot-version }}-py${{ matrix.python-version }}"
+          cache-to: "type=gha,scope=${{ matrix.nautobot-version }}-py${{ matrix.python-version }}"
           build-args: |
             PYTHON_VER=${{ matrix.python-version }}
       - name: "Run Tests"

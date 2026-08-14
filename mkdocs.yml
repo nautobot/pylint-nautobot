@@ -3,7 +3,7 @@ dev_addr: "127.0.0.1:8001"
 edit_uri: "edit/main/pylint-nautobot/docs"
 site_dir: "pylint-nautobot/static/pylint-nautobot/docs"
 site_name: "Pylint Nautobot Documentation"
-site_url: "https://pylint-nautobot.readthedocs.io/en/latest/"
+site_url: "https://docs.nautobot.com/projects/pylint-nautobot/en/latest/"
 repo_url: "https://github.com/nautobot/pylint-nautobot"
 copyright: "Copyright &copy; The Authors"
 theme:
@@ -13,6 +13,7 @@ theme:
   hljs_languages:
     - "python"
     - "yaml"
+    - "django"
   features:
     - "content.action.edit"
     - "content.action.view"
@@ -26,7 +27,7 @@ theme:
     - "search.share"
     - "search.suggest"
   favicon: "assets/favicon.ico"
-  logo: "assets/networktocode_logo.svg"
+  logo: "assets/nautobot_logo.svg"
   palette:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
@@ -54,14 +55,14 @@ extra:
       link: "https://blog.networktocode.com/"
       name: "Network to Code Blog"
     - icon: "fontawesome/brands/youtube"
-      link: "https://www.youtube.com/channel/UCwBh-dDdoqzxXKyvTw3BuTw"
-      name: "Network to Code Videos"
+      link: "https://www.youtube.com/playlist?list=PLjA0bhxgryJ2Ts4GJMDA-tPzVWEncv4pb"
+      name: "Nautobot Videos"
     - icon: "fontawesome/brands/slack"
       link: "https://www.networktocode.com/community/"
       name: "Network to Code Community"
     - icon: "fontawesome/brands/github"
-      link: "https://github.com/networktocode/"
-      name: "GitHub Organization"
+      link: "https://github.com/nautobot/nautobot"
+      name: "GitHub Repo"
     - icon: "fontawesome/brands/twitter"
       link: "https://twitter.com/networktocode"
       name: "Network to Code Twitter"
@@ -132,6 +133,10 @@ nav:
       - Release Notes:
           - "admin/release_notes/index.md"
           - v1.0: "admin/release_notes/version_1.0.md"
+          - v0.4: "admin/release_notes/version_0.4.md"
+          - v0.3: "admin/release_notes/version_0.3.md"
+          - v0.2: "admin/release_notes/version_0.2.md"
+          - v0.1: "admin/release_notes/version_0.1.md"
   - Developer Guide:
       - Extending the Library: "dev/extending.md"
       - Contributing to the Library: "dev/contributing.md"

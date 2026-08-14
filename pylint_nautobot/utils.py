@@ -1,12 +1,12 @@
 """Utilities for managing data."""
 
 from importlib import metadata
+from importlib.resources import files
 from pathlib import Path
 from typing import Callable, Iterable, Optional, TypeVar, Union
 
 import toml
 from astroid.nodes import Assign, Attribute, Call, ClassDef, Const, Name, NodeNG
-from importlib_resources import files
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 from yaml import safe_load

@@ -112,7 +112,7 @@ def run_command(context, exec_cmd, port=None, rm=True):
 def build(context, cache=True, force_rm=False, hide=False):
     """Build a Docker image."""
     print(f"Building image {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver}")
-    command = f"docker build --tag {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver} --build-arg PYTHON_VER={context.pylint_nautobot.python_ver} -f Dockerfile ."
+    command = f"docker build --tag {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver} --build-arg PYTHON_VER={context.pylint_nautobot.python_ver} -f development/Dockerfile ."
 
     if not cache:
         command += " --no-cache"
@@ -247,7 +247,7 @@ def pylint(context):
     Args:
         context (obj): Used to run specific commands
     """
-    exec_cmd = 'find . -name "*.py" | grep -vE "tests/unit" | xargs pylint'
+    exec_cmd = 'find . -name "*.py" | grep -vE "tests" | xargs pylint'
     run_command(context, exec_cmd)
 
 

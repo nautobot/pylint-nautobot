@@ -4,9 +4,10 @@ version = "1.0.1a0"
 description = "Custom Pylint rules for Nautobot"
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 readme = "README.md"
-homepage = "https://pylint-nautobot.readthedocs.io/"
+homepage = "https://github.com/nautobot/pylint-nautobot"
 repository = "https://github.com/nautobot/pylint-nautobot"
-documentation = "https://pylint-nautobot.readthedocs.io/"
+keywords = ["nautobot", "pylint"]
+documentation = "https://docs.nautobot.com/projects/pylint-nautobot/en/latest/"
 license = "Apache-2.0"
 classifiers = [
     "Intended Audience :: Developers",
@@ -16,6 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 include = [
     "LICENSE",
@@ -27,22 +29,23 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.14"
+python = ">=3.10,<3.15"
 pylint = ">=4.0.4,<5.0"
-pydantic = {version = "*", extras = ["dotenv"]}
-pydantic-settings = "*"
-toml = "^0.10.2"
-click = "*"
+pyyaml = ">=6.0.1"
+toml = ">=0.10.2"
+
+# This project has no real extras, but the Nautobot app development Dockerfile
+# (development/Dockerfile) builds with `--extras all` / `pip install -e .[all]`.
+[tool.poetry.extras]
+all = []
 
 [tool.poetry.group.dev.dependencies]
 coverage = "~7.15.4"
 pytest = "*"
 mock = "*"
-pyyaml = "^6.0.1"
 pylint = "~4.0.6"
 yamllint = "~1.38.0"
 invoke = "~3.0.3"
-toml = "^0.10.2"
 attrs = "^23.2.0"
 towncrier = "~25.8.0"
 ruff = "~0.16.2"
@@ -92,6 +95,7 @@ target-version = "py310"
 select = [
     "D",  # pydocstyle
     "F", "E", "W",  # flake8
+    "PL",  # pylint
     "S",  # bandit
     "I",  # isort
 ]
@@ -156,6 +160,13 @@ testpaths = [
     "tests/"
 ]
 addopts = "-vv --doctest-modules -p no:warnings --ignore-glob='*mock*'"
+norecursedirs = [
+    "tests/inputs",
+]
+filterwarnings = [
+    "ignore:The end_col_offset attribute of MessageTest.*:DeprecationWarning",
+    "ignore:The end_line attribute of MessageTest.*:DeprecationWarning",
+]
 
 [tool.towncrier]
 package = "pylint_nautobot"
