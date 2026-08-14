@@ -172,6 +172,7 @@ jobs:
           cache-to: "type=gha,scope=${{ matrix.nautobot-version }}-py${{ matrix.python-version }}"
           build-args: |
             PYTHON_VER=${{ matrix.python-version }}
+            NAUTOBOT_VER=${{ matrix.nautobot-version }}
       - name: "Run Tests"
         run: "poetry run invoke pytest"
   changelog:
