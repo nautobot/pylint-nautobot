@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Tasks for use with Invoke.
 
 Copyright (c) 2023, Network to Code, LLC
@@ -16,13 +17,27 @@ import os
 
 from invoke.collection import Collection
 from invoke.tasks import task as invoke_task
+=======
+"""Tasks for use with Invoke."""
+
+import os
+import re
+from pathlib import Path
+
+from invoke import Collection, Exit
+from invoke import task as invoke_task
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 def is_truthy(arg):
     """Convert "truthy" strings into Booleans.
 
+<<<<<<< HEAD
     Examples
     --------
+=======
+    Examples:
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
         >>> is_truthy('yes')
         True
     Args:
@@ -35,10 +50,16 @@ def is_truthy(arg):
     val = str(arg).lower()
     if val in ("y", "yes", "t", "true", "on", "1"):
         return True
+<<<<<<< HEAD
     elif val in ("n", "no", "f", "false", "off", "0"):
         return False
     else:
         raise ValueError(f"Invalid truthy value: `{arg}`")
+=======
+    if val in ("n", "no", "f", "false", "off", "0"):
+        return False
+    raise ValueError(f"Invalid truthy value: `{arg}`")
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 # Use pyinvoke configuration for default values, see http://docs.pyinvoke.org/en/stable/concepts/configuration.html
@@ -47,6 +68,7 @@ namespace = Collection("pylint_nautobot")
 namespace.configure(
     {
         "pylint_nautobot": {
+<<<<<<< HEAD
             "nautobot_ver": "2.3.1",
             "project_name": "pylint-nautobot",
             "python_ver": "3.11",
@@ -57,11 +79,23 @@ namespace.configure(
                 "docker-compose.dev.yml",
             ],
             "compose_http_timeout": "86400",
+=======
+            "project_name": "pylint_nautobot",
+            "python_ver": "3.10",
+            "local": is_truthy(os.getenv("INVOKE_PYLINT_NAUTOBOT_LOCAL", "false")),
+            "image_name": "pylint_nautobot",
+            "image_ver": os.getenv("INVOKE_PYLINT_NAUTOBOT_IMAGE_VER", "latest"),
+            "pwd": Path(__file__).parent,
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
         }
     }
 )
 
 
+<<<<<<< HEAD
+=======
+# pylint: disable=keyword-arg-before-vararg
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 def task(function=None, *args, **kwargs):
     """Task decorator to override the default Invoke task decorator and add each task to the invoke namespace."""
 
@@ -81,6 +115,7 @@ def task(function=None, *args, **kwargs):
     return task_wrapper
 
 
+<<<<<<< HEAD
 def docker_compose(context, command, **kwargs):
     """Helper function for running a specific docker compose command with all appropriate parameters and environment.
 
@@ -137,6 +172,39 @@ def run_command(context, command, **kwargs):
         pty = kwargs.pop("pty", True)
 
         docker_compose(context, compose_command, pty=pty, **kwargs)
+=======
+def run_command(context, exec_cmd, port=None, rm=True):
+    """Wrapper to run the invoke task commands.
+
+    Args:
+        context ([invoke.task]): Invoke task object.
+        exec_cmd ([str]): Command to run.
+        port (int): Used to serve local docs.
+        rm (bool): Whether to remove the container after running the command.
+
+    Returns:
+        result (obj): Contains Invoke result from running task.
+    """
+    if is_truthy(context.pylint_nautobot.local):
+        print(f"LOCAL - Running command {exec_cmd}")
+        result = context.run(exec_cmd, pty=True)
+    else:
+        print(
+            f"DOCKER - Running command: {exec_cmd} container: {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver}"
+        )
+        if port:
+            result = context.run(
+                f"docker run -it {'--rm' if rm else ''} -p {port} -v {context.pylint_nautobot.pwd}:/local {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver} sh -c '{exec_cmd}'",
+                pty=True,
+            )
+        else:
+            result = context.run(
+                f"docker run -it {'--rm' if rm else ''} -v {context.pylint_nautobot.pwd}:/local {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver} sh -c '{exec_cmd}'",
+                pty=True,
+            )
+
+    return result
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 # ------------------------------------------------------------------------------
@@ -144,6 +212,7 @@ def run_command(context, command, **kwargs):
 # ------------------------------------------------------------------------------
 @task(
     help={
+<<<<<<< HEAD
         "force_rm": "Always remove intermediate containers",
         "cache": "Whether to use Docker's cache when building the image (defaults to enabled)",
         "pull": "Always attempt to pull a newer version of the base image",
@@ -152,16 +221,36 @@ def run_command(context, command, **kwargs):
 def build(context, force_rm=False, cache=True, pull=False):
     """Build Nautobot docker image."""
     command = "build"
+=======
+        "cache": "Whether to use Docker's cache when building images (default enabled)",
+        "force_rm": "Always remove intermediate images",
+        "hide": "Suppress output from Docker",
+    }
+)
+def build(context, cache=True, force_rm=False, hide=False):
+    """Build a Docker image."""
+    print(f"Building image {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver}")
+    command = f"docker build --tag {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver} --build-arg PYTHON_VER={context.pylint_nautobot.python_ver} -f Dockerfile ."
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
     if not cache:
         command += " --no-cache"
     if force_rm:
         command += " --force-rm"
+<<<<<<< HEAD
     if pull:
         command += " --pull"
 
     print(f"Building Nautobot with Python {context.pylint_nautobot.python_ver}...")
     docker_compose(context, command)
+=======
+
+    result = context.run(command, hide=hide)
+    if result.exited != 0:
+        print(
+            f"Failed to build image {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver}\nError: {result.stderr}"
+        )
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 @task
@@ -180,6 +269,7 @@ def generate_packages(context):
     }
 )
 def lock(context, check=False):
+<<<<<<< HEAD
     """Generate poetry.lock inside the Nautobot container."""
     run_command(context, f"poetry {'check' if check else 'lock --no-update'}")
 
@@ -246,10 +336,41 @@ def vscode(context):
     command = "code nautobot.code-workspace"
 
     context.run(command)
+=======
+    """Generate poetry.lock inside the library container."""
+    run_command(context, f"poetry {'check' if check else 'lock --no-update'}")
+
+
+@task
+def clean(context):
+    """Remove the project specific image."""
+    print(
+        f"Attempting to forcefully remove image {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver}"
+    )
+    context.run(f"docker rmi {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver} --force")
+    print(f"Successfully removed image {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver}")
+
+
+@task
+def rebuild(context):
+    """Clean the Docker image and then rebuild without using cache."""
+    clean(context)
+    build(context, cache=False)
+
+
+@task
+def coverage(context):
+    """Run the coverage report against pytest."""
+    exec_cmd = "coverage run --source=pylint_nautobot -m pytest"
+    run_command(context, exec_cmd)
+    run_command(context, "coverage report")
+    run_command(context, "coverage html")
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 @task(
     help={
+<<<<<<< HEAD
         "service": "If specified, only display logs for this service (default: all)",
         "follow": "Flag to follow logs (default: False)",
         "tail": "Tail N number of lines (default: all)",
@@ -388,6 +509,27 @@ def pylint(context):
     """Run pylint code analysis."""
     command = 'pylint --init-hook "import nautobot; nautobot.setup()" --rcfile pyproject.toml pylint_nautobot'
     run_command(context, command)
+=======
+        "pattern": "Only run tests which match the given substring. Can be used multiple times.",
+        "label": "Module path to run (e.g., tests/unit/test_foo.py). Can be used multiple times.",
+    },
+    iterable=["pattern", "label"],
+)
+def pytest(context, pattern=None, label=None):
+    """Run pytest test cases."""
+    exec_cmd = "pytest -vv --doctest-modules pylint_nautobot/ && coverage run --source=pylint_nautobot -m pytest && coverage report"
+    run_command(context, exec_cmd)
+
+    doc_test_cmd = "pytest -vv --doctest-modules pylint_nautobot/"
+    pytest_cmd = "coverage run --source=pylint_nautobot -m pytest"
+    if pattern:
+        pytest_cmd += "".join([f" -k {_pattern}" for _pattern in pattern])
+    if label:
+        pytest_cmd += "".join([f" {_label}" for _label in label])
+    coverage_cmd = "coverage report"
+    exec_cmd = " && ".join([doc_test_cmd, pytest_cmd, coverage_cmd])
+    run_command(context, exec_cmd)
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 @task(aliases=("a",))
@@ -398,6 +540,7 @@ def autoformat(context):
 
 @task(
     help={
+<<<<<<< HEAD
         "action": "Available values are `['lint', 'format']`. Can be used multiple times. (default: `['lint']`)",
         "fix": "Automatically fix selected actions. May not be able to fix all issues found. (default: False)",
         "output_format": "See https://docs.astral.sh/ruff/settings/#output-format for details. (default: `full`)",
@@ -422,6 +565,54 @@ def ruff(context, action=None, fix=False, output_format="full"):
             command += " --fix"
         command += f" --output-format {output_format} ."
         run_command(context, command)
+=======
+        "action": "Available values are `['lint', 'format']`. Can be used multiple times. (default: `['lint', 'format']`)",
+        "target": "File or directory to inspect, repeatable (default: all files in the project will be inspected)",
+        "fix": "Automatically fix selected actions. May not be able to fix all issues found. (default: False)",
+        "output_format": "See https://docs.astral.sh/ruff/settings/#output-format for details. (default: `concise`)",
+    },
+    iterable=["action", "target"],
+)
+def ruff(context, action=None, target=None, fix=False, output_format="concise"):
+    """Run ruff to perform code formatting and/or linting."""
+    if not action:
+        action = ["lint", "format"]
+    if not target:
+        target = ["."]
+
+    exit_code = 0
+
+    if "format" in action:
+        command = "ruff format "
+        if not fix:
+            command += "--check "
+        command += " ".join(target)
+        if not run_command(context, command):
+            exit_code = 1
+
+    if "lint" in action:
+        command = "ruff check "
+        if fix:
+            command += "--fix "
+        command += f"--output-format {output_format} "
+        command += " ".join(target)
+        if not run_command(context, command):
+            exit_code = 1
+
+    if exit_code != 0:
+        raise Exit(code=exit_code)
+
+
+@task
+def pylint(context):
+    """Run pylint for the specified name and Python version.
+
+    Args:
+        context (obj): Used to run specific commands
+    """
+    exec_cmd = 'find . -name "*.py" | grep -vE "tests/unit" | xargs pylint'
+    run_command(context, exec_cmd)
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 @task
@@ -429,11 +620,29 @@ def yamllint(context):
     """Run yamllint to validate formatting adheres to NTC defined YAML standards.
 
     Args:
+<<<<<<< HEAD
     ----
         context (obj): Used to run specific commands
     """
     command = "yamllint . --format standard"
     run_command(context, command)
+=======
+        context (obj): Used to run specific commands
+    """
+    exec_cmd = "yamllint ."
+    run_command(context, exec_cmd)
+
+
+@task
+def cli(context):
+    """Enter the image to perform troubleshooting or dev work.
+
+    Args:
+        context (obj): Used to run specific commands
+    """
+    dev = f"docker run -it -v {context.pylint_nautobot.pwd}:/local {context.pylint_nautobot.image_name}:{context.pylint_nautobot.image_ver} /bin/bash"
+    context.run(f"{dev}", pty=True)
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 
 @task(
@@ -442,11 +651,21 @@ def yamllint(context):
     }
 )
 def tests(context, lint_only=False):
+<<<<<<< HEAD
     """Run all tests for this app."""
     # If we are not running locally, start the docker containers so we don't have to for each test
     if not is_truthy(context.pylint_nautobot.local):
         print("Starting Docker Containers...")
         start(context)
+=======
+    """Run all tests for the specified name and Python version.
+
+    Args:
+        context (obj): Used to run specific commands
+        lint_only (bool): If True, only run linters and skip unit tests.
+    """
+    # If we are not running locally, start the docker containers so we don't have to for each test
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
     # Sorted loosely from fastest to slowest
     print("Running ruff...")
     ruff(context)
@@ -465,6 +684,7 @@ def tests(context, lint_only=False):
 
 
 @task
+<<<<<<< HEAD
 def pytest(context, verbose=False, names=""):
     """Run pytest test cases."""
     command = [
@@ -474,3 +694,48 @@ def pytest(context, verbose=False, names=""):
     ]
 
     run_command(context, " ".join(command))
+=======
+def build_and_check_docs(context):
+    """Build documentation and test the configuration."""
+    command = "mkdocs build --no-directory-urls --strict"
+    run_command(context, command)
+
+    # Check for the existence of a release notes file for the current version if it's not a prerelease.
+    version = context.run("poetry version --short", hide=True)
+    match = re.match(r"^(\d+)\.(\d+)\.\d+$", version.stdout.strip())
+    if match:
+        major = match.group(1)
+        minor = match.group(2)
+        release_notes_file = Path(__file__).parent / "docs" / "admin" / "release_notes" / f"version_{major}.{minor}.md"
+        if not release_notes_file.exists():
+            print(f"Release notes file `version_{major}.{minor}.md` does not exist.")
+            raise Exit(code=1)
+
+
+@task
+def docs(context):
+    """Build and serve docs locally for development."""
+    exec_cmd = "mkdocs serve -v"
+    run_command(context, exec_cmd, port="8001:8001")
+
+
+@task(
+    help={
+        "version": "Version of pylint_nautobot to generate the release notes for.",
+        "date": "Date of the release (default: today).",
+    }
+)
+def generate_release_notes(context, version="", date=""):
+    """Generate Release Notes using Towncrier."""
+    if not version:
+        version = context.run("poetry version --short", hide=True).stdout.strip()
+
+    version_major_minor = ".".join(version.split(".")[:2])
+    context.run(f"poetry run python bin/ensure_release_notes.py --version {version_major_minor}")
+
+    command = f"poetry run towncrier build --version {version} --yes"
+    if date:
+        command += f" --date {date}"
+    # Due to issues with git repo ownership in the containers, this must always run locally.
+    context.run(command)
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)

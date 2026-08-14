@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!--
     Thank you for your interest in contributing to pylint-nautobot! Please note
     that our contribution policy recommends that a feature request or bug
@@ -32,3 +33,15 @@
 - [ ] Documentation Updates (when adding/changing features)
 - [ ] Example App Updates (when adding/changing features)
 - [ ] Outline Remaining Work, Constraints from Design
+=======
+## New Pull Request
+
+Have you:
+- [ ] Updated the README if necessary?
+- [ ] Updated any configuration settings?
+- [ ] Written a unit test?
+
+## Change Notes
+
+## Justification
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)

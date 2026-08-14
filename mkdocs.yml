@@ -1,8 +1,15 @@
 ---
 dev_addr: "127.0.0.1:8001"
+<<<<<<< HEAD
 edit_uri: "blob/main/docs"
 site_name: "Pylint Nautobot Documentation"
 site_url: "https://docs.nautobot.com/projects/pylint-nautobot/en/latest/"
+=======
+edit_uri: "edit/main/pylint-nautobot/docs"
+site_dir: "pylint-nautobot/static/pylint-nautobot/docs"
+site_name: "Pylint Nautobot Documentation"
+site_url: "https://pylint-nautobot.readthedocs.io/en/latest/"
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 repo_url: "https://github.com/nautobot/pylint-nautobot"
 copyright: "Copyright &copy; The Authors"
 theme:
@@ -10,6 +17,7 @@ theme:
   navigation_depth: 4
   custom_dir: "docs/assets/overrides"
   hljs_languages:
+<<<<<<< HEAD
     - "django"
     - "yaml"
   features:
@@ -26,6 +34,24 @@ theme:
     - "content.action.view"
   favicon: "assets/favicon.ico"
   logo: "assets/nautobot_logo.svg"
+=======
+    - "python"
+    - "yaml"
+  features:
+    - "content.action.edit"
+    - "content.action.view"
+    - "content.code.copy"
+    - "navigation.footer"
+    - "navigation.indexes"
+    - "navigation.tabs"
+    - "navigation.tabs.sticky"
+    - "navigation.tracking"
+    - "search.highlight"
+    - "search.share"
+    - "search.suggest"
+  favicon: "assets/favicon.ico"
+  logo: "assets/networktocode_logo.svg"
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
   palette:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
@@ -45,28 +71,44 @@ theme:
 extra_css:
   - "assets/extra.css"
 
+<<<<<<< HEAD
 # needed for RTD version flyout menu
 # jquery is not (yet) injected by RTD automatically and it might be dropped
 # as a dependency in the future
 extra_javascript:
   - "https://code.jquery.com/jquery-3.6.0.min.js"
 
+=======
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 extra:
   generator: false
   ntc_sponsor: true
   social:
     - icon: "fontawesome/solid/rss"
+<<<<<<< HEAD
       link: "https://blog.networktocode.com/blog/tags/nautobot"
       name: "Network to Code Blog"
     - icon: "fontawesome/brands/youtube"
       link: "https://www.youtube.com/playlist?list=PLjA0bhxgryJ2Ts4GJMDA-tPzVWEncv4pb"
       name: "Nautobot Videos"
+=======
+      link: "https://blog.networktocode.com/"
+      name: "Network to Code Blog"
+    - icon: "fontawesome/brands/youtube"
+      link: "https://www.youtube.com/channel/UCwBh-dDdoqzxXKyvTw3BuTw"
+      name: "Network to Code Videos"
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
     - icon: "fontawesome/brands/slack"
       link: "https://www.networktocode.com/community/"
       name: "Network to Code Community"
     - icon: "fontawesome/brands/github"
+<<<<<<< HEAD
       link: "https://github.com/nautobot/nautobot"
       name: "GitHub Repo"
+=======
+      link: "https://github.com/networktocode/"
+      name: "GitHub Organization"
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
     - icon: "fontawesome/brands/twitter"
       link: "https://twitter.com/networktocode"
       name: "Network to Code Twitter"
@@ -78,6 +120,16 @@ markdown_extensions:
       permalink: true
   - "attr_list"
   - "md_in_html"
+<<<<<<< HEAD
+=======
+  - "markdown_data_tables":
+      base_path: "docs"
+  - "pymdownx.details"
+  # Need pymdownx.emoji for Grid icon search
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
   - "pymdownx.highlight":
       anchor_linenums: true
   - "pymdownx.inlinehilite"
@@ -87,6 +139,7 @@ markdown_extensions:
         - name: "mermaid"
           class: "mermaid"
           format: !!python/name:pymdownx.superfences.fence_code_format
+<<<<<<< HEAD
   - "footnotes"
 plugins:
   - "search"
@@ -105,3 +158,54 @@ nav:
   - Release Notes: "release_notes.md"
   - Development: "development.md"
   - Nautobot Docs Home ↗︎: "https://docs.nautobot.com"
+=======
+  - "pymdownx.tabbed":
+      "alternate_style": true
+  - "pymdownx.tilde"
+
+plugins:
+  - "search"
+  - "gen-files":
+      scripts:
+        - "docs/generate_code_reference_pages.py"
+  - "glightbox":
+      manual: true  # See https://blueswen.github.io/mkdocs-glightbox/flexibility/enable-by-image-or-page/
+  - "section-index"
+  - "mkdocstrings":
+      default_handler: "python"
+      handlers:
+        python:
+          paths: ["."]
+          options:
+            heading_level: 1
+            show_root_heading: true
+            show_root_members_full_path: true
+            show_source: false
+
+validation:
+  absolute_links: "warn"
+  anchors: "warn"
+  omitted_files: "warn"
+  unrecognized_links: "warn"
+
+nav:
+  - Overview: "index.md"
+  - User Guide:
+      - Library Overview: "user/lib_overview.md"
+      - Getting Started: "user/lib_getting_started.md"
+      - Using the Library: "user/lib_use_cases.md"
+      - Frequently Asked Questions: "user/faq.md"
+  - Administrator Guide:
+      - Install and Configure: "admin/install.md"
+      - Upgrade: "admin/upgrade.md"
+      - Uninstall: "admin/uninstall.md"
+      - Release Notes:
+          - "admin/release_notes/index.md"
+          - v1.0: "admin/release_notes/version_1.0.md"
+  - Developer Guide:
+      - Extending the Library: "dev/extending.md"
+      - Contributing to the Library: "dev/contributing.md"
+      - Development Environment: "dev/dev_environment.md"
+      - Release Checklist: "dev/release_checklist.md"
+      - Architecture Design Records: "dev/arch_decision.md"
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)

@@ -1,5 +1,6 @@
 # Pylint Nautobot
 
+<<<<<<< HEAD
 <p align="center">
   <img src="https://raw.githubusercontent.com/nautobot/pylint-nautobot/main/docs/images/icon-pylint-nautobot.png" class="logo" height="200px">
   <br>
@@ -9,10 +10,31 @@
   <a href="https://pypi.org/project/pylint-nautobot/"><img src="https://img.shields.io/pypi/dm/pylint-nautobot"></a>
   <br>
   An collection of code linting rules for <a href="https://nautobot.com/">Nautobot</a>.
+=======
+<!--
+Developer Note - Remove Me!
+
+The README will have certain links/images broken until the PR is merged into `develop`. Update the GitHub links with whichever branch you're using (main etc.) if different.
+
+The logo of the project is a placeholder (docs/images/icon-pylint-nautobot.png) - please replace it with your app icon, making sure it's at least 200x200px and has a transparent background!
+
+To avoid extra work and temporary links, make sure that publishing docs (or merging a PR) is done at the same time as setting up the docs site on RTD, then test everything.
+-->
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/nautobot/pylint-nautobot/develop/docs/images/icon-pylint-nautobot.png" class="logo" height="200px">
+  <br>
+  <a href="https://github.com/nautobot/pylint-nautobot/actions"><img src="https://github.com/nautobot/pylint-nautobot/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://pylint-nautobot.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/pylint-nautobot/badge/"></a>
+  <a href="https://pypi.org/project/pylint-nautobot/"><img src="https://img.shields.io/pypi/v/pylint-nautobot"></a>
+  <a href="https://pypi.org/project/pylint-nautobot/"><img src="https://img.shields.io/pypi/dm/pylint-nautobot"></a>
+  <br>
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 </p>
 
 ## Overview
 
+<<<<<<< HEAD
 This project contains custom [pylint](https://github.com/pylint-dev/pylint) rules for linting [Nautobot](https://github.com/nautobot/nautobot) and its Apps.
 
 ## Documentation
@@ -29,9 +51,32 @@ Full documentation for this project can be found over on the [Nautobot Docs](htt
 You can find all the Markdown source for the project documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/main/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
 
 If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/) by running `invoke docs` in your local development environment. As your changes to the documentation files are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
+=======
+> Developer Note: Add a long (2-3 paragraphs) description of what the library does, what problems it solves, etc.
+
+## Documentation
+
+Full documentation for this library can be found over on the [Pylint Nautobot Docs](https://pylint-nautobot.readthedocs.io/) website:
+
+- [User Guide](https://pylint-nautobot.readthedocs.io/en/latest/user/app_overview/) - Overview, Using the Library, Getting Started.
+- [Administrator Guide](https://pylint-nautobot.readthedocs.io/en/latest/admin/install/) - How to Install, Configure, Upgrade, or Uninstall the Library.
+- [Developer Guide](https://pylint-nautobot.readthedocs.io/en/latest/dev/contributing/) - Extending the Library, Code Reference, Contribution Guide.
+- [Release Notes / Changelog](https://pylint-nautobot.readthedocs.io/en/latest/admin/release_notes/).
+- [Frequently Asked Questions](https://pylint-nautobot.readthedocs.io/en/latest/user/faq/).
+
+### Contributing to the Documentation
+
+You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
+
+If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/). A container hosting the documentation can be started using the `invoke` commands (details in the [Development Environment Guide](https://pylint-nautobot/dev/dev_environment/#docker-development-environment)) on [http://localhost:8001](http://localhost:8001). Using this container, as your changes to the documentation are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 Any PRs with fixes or improvements are very welcome!
 
 ## Questions
 
+<<<<<<< HEAD
 For any questions or comments, please check the [FAQ](https://docs.nautobot.com/projects/pylint-nautobot/en/latest/faq/) first. Feel free to also swing by the [Network to Code Slack](https://networktocode.slack.com/) (channel `#nautobot`), sign up [here](http://slack.networktocode.com/) if you don't have an account.
+=======
+For any questions or comments, please check the [FAQ](https://pylint-nautobot.readthedocs.io/en/latest/user/faq/) first. Feel free to also swing by the [Network to Code Slack](https://networktocode.slack.com/) (channel `#networktocode`), sign up [here](http://slack.networktocode.com/) if you don't have an account.
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)

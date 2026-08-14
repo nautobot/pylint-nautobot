@@ -4,8 +4,12 @@ about: Report a reproducible bug in the current release of pylint-nautobot
 ---
 
 ### Environment
+<<<<<<< HEAD
 * Python version:  <!-- Example: 3.11.4 -->
 * Nautobot version:  <!-- Example: 2.0.0 -->
+=======
+* Python version:  <!-- Example: 3.10 -->
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 * pylint-nautobot version:  <!-- Example: 1.0.0 -->
 
 <!-- What did you expect to happen? -->
@@ -22,4 +26,8 @@ about: Report a reproducible bug in the current release of pylint-nautobot
 ### Steps to Reproduce
 1.
 2.
+<<<<<<< HEAD
 3.
+=======
+3.
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)

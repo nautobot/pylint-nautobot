@@ -2,6 +2,7 @@
 
 from importlib import metadata
 
+<<<<<<< HEAD
 from pylint.lint import PyLinter
 
 from .cable_data_model import NautobotCableDataModelChecker
@@ -41,3 +42,6 @@ def register(linter: PyLinter):
     for checker in CHECKERS:
         if is_version_compatible(checker.version_specifier):
             linter.register_checker(checker(linter))
+=======
+__version__ = metadata.version(__name__)
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)

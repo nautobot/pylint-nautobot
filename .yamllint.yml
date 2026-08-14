@@ -1,14 +1,24 @@
 ---
 extends: "default"
 rules:
+<<<<<<< HEAD
   comments: "enable"
   empty-values: "disable"
+=======
+  comments:
+    min-spaces-from-content: 1
+  empty-values: "enable"
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
   indentation:
     indent-sequences: "consistent"
   line-length: "disable"
   quoted-strings:
     quote-type: "double"
 ignore: |
+<<<<<<< HEAD
   /.venv/
   /compose.yaml
   /var
+=======
+  .venv/
+>>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
