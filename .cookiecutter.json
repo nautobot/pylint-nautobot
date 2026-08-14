@@ -1,14 +1,29 @@
 {
-  "cookiecutter": {
-    "codeowner_github_usernames": "@cmsirbu @Kircheneer",
-    "description": "Custom Pylint rules for Nautobot",
-    "project_name": "Pylint Nautobot",
-    "project_slug": "pylint-nautobot",
-    "project_python_name": "pylint_nautobot",
-    "project_python_base_version": "3.8",
-    "project_with_config_settings": "yes",
-    "generate_docs": "no",
-    "version": "0.1.0",
-    "_template": "python"
-  }
+    "cookiecutter": {
+        "codeowner_github_usernames": "@cmsirbu @nautobot/maintain-nautobot-apps",
+        "full_name": "Network to Code, LLC",
+        "email": "info@networktocode.com",
+        "github_org": "nautobot",
+        "description": "Custom Pylint rules for Nautobot",
+        "project_name": "Pylint Nautobot",
+        "project_slug": "pylint-nautobot",
+        "repo_url": "https://github.com/nautobot/pylint-nautobot",
+        "base_url": "pylint-nautobot",
+        "project_python_name": "pylint_nautobot",
+        "project_python_base_version": "3.10",
+        "project_with_config_settings": "yes",
+        "generate_docs": "yes",
+        "version": "1.0.1",
+        "_drift_manager": {
+            "template": "https://github.com/networktocode-llc/cookiecutter-ntc.git",
+            "template_dir": "python",
+            "template_ref": "main",
+            "cookie_dir": "",
+            "pull_request_strategy": "update-or-create",
+            "post_actions": [],
+            "draft": false,
+            "baked_commit_ref": "c27649c95b37190d78a8355e4eaa9c9c4f9ff41f",
+            "drift_managed_branch": "develop"
+        }
+    }
 }

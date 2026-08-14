@@ -1,6 +1,7 @@
 ---
 dev_addr: "127.0.0.1:8001"
-edit_uri: "blob/main/docs"
+edit_uri: "edit/main/pylint-nautobot/docs"
+site_dir: "pylint-nautobot/static/pylint-nautobot/docs"
 site_name: "Pylint Nautobot Documentation"
 site_url: "https://docs.nautobot.com/projects/pylint-nautobot/en/latest/"
 repo_url: "https://github.com/nautobot/pylint-nautobot"
@@ -10,20 +11,21 @@ theme:
   navigation_depth: 4
   custom_dir: "docs/assets/overrides"
   hljs_languages:
-    - "django"
+    - "python"
     - "yaml"
+    - "django"
   features:
-    - "navigation.indexes"
-    - "navigation.tracking"
-    - "navigation.tabs"
-    - "navigation.tabs.sticky"
-    - "navigation.footer"
-    - "search.suggest"
-    - "search.highlight"
-    - "search.share"
-    - "content.code.copy"
     - "content.action.edit"
     - "content.action.view"
+    - "content.code.copy"
+    - "navigation.footer"
+    - "navigation.indexes"
+    - "navigation.tabs"
+    - "navigation.tabs.sticky"
+    - "navigation.tracking"
+    - "search.highlight"
+    - "search.share"
+    - "search.suggest"
   favicon: "assets/favicon.ico"
   logo: "assets/nautobot_logo.svg"
   palette:
@@ -45,18 +47,12 @@ theme:
 extra_css:
   - "assets/extra.css"
 
-# needed for RTD version flyout menu
-# jquery is not (yet) injected by RTD automatically and it might be dropped
-# as a dependency in the future
-extra_javascript:
-  - "https://code.jquery.com/jquery-3.6.0.min.js"
-
 extra:
   generator: false
   ntc_sponsor: true
   social:
     - icon: "fontawesome/solid/rss"
-      link: "https://blog.networktocode.com/blog/tags/nautobot"
+      link: "https://blog.networktocode.com/"
       name: "Network to Code Blog"
     - icon: "fontawesome/brands/youtube"
       link: "https://www.youtube.com/playlist?list=PLjA0bhxgryJ2Ts4GJMDA-tPzVWEncv4pb"
@@ -78,6 +74,13 @@ markdown_extensions:
       permalink: true
   - "attr_list"
   - "md_in_html"
+  - "markdown_data_tables":
+      base_path: "docs"
+  - "pymdownx.details"
+  # Need pymdownx.emoji for Grid icon search
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - "pymdownx.highlight":
       anchor_linenums: true
   - "pymdownx.inlinehilite"
@@ -87,21 +90,52 @@ markdown_extensions:
         - name: "mermaid"
           class: "mermaid"
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - "footnotes"
+  - "pymdownx.tabbed":
+      "alternate_style": true
+  - "pymdownx.tilde"
+
 plugins:
   - "search"
-watch:
-  - "README.md"
+  - "glightbox":
+      manual: true  # See https://blueswen.github.io/mkdocs-glightbox/flexibility/enable-by-image-or-page/
+  - "section-index"
+  - "mkdocstrings":
+      default_handler: "python"
+      handlers:
+        python:
+          paths: ["."]
+          options:
+            heading_level: 1
+            show_root_heading: true
+            show_root_members_full_path: true
+            show_source: false
 
 validation:
-  omitted_files: "warn"
   absolute_links: "warn"
-  unrecognized_links: "warn"
   anchors: "warn"
+  omitted_files: "warn"
+  unrecognized_links: "warn"
 
 nav:
   - Overview: "index.md"
-  - Getting Started: "getting_started.md"
-  - Release Notes: "release_notes.md"
-  - Development: "development.md"
-  - Nautobot Docs Home ↗︎: "https://docs.nautobot.com"
+  - User Guide:
+      - Library Overview: "user/lib_overview.md"
+      - Getting Started: "user/lib_getting_started.md"
+      - Using the Library: "user/lib_use_cases.md"
+  - Administrator Guide:
+      - Install and Configure: "admin/install.md"
+      - Upgrade: "admin/upgrade.md"
+      - Uninstall: "admin/uninstall.md"
+      - Release Notes:
+          - "admin/release_notes/index.md"
+          - v1.0: "admin/release_notes/version_1.0.md"
+          - v0.4: "admin/release_notes/version_0.4.md"
+          - v0.3: "admin/release_notes/version_0.3.md"
+          - v0.2: "admin/release_notes/version_0.2.md"
+          - v0.1: "admin/release_notes/version_0.1.md"
+  - Developer Guide:
+      - Extending the Library: "dev/extending.md"
+      - Contributing to the Library: "dev/contributing.md"
+      - Development Environment: "dev/dev_environment.md"
+      - Release Checklist: "dev/release_checklist.md"
+      - Architecture Design Records: "dev/arch_decision.md"

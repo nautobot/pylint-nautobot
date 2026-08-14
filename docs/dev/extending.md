@@ -1,35 +1,6 @@
----
-hide:
-  - navigation
----
-# Development
+# Extending the Library
 
-## Building Your Development Environment
-
-### Quickstart Guide
-
-If you're already familiar with writing pylint rules, you can get started quickly by following these steps:
-
-```bash
-poetry install
-poetry run invoke build
-```
-
-You can then use `poetry run invoke pytest` to run the test suite.
-
-## Contributing
-
-The project is packaged with a light development environment using `invoke` tasks to help with the local development of the project and to run tests.
-
-The project is following Network to Code software development guidelines and is leveraging the following:
-
-- Python linting and formatting: `pylint` and `ruff` (which includes rules from `bandit`, `flake8`, and `pydocstyle`).
-- YAML linting is done with `yamllint`.
-- Python unit tests to ensure the rules are working properly.
-
-You can find all the Markdown source for the project documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/main/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
-
-If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/) by running `invoke docs` in your local development environment. As your changes to the documentation files are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
+Extending the library is welcome, however it is best to open an issue first, to ensure that a PR would be accepted and makes sense in terms of features and design.
 
 ## Extending the Linting Rules
 
@@ -51,6 +22,7 @@ The following example is a checker that applies to all projects targeting any Na
 
 ```python
 from pylint.checkers import BaseChecker
+
 
 class NautobotSpecificExampleChecker(BaseChecker):
     version_specifier = ">=2,<3"

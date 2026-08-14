@@ -1,17 +1,10 @@
----
-hide:
-  - navigation
----
+# Using the Library
 
-# Getting Started
+This document describes common use-cases and scenarios for this library.
 
-## Overview
+## General Usage
 
-This project packages together custom rules for the `pylint` Python linter. These rules are meant to aid developers within the Nautobot ecosystem (i.e. core application, plugins/apps, jobs etc.) by highlighting good practices, unwanted coding patterns, or outright errors when migrating code between major releases of Nautobot (which have backwards incompatible changes).
-
-### Audience (User Personas) - Who should use this project?
-
-Nautobot ecosystem developers and maintainers can add these rules to their development environment and CI pipelines.
+This library provides Pylint rules to enforce best practices and known issues with Nautobot code, specifically used in Nautobot Apps and Nautobot Jobs. 
 
 ## Usage in an Existing Project
 
@@ -91,13 +84,3 @@ disable = [
 ```
 
 This way, when your app is updated to drop support for the older Nautobot version(s), you can just remove the relevant lines from the project configuration and immediately make it possible for `pylint` to flag all instances in your code that are still using the deprecated pattern(s) and can now be updated to use the new, preferred patterns.
-
-## Authors and Maintainers
-
-- [Cristian Sirbu](https://github.com/cmsirbu)
-- [Leo Kirchner](https://github.com/Kircheneer)
-- Nautobot Core Team (TBD)
-
-## Frequently Asked Questions
-
-Please ask us questions! You can swing by the [Network to Code Slack](https://networktocode.slack.com/) (channel `#nautobot`), sign up [here](http://slack.networktocode.com/) if you don't have an account.
