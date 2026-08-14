@@ -4,7 +4,7 @@ edit_uri: "edit/main/pylint-nautobot/docs"
 site_dir: "pylint-nautobot/static/pylint-nautobot/docs"
 site_name: "Pylint Nautobot Documentation"
 site_url: "https://pylint-nautobot.readthedocs.io/en/latest/"
-repo_url: "https://github.com/nautobot/pylint-nautobot"
+repo_url: "https://github.com/networktocode/pylint-nautobot"
 copyright: "Copyright &copy; The Authors"
 theme:
   name: "material"

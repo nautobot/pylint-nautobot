@@ -1,6 +1,6 @@
 ---
 "pylint-nautobot":
-  python_ver: "3.10"
+  python_ver: "3.8"
   local: false
   # image_name: "pylint-nautobot"
   # image_ver: "latest"

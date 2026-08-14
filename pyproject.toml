@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "pylint-nautobot"
-version = "1.0.1"
+version = "0.1.0a0"
 description = "Custom Pylint rules for Nautobot"
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 readme = "README.md"
 homepage = "https://pylint-nautobot.readthedocs.io/"
-repository = "https://github.com/nautobot/pylint-nautobot"
+repository = "https://github.com/networktocode/pylint-nautobot"
 documentation = "https://pylint-nautobot.readthedocs.io/"
 license = "Apache-2.0"
 classifiers = [
@@ -16,10 +16,12 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
+
 include = [
-    "LICENSE",
-    "README.md",
+    # Poetry by default will exclude files that are in .gitignore
+    { path = "pylint-nautobot/static/pylint-nautobot/docs/**/*", format = ["sdist", "wheel"] }
 ]
 
 packages = [
@@ -27,7 +29,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.14"
+python = ">=3.8,<3.15"
 pydantic = {version = "*", extras = ["dotenv"]}
 pydantic-settings = "*"
 toml = "^0.10.2"
@@ -160,9 +162,9 @@ addopts = "-vv --doctest-modules -p no:warnings --ignore-glob='*mock*'"
 package = "pylint_nautobot"
 directory = "changes"
 filename = "docs/admin/release_notes/version_X.Y.md"
-template = "towncrier_template.j2"
+template = "development/towncrier_template.j2"
 start_string = "<!-- towncrier release notes start -->"
-issue_format = "[#{issue}](https://github.com/nautobot/pylint-nautobot/issues/{issue})"
+issue_format = "[#{issue}](https://github.com/networktocode/pylint-nautobot/issues/{issue})"
 
 [[tool.towncrier.type]]
 directory = "breaking"
