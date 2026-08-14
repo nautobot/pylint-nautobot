@@ -74,4 +74,8 @@ When a new release is created the following should happen.
 - A post release PR is created with.
     - Change the version from `<major>.<minor>.<patch>` to `<major>.<minor>.<patch + 1>-beta` pyproject.toml.
     - Set the PR to the `develop`.
+<<<<<<< HEAD
     - Once tests pass, merge.
+=======
+    - Once tests pass, merge.
+>>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)

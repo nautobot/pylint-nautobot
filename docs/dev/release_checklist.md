@@ -12,8 +12,13 @@ This document is intended for library maintainers and outlines the steps to perf
 
 Choose your own adventure:
 
+<<<<<<< HEAD
 - Patch release from `develop`? Jump [here](#all-releases-from-develop).
 - Minor release? Continue with [Minor Version Bumps](#minor-version-bumps) and then [All Releases from `develop`](#all-releases-from-develop).
+=======
+- Patch release from `develop`? Jump [here](#all-release-branches-branch-off-of-develop).
+- Minor release? Continue with [Minor Version Bumps](#minor-version-bumps) and then [All Releases from `develop`](#all-release-branches-branch-off-of-develop).
+>>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 ## Minor Version Bumps
 
@@ -45,7 +50,11 @@ The goal of this step is to walk through the entire install process *as document
 
 ---
 
+<<<<<<< HEAD
 ## All Releases from `develop`
+=======
+## All `release` branches branch off of `develop`
+>>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 ### Verify CI Build Status
 
