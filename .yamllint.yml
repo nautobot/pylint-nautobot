@@ -11,3 +11,5 @@ rules:
     quote-type: "double"
 ignore: |
   .venv/
+  /compose.yaml
+  /var

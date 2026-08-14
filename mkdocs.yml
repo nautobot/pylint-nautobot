@@ -96,9 +96,6 @@ markdown_extensions:
 
 plugins:
   - "search"
-  - "gen-files":
-      scripts:
-        - "docs/generate_code_reference_pages.py"
   - "glightbox":
       manual: true  # See https://blueswen.github.io/mkdocs-glightbox/flexibility/enable-by-image-or-page/
   - "section-index"
@@ -125,7 +122,6 @@ nav:
       - Library Overview: "user/lib_overview.md"
       - Getting Started: "user/lib_getting_started.md"
       - Using the Library: "user/lib_use_cases.md"
-      - Frequently Asked Questions: "user/faq.md"
   - Administrator Guide:
       - Install and Configure: "admin/install.md"
       - Upgrade: "admin/upgrade.md"
