@@ -295,34 +295,17 @@ fabric.properties
 .vscode/*
 *.code-workspace
 
-<<<<<<< HEAD
-# Random
-creds.env
-development/*.txt
-!development/towncrier_header.txt
-=======
 # Rando
 creds.env
 development/*.txt
->>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 # Invoke overrides
 invoke.yml
 
 # Docs
-<<<<<<< HEAD
-public
-/compose.yaml
-/pylint-nautobot/static/nautobot_firewall_models/docs
-
-# Vagrant
-.vagrant
-Vagrantfile
-=======
 docs/README.md
 docs/CHANGELOG.md
 public
 /compose.yaml
 /dump.sql
 /pylint-nautobot/static/*
->>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)

@@ -5,10 +5,7 @@ about: Propose a new feature or enhancement
 ---
 
 ### Environment
-<<<<<<< HEAD
 * Nautobot version:  <!-- Example: 2.0.0 -->
-=======
->>>>>>> 20e684d (Cookie initially baked targeting develop by NetworkToCode Cookie Drift Manager Tool)
 * pylint-nautobot version:  <!-- Example: 1.0.0 -->
 
 <!--
