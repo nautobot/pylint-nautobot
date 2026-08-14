@@ -1,5 +1,4 @@
 ---
-<<<<<<< HEAD
 pylint_nautobot:
   project_name: "pylint-nautobot"
   nautobot_ver: "1.6.0"
@@ -9,11 +8,3 @@ pylint_nautobot:
   compose_files:
     - "docker-compose.base.yml"
     - "docker-compose.dev.yml"
-=======
-"pylint-nautobot":
-  python_ver: "3.8"
-  local: false
-  # image_name: "pylint-nautobot"
-  # image_ver: "latest"
-  # pwd: "."
->>>>>>> 100910e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
