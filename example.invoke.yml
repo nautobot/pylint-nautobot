@@ -1,7 +1,0 @@
----
-"pylint-nautobot":
-  python_ver: "3.10"
-  local: false
-  # image_name: "pylint-nautobot"
-  # image_ver: "latest"
-  # pwd: "."

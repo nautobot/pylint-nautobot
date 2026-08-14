@@ -1,10 +1,17 @@
 # Pylint Nautobot
 
 <p align="center">
+<<<<<<< HEAD
   <img src="https://raw.githubusercontent.com/nautobot/pylint-nautobot/main/docs/images/icon-pylint-nautobot.png" class="logo" height="200px">
   <br>
   <a href="https://github.com/nautobot/pylint-nautobot/actions"><img src="https://github.com/nautobot/pylint-nautobot/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <a href="https://docs.nautobot.com/projects/pylint-nautobot/en/latest"><img src="https://readthedocs.org/projects/pylint-nautobot/badge/"></a>
+=======
+  <img src="https://raw.githubusercontent.com/networktocode/pylint-nautobot/develop/docs/images/icon-pylint-nautobot.png" class="logo" height="200px">
+  <br>
+  <a href="https://github.com/networktocode/pylint-nautobot/actions"><img src="https://github.com/networktocode/pylint-nautobot/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://pylint-nautobot.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/pylint-nautobot/badge/"></a>
+>>>>>>> 100910e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
   <a href="https://pypi.org/project/pylint-nautobot/"><img src="https://img.shields.io/pypi/v/pylint-nautobot"></a>
   <a href="https://pypi.org/project/pylint-nautobot/"><img src="https://img.shields.io/pypi/dm/pylint-nautobot"></a>
   <br>
@@ -26,7 +33,11 @@ Full documentation for this project can be found over on the [Nautobot Docs](htt
 
 ### Contributing to the Documentation
 
+<<<<<<< HEAD
 You can find all the Markdown source for the project documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/main/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
+=======
+You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/networktocode/pylint-nautobot/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
+>>>>>>> 100910e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/) by running `invoke docs` in your local development environment. As your changes to the documentation files are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
 
