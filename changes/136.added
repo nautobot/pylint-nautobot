@@ -1,1 +1,0 @@
-Added `django.test.TransactionTestCase` to the incorrect base class checker.
