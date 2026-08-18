@@ -35,9 +35,6 @@ def _read_locked_nautobot_version() -> Optional[str]:
     return None
 
 
-MINIMUM_NAUTOBOT_VERSION = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
-
-
 def trim_first_pascal_word(pascal_case_string: str) -> str:
     """Remove the first word from a pascal case string.
 
@@ -172,11 +169,12 @@ def find_ancestor(
 
 def is_version_compatible(specifier_set: Union[str, SpecifierSet]) -> bool:
     """Return True if the Nautobot version is compatible with the given version specifier_set."""
+    minimum_nautobot_version = Version(_read_locked_nautobot_version() or metadata.version("nautobot"))
     if not specifier_set:
         return True
     if isinstance(specifier_set, str):
         specifier_set = SpecifierSet(specifier_set, prereleases=True)
-    return specifier_set.contains(MINIMUM_NAUTOBOT_VERSION)
+    return specifier_set.contains(minimum_nautobot_version)
 
 
 def load_v2_code_location_changes():
