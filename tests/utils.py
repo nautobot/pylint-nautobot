@@ -15,11 +15,27 @@ def get_checker_name(module):
     return Path(module).stem[5:].replace("_", "-")
 
 
-def parametrize_good_files(module):
+def parametrize_good_files(module, versions=None):
+    """Parametrize over the `good_*.py` files for a checker.
+
+    Args:
+        module (str): The test module, used to derive the checker's input directory.
+        versions (dict): Optionally maps a file name, stripped of its `good_` prefix, to a version specifier, for
+            fixtures that are only meaningful on some Nautobot versions. This mirrors the `versions` key that
+            `parametrize_error_files` supports, and is needed because a fixture referring to a model that a given
+            Nautobot version does not ship cannot be resolved by astroid on that version.
+    """
     checker_name = get_checker_name(module)
+    versions = versions or {}
+    paths = sorted((_INPUTS_PATH / checker_name).glob("good_*.py"))
+
+    unknown = set(versions) - {path.stem[5:] for path in paths}
+    if unknown:
+        raise ValueError(f"No good_*.py file for {', '.join(sorted(unknown))} in {module}")
+
     return mark.parametrize(
         "filename",
-        [f"{checker_name}/{item.name}" for item in (_INPUTS_PATH / checker_name).glob("good_*.py")],
+        [f"{checker_name}/{path.name}" for path in paths if is_version_compatible(versions.get(path.stem[5:], ""))],
     )
 
 

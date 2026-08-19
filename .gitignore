@@ -304,10 +304,9 @@ development/*.txt
 invoke.yml
 
 # Docs
+docs/README.md
+docs/CHANGELOG.md
 public
 /compose.yaml
-/pylint-nautobot/static/nautobot_firewall_models/docs
-
-# Vagrant
-.vagrant
-Vagrantfile
+/dump.sql
+/pylint-nautobot/static/*

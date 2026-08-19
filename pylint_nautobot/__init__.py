@@ -4,6 +4,7 @@ from importlib import metadata
 
 from pylint.lint import PyLinter
 
+from .cable_data_model import NautobotCableDataModelChecker
 from .code_location_changes import NautobotCodeLocationChangesChecker
 from .deprecated_classes import NautobotDeprecatedClassChecker
 from .deprecated_status_model import NautobotDeprecatedStatusModelChecker
@@ -20,6 +21,7 @@ from .utils import is_version_compatible
 __version__ = metadata.version(__name__)
 
 CHECKERS = [
+    NautobotCableDataModelChecker,
     NautobotCodeLocationChangesChecker,
     NautobotDeprecatedClassChecker,
     NautobotDeprecatedStatusModelChecker,

@@ -52,6 +52,16 @@ _EXPECTED_ERRORS = {
         "node": _find_error_node,
         "args": ("django.forms.models.BaseModelForm", "nautobot.apps.forms.NautobotModelForm"),
     },
+    "transaction_test_case": {
+        "versions": ">=2",
+        "msg_id": "nb-incorrect-base-class",
+        "line": 4,
+        "end_line": 4,
+        "col_offset": 0,
+        "end_col_offset": 16,
+        "node": _find_error_node,
+        "args": ("django.test.testcases.TransactionTestCase", "nautobot.apps.testing.TransactionTestCase"),
+    },
 }
 
 

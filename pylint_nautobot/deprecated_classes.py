@@ -1,6 +1,7 @@
 """Check for deprecated class usage and encourage the usage of the replacement class instead."""
 
-from importlib_resources import files
+from importlib.resources import files
+
 from pylint.checkers import BaseChecker
 from yaml import safe_load
 

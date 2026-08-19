@@ -4,7 +4,7 @@ about: Report a reproducible bug in the current release of pylint-nautobot
 ---
 
 ### Environment
-* Python version:  <!-- Example: 3.11.4 -->
+* Python version:  <!-- Example: 3.10 -->
 * Nautobot version:  <!-- Example: 2.0.0 -->
 * pylint-nautobot version:  <!-- Example: 1.0.0 -->
 
