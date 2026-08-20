@@ -163,7 +163,7 @@ filterwarnings = [
 [tool.towncrier]
 package = "pylint_nautobot"
 directory = "changes"
-filename = "docs/admin/release_notes/version_1.0.md"
+filename = "docs/admin/release_notes/version_1.1.md"
 template = "development/towncrier_template.j2"
 start_string = "<!-- towncrier release notes start -->"
 issue_format = "[#{issue}](https://github.com/nautobot/pylint-nautobot/issues/{issue})"

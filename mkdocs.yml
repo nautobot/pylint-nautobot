@@ -98,7 +98,6 @@ plugins:
   - "search"
   - "glightbox":
       manual: true  # See https://blueswen.github.io/mkdocs-glightbox/flexibility/enable-by-image-or-page/
-  - "section-index"
   - "mkdocstrings":
       default_handler: "python"
       handlers:
@@ -128,6 +127,7 @@ nav:
       - Uninstall: "admin/uninstall.md"
       - Release Notes:
           - "admin/release_notes/index.md"
+          - v1.1: "admin/release_notes/version_1.1.md"
           - v1.0: "admin/release_notes/version_1.0.md"
           - v0.4: "admin/release_notes/version_0.4.md"
           - v0.3: "admin/release_notes/version_0.3.md"
