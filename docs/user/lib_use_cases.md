@@ -4,6 +4,8 @@ This document describes common use-cases and scenarios for this library.
 
 ## General Usage
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 This library provides Pylint rules to enforce best practices and known issues with Nautobot code, specifically used in Nautobot Apps and Nautobot Jobs. 
 
 ## Usage in an Existing Project
@@ -84,3 +86,16 @@ disable = [
 ```
 
 This way, when your app is updated to drop support for the older Nautobot version(s), you can just remove the relevant lines from the project configuration and immediately make it possible for `pylint` to flag all instances in your code that are still using the deprecated pattern(s) and can now be updated to use the new, preferred patterns.
+=======
+=======
+>>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+## Use-cases and common workflows
+
+## Screenshots
+
+!!! warning "Developer Note - Remove Me!"
+    Ideally captures every view exposed by the Library. Should include a relevant dataset.
+<<<<<<< HEAD
+>>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)

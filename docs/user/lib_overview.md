@@ -1,5 +1,7 @@
 # Library Overview
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 This library is intended for static analysis on Nautobot Apps and Jobs Python code.
 
 ## Audience (User Personas) - Who should use this Library?
@@ -13,3 +15,24 @@ Nautobot ecosystem developers and maintainers can add these rules to their devel
 ## Authors and Maintainers
 
 * @cmsirbu @nautobot/maintain-nautobot-apps
+=======
+=======
+>>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+This document provides an overview of the library including critical information and important considerations.
+
+## Description
+
+
+## Audience (User Personas) - Who should use this Library?
+
+!!! warning "Developer Note - Remove Me!"
+    Who is this meant for/ who is the common user of this library?
+
+## Authors and Maintainers
+
+!!! warning "Developer Note - Remove Me!"
+    Add the team and/or the main individuals maintaining this project. Include historical maintainers as well.
+<<<<<<< HEAD
+>>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
