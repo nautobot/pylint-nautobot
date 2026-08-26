@@ -6,7 +6,10 @@ pylint_nautobot:
 =======
 "pylint-nautobot":
   python_ver: "3.10"
+<<<<<<< HEAD
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
   local: false
   python_ver: "3.11"
   compose_dir: "development"

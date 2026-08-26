@@ -3,6 +3,7 @@
 Extending the library is welcome, however it is best to open an issue first, to ensure that a PR would be accepted and makes sense in terms of features and design.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Extending the Linting Rules
 
 Extending the rules is welcome, however it is best to open an issue first, to ensure that a PR would be accepted and makes sense in terms of coverage and design.
@@ -118,3 +119,5 @@ nautobot_golden_config/tables.py:9:0: E4251: Import location has changed (nautob
 Should you want to perform the full `pylint` suite of tests, follow the project's development setup (for Nautobot Apps typically `invoke pylint`).
 =======
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
