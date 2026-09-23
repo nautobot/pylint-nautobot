@@ -18,6 +18,7 @@ The [Invoke](http://www.pyinvoke.org/) library is used to provide some helper co
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Using **Invoke** these configuration options can be overridden using [several methods](https://docs.pyinvoke.org/en/stable/concepts/configuration.html). Perhaps the simplest is setting an environment variable `INVOKE_PYLINT_NAUTOBOT_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override. There is an example `invoke.yml` (`invoke.example.yml`) in this directory which can be used as a starting point.
 =======
 Using **Invoke** these configuration options can be overridden using [several methods](https://docs.pyinvoke.org/en/stable/concepts/configuration.html). Perhaps the simplest is setting an environment variable `INVOKE_PYLINT-NAUTOBOT_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override. There is an example `invoke.yml` (`invoke.example.yml`) in this directory which can be used as a starting point.
@@ -28,6 +29,9 @@ Using **Invoke** these configuration options can be overridden using [several me
 =======
 Using **Invoke** these configuration options can be overridden using [several methods](https://docs.pyinvoke.org/en/stable/concepts/configuration.html). Perhaps the simplest is setting an environment variable `INVOKE_PYLINT-NAUTOBOT_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override. There is an example `invoke.yml` (`invoke.example.yml`) in this directory which can be used as a starting point.
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+Using **Invoke** these configuration options can be overridden using [several methods](https://docs.pyinvoke.org/en/stable/concepts/configuration.html). Perhaps the simplest is setting an environment variable `INVOKE_PYLINT-NAUTOBOT_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override. There is an example `invoke.yml` (`invoke.example.yml`) in this directory which can be used as a starting point.
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 ### Docker Development Environment
 

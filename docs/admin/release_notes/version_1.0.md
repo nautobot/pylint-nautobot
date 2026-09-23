@@ -3,11 +3,14 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 !!! warning "Developer Note - Remove Me!"
     Guiding Principles:
 
@@ -31,15 +34,19 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 This document describes all new features and changes in the release `1.0`. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Release Overview
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -56,10 +63,13 @@ This document describes all new features and changes in the release `1.0`. The f
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 - Major features or milestones
 - Achieved in this `x.y` release
 - Changes to compatibility with Nautobot and/or other apps, libraries etc.
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 ## [v1.0.0] - 2026-08-14
@@ -69,6 +79,9 @@ This document describes all new features and changes in the release `1.0`. The f
 =======
 ## [v1.0.0] - 2026-09-23
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+## [v1.0.0] - 2026-09-23
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 ### Added
 
@@ -79,8 +92,11 @@ This document describes all new features and changes in the release `1.0`. The f
 - [#123](https://github.com/nautobot/pylint-nautobot/issues/123) Fixed Tag filtering not working in job launch form.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)

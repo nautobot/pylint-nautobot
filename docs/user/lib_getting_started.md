@@ -9,6 +9,7 @@ To install the library, please follow the instructions detailed in the [Installa
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 You can check out the [Use Cases](./lib_use_cases.md) section for more examples.
 
 ## Authors and Maintainers
@@ -20,6 +21,8 @@ You can check out the [Use Cases](./lib_use_cases.md) section for more examples.
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 ## First steps with the Library
 
 !!! warning "Developer Note - Remove Me!"
@@ -32,6 +35,7 @@ You can check out the [Use Cases](./lib_use_cases.md) section for more examples.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 You can check out the [Use Cases](./lib_use_cases.md) section for more examples.
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
@@ -40,3 +44,6 @@ You can check out the [Use Cases](./lib_use_cases.md) section for more examples.
 =======
 You can check out the [Use Cases](./lib_use_cases.md) section for more examples.
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+You can check out the [Use Cases](./lib_use_cases.md) section for more examples.
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)

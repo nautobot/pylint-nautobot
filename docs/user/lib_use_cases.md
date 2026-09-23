@@ -7,6 +7,7 @@ This document describes common use-cases and scenarios for this library.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 This library provides Pylint rules to enforce best practices and known issues with Nautobot code, specifically used in Nautobot Apps and Nautobot Jobs. 
 
 ## Usage in an Existing Project
@@ -92,6 +93,8 @@ This way, when your app is updated to drop support for the older Nautobot versio
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 ## Use-cases and common workflows
 
 ## Screenshots
@@ -100,8 +103,11 @@ This way, when your app is updated to drop support for the older Nautobot versio
     Ideally captures every view exposed by the Library. Should include a relevant dataset.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)

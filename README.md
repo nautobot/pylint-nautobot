@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <img src="https://raw.githubusercontent.com/nautobot/pylint-nautobot/main/docs/images/icon-pylint-nautobot.png" class="logo" height="200px">
   <br>
   <a href="https://github.com/nautobot/pylint-nautobot/actions"><img src="https://github.com/nautobot/pylint-nautobot/actions/workflows/ci.yml/badge.svg?branch=main"></a>
@@ -22,6 +23,11 @@
   <br>
   <a href="https://github.com/nautobot/pylint-nautobot/actions"><img src="https://github.com/nautobot/pylint-nautobot/actions/workflows/ci.yml/badge.svg?branch=main"></a>
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+  <img src="https://raw.githubusercontent.com/nautobot/pylint-nautobot/develop/docs/images/icon-pylint-nautobot.png" class="logo" height="200px">
+  <br>
+  <a href="https://github.com/nautobot/pylint-nautobot/actions"><img src="https://github.com/nautobot/pylint-nautobot/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
   <a href="https://pylint-nautobot.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/pylint-nautobot/badge/"></a>
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
   <a href="https://pypi.org/project/pylint-nautobot/"><img src="https://img.shields.io/pypi/v/pylint-nautobot"></a>
@@ -48,6 +54,7 @@ Full documentation for this project can be found over on the [Nautobot Docs](htt
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 You can find all the Markdown source for the project documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/main/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
 =======
 You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
@@ -58,6 +65,9 @@ You can find all the Markdown source for the App documentation under the [`docs`
 =======
 You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/pylint-nautobot/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/) by running `invoke docs` in your local development environment. As your changes to the documentation files are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
 

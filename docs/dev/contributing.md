@@ -77,6 +77,7 @@ When a new release is created the following should happen.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - Once tests pass, merge.
 =======
     - Once tests pass, merge.
@@ -87,3 +88,6 @@ When a new release is created the following should happen.
 =======
     - Once tests pass, merge.
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+    - Once tests pass, merge.
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)

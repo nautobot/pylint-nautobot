@@ -17,11 +17,14 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
         "original_publish_year": "2025",
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
         "_drift_manager": {
@@ -35,6 +38,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             "baked_commit_ref": "c27649c95b37190d78a8355e4eaa9c9c4f9ff41f",
 =======
             "baked_commit_ref": "7757de33d719e59a286cccfcb2f78e5a1ffc7ff8",
@@ -45,6 +49,9 @@
 =======
             "baked_commit_ref": "2b984c66e8fa72aa454560bb04951f40969ef839",
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+            "baked_commit_ref": "06faf8ac37355b0a7fc9012576ae020878621531",
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
             "drift_managed_branch": "develop"
         }
     }

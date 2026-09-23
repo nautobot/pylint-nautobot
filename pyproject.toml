@@ -40,6 +40,7 @@ python = ">=3.10,<3.15"
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 pylint = ">=4.0.4,<5.0"
 pyyaml = ">=6.0.1"
 toml = ">=0.10.2"
@@ -53,6 +54,8 @@ all = []
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 pydantic = {version = "*", extras = ["dotenv"]}
 pydantic-settings = "*"
 toml = "^0.10.2"

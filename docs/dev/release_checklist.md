@@ -15,6 +15,7 @@ Choose your own adventure:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 - Patch release from `develop`? Jump [here](#all-releases-from-develop).
 - Minor release? Continue with [Minor Version Bumps](#minor-version-bumps) and then [All Releases from `develop`](#all-releases-from-develop).
 =======
@@ -29,6 +30,10 @@ Choose your own adventure:
 - Patch release from `develop`? Jump [here](#all-release-branches-branch-off-of-develop).
 - Minor release? Continue with [Minor Version Bumps](#minor-version-bumps) and then [All Releases from `develop`](#all-release-branches-branch-off-of-develop).
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+- Patch release from `develop`? Jump [here](#all-release-branches-branch-off-of-develop).
+- Minor release? Continue with [Minor Version Bumps](#minor-version-bumps) and then [All Releases from `develop`](#all-release-branches-branch-off-of-develop).
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 ## Minor Version Bumps
 
@@ -63,6 +68,7 @@ The goal of this step is to walk through the entire install process *as document
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## All Releases from `develop`
 =======
 ## All `release` branches branch off of `develop`
@@ -73,6 +79,9 @@ The goal of this step is to walk through the entire install process *as document
 =======
 ## All `release` branches branch off of `develop`
 >>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+## All `release` branches branch off of `develop`
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 ### Verify CI Build Status
 

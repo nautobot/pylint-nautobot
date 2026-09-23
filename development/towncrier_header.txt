@@ -5,6 +5,9 @@ This document describes all new features and changes in the release. The format 
 ## Release Overview
 
 - Major features or milestones
+<<<<<<< HEAD
 - Changes to compatibility with Nautobot and/or other apps, libraries etc.
+=======
+>>>>>>> 4c1a07e (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 <!-- towncrier release notes start -->
