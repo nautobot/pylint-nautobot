@@ -4,6 +4,7 @@ Extending the library is welcome, however it is best to open an issue first, to 
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Extending the Linting Rules
 
 Extending the rules is welcome, however it is best to open an issue first, to ensure that a PR would be accepted and makes sense in terms of coverage and design.
@@ -121,3 +122,5 @@ Should you want to perform the full `pylint` suite of tests, follow the project'
 >>>>>>> 3e7c854 (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 =======
 >>>>>>> 053372b (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+=======
+>>>>>>> af7478f (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
