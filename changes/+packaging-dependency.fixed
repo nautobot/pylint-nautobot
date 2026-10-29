@@ -1,0 +1,1 @@
+Fixed importing the plugin in an environment without packaging installed, by declaring packaging as a dependency.
